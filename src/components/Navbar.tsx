@@ -2,44 +2,34 @@
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import { Toggle } from "@/components/ui/toggle";
 
 export default function Navbar() {
   const { data: session } = useSession();
 
   return (
-    <nav className="bg-white shadow-sm">
+    <nav className="border-b">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between h-16">
-          <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="text-xl font-bold text-gray-900">
-                Formation App
-              </Link>
-            </div>
-          </div>
+        <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
+            <Link href="/" className="text-xl font-bold">
+              Formation App
+            </Link>
+          </div>
+          <div className="flex items-center gap-4">
+            <Toggle />
             {session ? (
-              <div className="flex items-center space-x-4">
-                <Link
-                  href="/dashboard"
-                  className="text-gray-700 hover:text-gray-900"
-                >
-                  Dashboard
-                </Link>
-                <button
-                  onClick={() => signOut()}
-                  className="text-gray-700 hover:text-gray-900"
-                >
-                  Déconnexion
-                </button>
+              <div className="flex items-center gap-4">
+                <Button asChild>
+                  <Link href="/dashboard">Dashboard</Link>
+                </Button>
+                <Button onClick={() => signOut()}>Déconnexion</Button>
               </div>
             ) : (
-              <Link
-                href="/auth/signin"
-                className="text-gray-700 hover:text-gray-900"
-              >
-                Connexion
-              </Link>
+              <Button asChild>
+                <Link href="/auth/signin">Connexion</Link>
+              </Button>
             )}
           </div>
         </div>

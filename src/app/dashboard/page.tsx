@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-
+import { Button } from "@/components/ui/button";
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
 
@@ -32,18 +32,19 @@ export default async function Dashboard() {
     <div>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Mes formations</h1>
-        <Link
+        <Button
+          asChild
           href="/dashboard/courses/new"
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+          className=" text-white px-4 py-2 rounded-md "
         >
-          Créer une formation
-        </Link>
+          <Link href="/dashboard/courses/new">Créer une formation</Link>
+        </Button>
       </div>
 
       {courses.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-600 mb-4">
-            Vous n'avez pas encore créé de formation
+            Vous n&apos;avez pas encore créé de formation
           </p>
           <Link
             href="/dashboard/courses/new"
