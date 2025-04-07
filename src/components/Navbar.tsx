@@ -3,11 +3,33 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { Toggle } from "@/components/ui/toggle";
+
+function AuthButtons() {
+  const { status } = useSession();
+
+  if (status === "loading") {
+    return null;
+  }
+
+  if (status === "authenticated") {
+    return (
+      <div className="flex items-center gap-4">
+        <Button asChild>
+          <Link href="/dashboard">Dashboard</Link>
+        </Button>
+        <Button onClick={() => signOut()}>Déconnexion</Button>
+      </div>
+    );
+  }
+
+  return (
+    <Button asChild>
+      <Link href="/auth/signin">Connexion</Link>
+    </Button>
+  );
+}
 
 export default function Navbar() {
-  const { data: session } = useSession();
-
   return (
     <nav className="border-b">
       <div className="container mx-auto px-4">
@@ -18,19 +40,7 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="flex items-center gap-4">
-            <Toggle />
-            {session ? (
-              <div className="flex items-center gap-4">
-                <Button asChild>
-                  <Link href="/dashboard">Dashboard</Link>
-                </Button>
-                <Button onClick={() => signOut()}>Déconnexion</Button>
-              </div>
-            ) : (
-              <Button asChild>
-                <Link href="/auth/signin">Connexion</Link>
-              </Button>
-            )}
+            <AuthButtons />
           </div>
         </div>
       </div>
