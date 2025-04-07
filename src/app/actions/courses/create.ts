@@ -4,16 +4,12 @@ import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
-
-export type CreateCourseState = {
-  error: string;
-  success?: boolean;
-};
+import { ActionState } from "../types";
 
 export async function createCourse(
-  prevState: CreateCourseState,
+  prevState: ActionState,
   formData: FormData
-): Promise<CreateCourseState> {
+): Promise<ActionState> {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.email) {
