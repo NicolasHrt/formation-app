@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/utils/authOptions";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getCourses } from "@/app/actions/courses";
