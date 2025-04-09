@@ -1,9 +1,9 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/app/utils/authOptions";
+import { authOptions } from "@/utils/authOptions";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { getCourses } from "@/app/actions/courses";
+import { getCourses } from "@/actions/courses";
 import { Course } from "@prisma/client";
 
 export default async function Dashboard() {
