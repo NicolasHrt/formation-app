@@ -60,12 +60,20 @@ export default async function Dashboard() {
                 {course.description}
               </p>
               <div className="flex justify-between items-center">
-                <Link
-                  href={`/dashboard/courses/${course.id}`}
-                  className="text-blue-600 hover:text-blue-700"
-                >
-                  Modifier
-                </Link>
+                <div className="space-x-2">
+                  <Link
+                    href={`/dashboard/courses/${course.id}`}
+                    className="text-blue-600 hover:text-blue-700"
+                  >
+                    Gérer les modules
+                  </Link>
+                  <Link
+                    href={`/dashboard/courses/${course.id}/edit`}
+                    className="text-gray-600 hover:text-gray-700"
+                  >
+                    Modifier
+                  </Link>
+                </div>
                 <span className="text-sm text-gray-500">
                   {new Date(course.createdAt).toLocaleDateString()}
                 </span>

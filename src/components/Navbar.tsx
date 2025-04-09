@@ -1,4 +1,5 @@
 "use client";
+import { Loader2 } from "lucide-react";
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
@@ -15,6 +16,7 @@ function AuthButtons() {
     return (
       <div className="flex items-center gap-4">
         <Button asChild>
+          
           <Link href="/dashboard">Dashboard</Link>
         </Button>
         <Button onClick={() => signOut()}>Déconnexion</Button>
