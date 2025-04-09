@@ -3,12 +3,16 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
+import { ActionState } from "../types";
 
-export async function getCourses() {
+export async function getCourses(): Promise<ActionState> {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.email) {
-    return [];
+    return {
+      error: "Vous devez être connecté pour accéder aux formations",
+      success: false,
+    };
   }
 
   const user = await prisma.user.findUnique({
@@ -16,10 +20,13 @@ export async function getCourses() {
   });
 
   if (!user) {
-    return [];
+    return {
+      error: "Utilisateur non trouvé",
+      success: false,
+    };
   }
 
-  return prisma.course.findMany({
+  const courses = await prisma.course.findMany({
     where: {
       authorId: user.id,
     },
@@ -27,4 +34,9 @@ export async function getCourses() {
       createdAt: "desc",
     },
   });
+
+  return {
+    success: true,
+    data: courses,
+  };
 }
