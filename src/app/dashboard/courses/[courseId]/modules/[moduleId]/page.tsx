@@ -245,32 +245,66 @@ export default function ModuleVideosPage({
     return <div>Module non trouvé</div>;
   }
 
+  const hasVideos = module.videos.length > 0;
+
   return (
-    <div className="container mx-auto py-8">
-      <div className="flex justify-between items-center mb-8">
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">{module.title}</h1>
-          <p className="text-gray-600 mt-2">{module.description}</p>
+          <h1 className="text-2xl font-bold text-gray-900">{module.title}</h1>
+          <p className="text-gray-600 mt-1">{module.description}</p>
         </div>
         <AddVideoModal moduleId={module.id} onSuccess={fetchModule} />
       </div>
 
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext
-          items={module.videos.map((v) => v.id)}
-          strategy={verticalListSortingStrategy}
+      {hasVideos ? (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
         >
-          <div className="space-y-4">
-            {module.videos.map((video) => (
-              <SortableVideo key={video.id} video={video} />
-            ))}
+          <SortableContext
+            items={module.videos.map((v) => v.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="space-y-4">
+              {module.videos.map((video) => (
+                <SortableVideo key={video.id} video={video} />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+      ) : (
+        <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+          <div className="max-w-md mx-auto space-y-4">
+            <div className="text-gray-400">
+              <svg
+                className="mx-auto h-12 w-12"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-gray-900">
+              Aucune vidéo dans ce module
+            </h3>
+            <p className="text-gray-500">
+              Commencez par ajouter votre première vidéo pour ce module.
+            </p>
+            <div className="mt-6">
+              <AddVideoModal moduleId={module.id} onSuccess={fetchModule} />
+            </div>
           </div>
-        </SortableContext>
-      </DndContext>
+        </div>
+      )}
     </div>
   );
 }
