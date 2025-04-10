@@ -2,7 +2,7 @@
 
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
-import { Module } from "@prisma/client";
+import { Module, Video } from "@prisma/client";
 import {
   DndContext,
   closestCenter,
@@ -31,21 +31,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-interface Video {
-  id: string;
-  title: string;
-  description: string;
-  videoUrl: string;
-  thumbnailUrl?: string;
-  duration?: number;
-  size?: number;
-  status: string;
-  order: number;
-  moduleId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 interface ModuleWithVideos extends Module {
   videos: Video[];
