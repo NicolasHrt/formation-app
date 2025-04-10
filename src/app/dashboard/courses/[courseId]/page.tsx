@@ -22,44 +22,42 @@ export default function CoursePage({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchCourse = async () => {
-      try {
-        const response = await fetch(`/api/courses/${courseId}`);
-        const data = await response.json();
+  const fetchCourse = async () => {
+    try {
+      const response = await fetch(`/api/courses/${courseId}`);
+      const data = await response.json();
 
-        if (!response.ok) {
-          if (response.status === 401) {
-            router.push("/auth/signin");
-            return;
-          }
-          if (response.status === 403 || response.status === 404) {
-            router.push("/dashboard");
-            return;
-          }
-          throw new Error(data.error || "Une erreur est survenue");
+      if (!response.ok) {
+        if (response.status === 401) {
+          router.push("/auth/signin");
+          return;
         }
-
-        const modulesResponse = await fetch(`/api/courses/${courseId}/modules`);
-        const modulesData = await modulesResponse.json();
-
-        if (!modulesResponse.ok) {
-          throw new Error(modulesData.error || "Une erreur est survenue");
+        if (response.status === 403 || response.status === 404) {
+          router.push("/dashboard");
+          return;
         }
-
-        setCourse({
-          ...data.data,
-          modules: modulesData.data,
-        });
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Une erreur est survenue"
-        );
-      } finally {
-        setLoading(false);
+        throw new Error(data.error || "Une erreur est survenue");
       }
-    };
 
+      const modulesResponse = await fetch(`/api/courses/${courseId}/modules`);
+      const modulesData = await modulesResponse.json();
+
+      if (!modulesResponse.ok) {
+        throw new Error(modulesData.error || "Une erreur est survenue");
+      }
+
+      setCourse({
+        ...data.data,
+        modules: modulesData.data,
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchCourse();
   }, [courseId, router]);
 
@@ -85,7 +83,7 @@ export default function CoursePage({
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold text-gray-900">Modules</h2>
-          <AddModuleModal courseId={course.id} />
+          <AddModuleModal courseId={course.id} onSuccess={fetchCourse} />
         </div>
 
         {!hasModules ? (

@@ -12,7 +12,15 @@ import {
 import AddVideoForm from "@/components/AddVideoForm";
 import { Plus } from "lucide-react";
 
-export default function AddVideoModal({ moduleId }: { moduleId: string }) {
+interface AddVideoModalProps {
+  moduleId: string;
+  onSuccess?: () => void;
+}
+
+export default function AddVideoModal({
+  moduleId,
+  onSuccess,
+}: AddVideoModalProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -27,7 +35,13 @@ export default function AddVideoModal({ moduleId }: { moduleId: string }) {
         <DialogHeader>
           <DialogTitle>Ajouter une vidéo</DialogTitle>
         </DialogHeader>
-        <AddVideoForm moduleId={moduleId} onSuccess={() => setOpen(false)} />
+        <AddVideoForm
+          moduleId={moduleId}
+          onSuccess={() => {
+            setOpen(false);
+            onSuccess?.();
+          }}
+        />
       </DialogContent>
     </Dialog>
   );

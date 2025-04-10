@@ -12,7 +12,15 @@ import {
 import AddModuleForm from "@/components/AddModuleForm";
 import { Plus } from "lucide-react";
 
-export default function AddModuleModal({ courseId }: { courseId: string }) {
+interface AddModuleModalProps {
+  courseId: string;
+  onSuccess?: () => void;
+}
+
+export default function AddModuleModal({
+  courseId,
+  onSuccess,
+}: AddModuleModalProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -27,7 +35,13 @@ export default function AddModuleModal({ courseId }: { courseId: string }) {
         <DialogHeader>
           <DialogTitle>Ajouter un module</DialogTitle>
         </DialogHeader>
-        <AddModuleForm courseId={courseId} onSuccess={() => setOpen(false)} />
+        <AddModuleForm
+          courseId={courseId}
+          onSuccess={() => {
+            setOpen(false);
+            onSuccess?.();
+          }}
+        />
       </DialogContent>
     </Dialog>
   );

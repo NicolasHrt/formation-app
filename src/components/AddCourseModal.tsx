@@ -12,7 +12,11 @@ import {
 import AddCourseForm from "@/components/AddCourseForm";
 import { Plus } from "lucide-react";
 
-export default function AddCourseModal() {
+interface AddCourseModalProps {
+  onSuccess?: () => void;
+}
+
+export default function AddCourseModal({ onSuccess }: AddCourseModalProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -20,14 +24,19 @@ export default function AddCourseModal() {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Plus className="w-4 h-4" />
-          Ajouter un cours
+          Ajouter une formation
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Ajouter un cours</DialogTitle>
+          <DialogTitle>Ajouter une formation</DialogTitle>
         </DialogHeader>
-        <AddCourseForm onSuccess={() => setOpen(false)} />
+        <AddCourseForm
+          onSuccess={() => {
+            setOpen(false);
+            onSuccess?.();
+          }}
+        />
       </DialogContent>
     </Dialog>
   );

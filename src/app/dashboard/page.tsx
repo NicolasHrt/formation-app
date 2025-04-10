@@ -47,7 +47,7 @@ export default function DashboardPage() {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Mes Formations</h1>
         <div className="space-x-4">
-          <AddCourseModal />
+          <AddCourseModal onSuccess={fetchCourses} />
         </div>
       </div>
 
