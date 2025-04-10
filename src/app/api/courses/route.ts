@@ -7,27 +7,16 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
       return NextResponse.json(
         { error: "Vous devez être connecté pour accéder aux formations" },
         { status: 401 }
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { error: "Utilisateur non trouvé" },
-        { status: 404 }
-      );
-    }
-
     const courses = await prisma.course.findMany({
       where: {
-        authorId: user.id,
+        authorId: session.user.id,
       },
       orderBy: {
         createdAt: "desc",
