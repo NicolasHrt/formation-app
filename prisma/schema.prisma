@@ -73,6 +73,9 @@ model Video {
   title       String
   description String
   videoUrl    String
+  thumbnailUrl String?
+  duration    Int?     // Durée en secondes
+  size        Int?     // Taille en octets
   order       Int
   moduleId    String
   createdAt   DateTime @default(now())

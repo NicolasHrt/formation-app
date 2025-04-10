@@ -2,7 +2,7 @@
 
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
-import { Video, Module } from "@prisma/client";
+import { Module } from "@prisma/client";
 import {
   DndContext,
   closestCenter,
@@ -21,8 +21,23 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical } from "lucide-react";
+import { Plus, GripVertical, Loader2 } from "lucide-react";
 import AddVideoModal from "@/components/AddVideoModal";
+
+interface Video {
+  id: string;
+  title: string;
+  description: string;
+  videoUrl: string;
+  thumbnailUrl?: string;
+  duration?: number;
+  size?: number;
+  status: string;
+  order: number;
+  moduleId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 interface ModuleWithVideos extends Module {
   videos: Video[];
@@ -57,18 +72,17 @@ function SortableVideo({ video }: { video: Video }) {
       >
         <GripVertical className="h-5 w-5 text-gray-400" />
       </div>
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex-1 pr-8">
+      <div className="flex flex-col space-y-4">
+        <div>
           <h3 className="text-lg font-semibold text-gray-900">{video.title}</h3>
           <p className="text-gray-600 mt-1">{video.description}</p>
-          <a
-            href={video.videoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:text-blue-800 mt-2 inline-block"
-          >
-            Voir la vidéo
-          </a>
+        </div>
+        <div className="relative pt-[56.25%]">
+          <video
+            src={video.videoUrl}
+            controls
+            className="absolute top-0 left-0 w-full h-full rounded-lg"
+          />
         </div>
       </div>
     </div>

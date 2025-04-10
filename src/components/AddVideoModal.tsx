@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus, Upload } from "lucide-react";
 
 interface AddVideoModalProps {
   moduleId: string;
@@ -30,23 +30,38 @@ export default function AddVideoModal({
   const [error, setError] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      setTitle(file.name.split(".")[0]);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedFile) {
+      setError("Veuillez sélectionner un fichier vidéo");
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(`/api/modules/${moduleId}/videos`, {
+      // Obtenir l'URL signée pour l'upload
+      const response = await fetch(`/api/modules/${moduleId}/videos/upload`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title,
-          description,
-          videoUrl,
+          fileName: selectedFile.name,
+          fileType: selectedFile.type,
         }),
       });
 
@@ -56,9 +71,35 @@ export default function AddVideoModal({
         throw new Error(data.error || "Une erreur est survenue");
       }
 
+      // Uploader le fichier vers S3
+      const uploadResponse = await fetch(data.data.uploadUrl, {
+        method: "PUT",
+        body: selectedFile,
+        headers: {
+          "Content-Type": selectedFile.type,
+        },
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error("Erreur lors de l'upload de la vidéo");
+      }
+
+      // Mettre à jour les métadonnées de la vidéo
+      await fetch(`/api/modules/${moduleId}/videos/${data.data.video.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          description,
+        }),
+      });
+
       setTitle("");
       setDescription("");
-      setVideoUrl("");
+      setSelectedFile(null);
+      setUploadProgress(0);
       setOpen(false);
       onSuccess?.();
     } catch (err) {
@@ -80,8 +121,7 @@ export default function AddVideoModal({
         <DialogHeader>
           <DialogTitle>Ajouter une vidéo</DialogTitle>
           <DialogDescription>
-            Remplissez les informations ci-dessous pour ajouter une nouvelle
-            vidéo à ce module.
+            Téléchargez une vidéo et remplissez les informations ci-dessous.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -90,6 +130,27 @@ export default function AddVideoModal({
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
+          <div className="space-y-2">
+            <Label htmlFor="video">Vidéo</Label>
+            <div className="flex items-center space-x-2">
+              <Input
+                id="video"
+                type="file"
+                accept="video/*"
+                onChange={handleFileChange}
+                ref={fileInputRef}
+                className="hidden"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                {selectedFile ? selectedFile.name : "Sélectionner une vidéo"}
+              </Button>
+            </div>
+          </div>
           <div className="space-y-2">
             <Label htmlFor="title">Titre</Label>
             <Input
@@ -108,20 +169,17 @@ export default function AddVideoModal({
               required
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="videoUrl">URL de la vidéo YouTube</Label>
-            <Input
-              id="videoUrl"
-              type="url"
-              value={videoUrl}
-              onChange={(e) => setVideoUrl(e.target.value)}
-              required
-              placeholder="https://www.youtube.com/watch?v=..."
-            />
-          </div>
-          <Button type="submit" disabled={loading}>
+          {uploadProgress > 0 && (
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div
+                className="bg-blue-600 h-2.5 rounded-full"
+                style={{ width: `${uploadProgress}%` }}
+              ></div>
+            </div>
+          )}
+          <Button type="submit" disabled={loading || !selectedFile}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Ajouter
+            {loading ? "Upload en cours..." : "Ajouter"}
           </Button>
         </form>
       </DialogContent>
