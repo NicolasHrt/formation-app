@@ -79,7 +79,6 @@ export default function CreateCourseForm() {
         <Textarea
           name="description"
           id="description"
-          rows={4}
           value={formData.description}
           onChange={handleChange}
           required
