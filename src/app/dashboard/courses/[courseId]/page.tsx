@@ -22,6 +22,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Button } from "@/components/ui/button";
 
 interface CourseWithModules extends Course {
   modules: Module[];
@@ -59,6 +60,16 @@ function SortableModule({ module }: { module: Module }) {
           </h3>
           <p className="text-gray-600 mt-1">{module.description}</p>
         </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = `/dashboard/courses/${module.courseId}/modules/${module.id}`;
+          }}
+        >
+          Gérer les vidéos
+        </Button>
       </div>
     </div>
   );
