@@ -14,7 +14,7 @@ export default function Home() {
           href="/auth/signin"
           className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700"
         >
-          Commencer maintenant
+          Start now
         </Link>
         <Link
           href="/formations"
