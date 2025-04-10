@@ -8,14 +8,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-export default function CreateCourseForm() {
+export default function AddCourseForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    coverImage: "",
     slug: "",
   });
 
@@ -82,17 +81,6 @@ export default function CreateCourseForm() {
           value={formData.description}
           onChange={handleChange}
           required
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="coverImage">Image de couverture (URL)</Label>
-        <Input
-          type="url"
-          name="coverImage"
-          id="coverImage"
-          value={formData.coverImage}
-          onChange={handleChange}
         />
       </div>
 

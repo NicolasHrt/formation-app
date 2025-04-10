@@ -4,12 +4,20 @@ import { useState, useEffect } from "react";
 import { Course } from "@prisma/client";
 import { CourseCard } from "@/components/CourseCard";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import AddCourseForm from "@/components/AddCourseForm";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function DashboardPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchCourses = async () => {
     try {
@@ -47,9 +55,17 @@ export default function DashboardPage() {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Mes Formations</h1>
         <div className="space-x-4">
-          <Link href="/dashboard/courses/new">
-            <Button>Créer une formation</Button>
-          </Link>
+          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline">Créer une formation</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[600px]">
+              <DialogHeader>
+                <DialogTitle>Créer une nouvelle formation</DialogTitle>
+              </DialogHeader>
+              <AddCourseForm />
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 

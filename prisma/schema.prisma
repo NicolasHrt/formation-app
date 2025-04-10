@@ -48,7 +48,6 @@ model Course {
   id          String   @id @default(cuid())
   title       String
   description String
-  coverImage  String?
   slug        String   @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
