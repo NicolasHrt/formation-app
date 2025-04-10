@@ -23,6 +23,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
+import { GripVertical } from "lucide-react";
 
 interface CourseWithModules extends Course {
   modules: Module[];
@@ -49,27 +50,34 @@ function SortableModule({ module }: { module: Module }) {
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
-      className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow cursor-move"
+      className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative"
     >
-      <div className="flex justify-between items-start mb-4">
-        <div>
+      <div
+        {...attributes}
+        {...listeners}
+        className="absolute top-2 right-2 cursor-move p-2 hover:bg-gray-100 rounded-lg transition-colors"
+      >
+        <GripVertical className="h-5 w-5 text-gray-400" />
+      </div>
+      <div className="flex flex-col gap-4">
+        <div className="flex-1 pr-8">
           <h3 className="text-lg font-semibold text-gray-900">
             {module.title}
           </h3>
           <p className="text-gray-600 mt-1">{module.description}</p>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={(e) => {
-            e.preventDefault();
-            window.location.href = `/dashboard/courses/${module.courseId}/modules/${module.id}`;
-          }}
-        >
-          Gérer les vidéos
-        </Button>
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = `/dashboard/courses/${module.courseId}/modules/${module.id}`;
+            }}
+          >
+            Gérer les vidéos
+          </Button>
+        </div>
       </div>
     </div>
   );
