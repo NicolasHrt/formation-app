@@ -26,7 +26,7 @@ export default function AddModuleModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button>
           <Plus className="w-4 h-4" />
           Ajouter un module
         </Button>
