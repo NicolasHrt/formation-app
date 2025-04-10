@@ -19,7 +19,7 @@ export default function AddVideoModal({ moduleId }: { moduleId: string }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
-          <Plus className="w-4 h-4 mr-2" />
+          <Plus className="w-4 h-4" />
           Ajouter une vidéo
         </Button>
       </DialogTrigger>

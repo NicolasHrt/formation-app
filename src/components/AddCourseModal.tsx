@@ -9,10 +9,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import AddModuleForm from "@/components/AddModuleForm";
+import AddCourseForm from "@/components/AddCourseForm";
 import { Plus } from "lucide-react";
 
-export default function AddModuleModal({ courseId }: { courseId: string }) {
+export default function AddCourseModal() {
   const [open, setOpen] = useState(false);
 
   return (
@@ -20,14 +20,14 @@ export default function AddModuleModal({ courseId }: { courseId: string }) {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Plus className="w-4 h-4" />
-          Ajouter un module
+          Ajouter un cours
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Ajouter un module</DialogTitle>
+          <DialogTitle>Ajouter un cours</DialogTitle>
         </DialogHeader>
-        <AddModuleForm courseId={courseId} onSuccess={() => setOpen(false)} />
+        <AddCourseForm onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

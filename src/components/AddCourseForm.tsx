@@ -8,7 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-export default function AddCourseForm() {
+export default function AddCourseForm({
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -40,6 +44,9 @@ export default function AddCourseForm() {
 
       router.push("/dashboard");
       router.refresh();
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Une erreur est survenue");
     } finally {
