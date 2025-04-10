@@ -21,8 +21,9 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, Loader2, Trash2 } from "lucide-react";
+import { Plus, GripVertical, Loader2, Trash2, Pencil } from "lucide-react";
 import AddVideoModal from "@/components/AddVideoModal";
+import EditVideoModal from "@/components/EditVideoModal";
 import {
   Dialog,
   DialogContent,
@@ -105,6 +106,10 @@ function SortableVideo({ video }: { video: Video }) {
         >
           <GripVertical className="h-5 w-5 text-gray-400" />
         </div>
+        <EditVideoModal
+          video={video}
+          onSuccess={() => window.location.reload()}
+        />
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button
