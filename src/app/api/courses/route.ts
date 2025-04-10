@@ -32,3 +32,42 @@ export async function GET() {
     );
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "Vous devez être connecté pour créer une formation" },
+        { status: 401 }
+      );
+    }
+
+    const { title, description } = await request.json();
+
+    if (!title || !description) {
+      return NextResponse.json(
+        { error: "Le titre et la description sont requis" },
+        { status: 400 }
+      );
+    }
+
+    const course = await prisma.course.create({
+      data: {
+        title,
+        description,
+        authorId: session.user.id,
+        slug: title.toLowerCase().replace(/ /g, "-"),
+      },
+    });
+
+    return NextResponse.json({ success: true, data: course });
+  } catch (error) {
+    console.error("Erreur lors de la création du cours:", error);
+    return NextResponse.json(
+      { error: "Une erreur est survenue" },
+      { status: 500 }
+    );
+  }
+}

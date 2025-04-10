@@ -47,7 +47,6 @@ export default function DashboardPage() {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Mes Formations</h1>
         <div className="space-x-4">
-          <Button onClick={fetchCourses}>Rafraîchir</Button>
           <Link href="/dashboard/courses/new">
             <Button>Créer une formation</Button>
           </Link>
