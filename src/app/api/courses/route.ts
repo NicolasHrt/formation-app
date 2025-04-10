@@ -23,7 +23,15 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json({ success: true, data: courses });
+    const response = NextResponse.json({ success: true, data: courses });
+
+    // Ajout des en-têtes de cache
+    response.headers.set(
+      "Cache-Control",
+      "public, s-maxage=60, stale-while-revalidate=30"
+    );
+
+    return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des cours:", error);
     return NextResponse.json(

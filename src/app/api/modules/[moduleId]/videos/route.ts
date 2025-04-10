@@ -73,3 +73,49 @@ export async function POST(
     );
   }
 }
+
+export async function GET(
+  request: Request,
+  { params }: { params: { moduleId: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "Vous devez être connecté pour accéder aux vidéos" },
+        { status: 401 }
+      );
+    }
+
+    const videos = await prisma.video.findMany({
+      where: {
+        moduleId: params.moduleId,
+        module: {
+          course: {
+            authorId: session.user.id,
+          },
+        },
+      },
+      orderBy: {
+        order: "asc",
+      },
+    });
+
+    const response = NextResponse.json({ success: true, data: videos });
+
+    // Ajout des en-têtes de cache
+    response.headers.set(
+      "Cache-Control",
+      "public, s-maxage=60, stale-while-revalidate=30"
+    );
+
+    return response;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des vidéos:", error);
+    return NextResponse.json(
+      { error: "Une erreur est survenue" },
+      { status: 500 }
+    );
+  }
+}

@@ -99,13 +99,6 @@ function SortableVideo({ video }: { video: Video }) {
       className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative h-full"
     >
       <div className="absolute top-2 right-2 flex gap-2">
-        <div
-          {...attributes}
-          {...listeners}
-          className="cursor-move p-2 hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          <GripVertical className="h-5 w-5 text-gray-400" />
-        </div>
         <EditVideoModal
           video={video}
           onSuccess={() => window.location.reload()}
@@ -154,6 +147,13 @@ function SortableVideo({ video }: { video: Video }) {
             </div>
           </DialogContent>
         </Dialog>
+        <div
+          {...attributes}
+          {...listeners}
+          className="cursor-move p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <GripVertical className="h-5 w-5 text-gray-400" />
+        </div>
       </div>
       <div className="flex flex-col space-y-4 h-full">
         <div className="pr-12">

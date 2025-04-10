@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
 import Navbar from "@/components/Navbar";
 import { SessionProvider } from "@/components/SessionProvider";
+import { QueryProvider } from "@/providers/QueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,10 +25,12 @@ export default async function RootLayout({
     <html lang="fr">
       <body className={inter.className}>
         <SessionProvider session={session}>
-          <div className="min-h-screen bg-gray-50">
-            <Navbar />
-            <main className="container mx-auto px-4 py-8">{children}</main>
-          </div>
+          <QueryProvider>
+            <div className="min-h-screen bg-gray-50">
+              <Navbar />
+              <main className="container mx-auto px-4 py-8">{children}</main>
+            </div>
+          </QueryProvider>
         </SessionProvider>
       </body>
     </html>

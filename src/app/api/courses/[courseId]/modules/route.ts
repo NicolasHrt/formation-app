@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ courseId: string }> }
+  { params }: { params: { courseId: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -17,36 +17,31 @@ export async function GET(
       );
     }
 
-    const { courseId } = await params;
-
-    // Vérifier que l'utilisateur est bien l'auteur du cours
-    const course = await prisma.course.findUnique({
-      where: { id: courseId },
-      include: {
-        modules: {
-          orderBy: {
-            order: "asc",
-          },
+    const modules = await prisma.module.findMany({
+      where: {
+        courseId: params.courseId,
+        course: {
+          authorId: session.user.id,
         },
+      },
+      orderBy: {
+        order: "asc",
       },
     });
 
-    if (!course) {
-      return NextResponse.json({ error: "Cours non trouvé" }, { status: 404 });
-    }
+    const response = NextResponse.json({ success: true, data: modules });
 
-    if (course.authorId !== session.user.id) {
-      return NextResponse.json(
-        { error: "Vous n'êtes pas autorisé à accéder aux modules de ce cours" },
-        { status: 403 }
-      );
-    }
+    // Ajout des en-têtes de cache
+    response.headers.set(
+      "Cache-Control",
+      "public, s-maxage=60, stale-while-revalidate=30"
+    );
 
-    return NextResponse.json({ success: true, data: course.modules });
+    return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des modules:", error);
     return NextResponse.json(
-      { error: "Une erreur est survenue lors de la récupération des modules" },
+      { error: "Une erreur est survenue" },
       { status: 500 }
     );
   }
