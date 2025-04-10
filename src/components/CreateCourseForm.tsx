@@ -1,53 +1,100 @@
 "use client";
 
-import { useActionState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { createCourse, ActionState } from "@/actions/courses";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-const initialState: ActionState = {
-  error: "",
-};
-
 export default function CreateCourseForm() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const [state, formAction, pending] = useActionState(
-    createCourse,
-    initialState
-  );
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    coverImage: "",
+    slug: "",
+  });
 
-  useEffect(() => {
-    if (state.success) {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch("/api/courses", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Une erreur est survenue");
+      }
+
       router.push("/dashboard");
       router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
+    } finally {
+      setLoading(false);
     }
-  }, [state.success, router]);
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   return (
-    <form action={formAction} className="space-y-6">
-      {state.error && (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {error && (
         <Alert variant="destructive">
-          <AlertDescription>{state.error}</AlertDescription>
+          <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
       <div className="space-y-2">
         <Label htmlFor="title">Titre</Label>
-        <Input type="text" name="title" id="title" required />
+        <Input
+          type="text"
+          name="title"
+          id="title"
+          value={formData.title}
+          onChange={handleChange}
+          required
+        />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
-        <Textarea name="description" id="description" rows={4} required />
+        <Textarea
+          name="description"
+          id="description"
+          rows={4}
+          value={formData.description}
+          onChange={handleChange}
+          required
+        />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="coverImage">Image de couverture (URL)</Label>
-        <Input type="url" name="coverImage" id="coverImage" />
+        <Input
+          type="url"
+          name="coverImage"
+          id="coverImage"
+          value={formData.coverImage}
+          onChange={handleChange}
+        />
       </div>
 
       <div className="space-y-2">
@@ -60,6 +107,8 @@ export default function CreateCourseForm() {
             type="text"
             name="slug"
             id="slug"
+            value={formData.slug}
+            onChange={handleChange}
             required
             pattern="[a-z0-9-]+"
             className="rounded-l-none"
@@ -71,8 +120,8 @@ export default function CreateCourseForm() {
       </div>
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={pending}>
-          {pending ? "Création en cours..." : "Créer la formation"}
+        <Button type="submit" disabled={loading}>
+          {loading ? "Création en cours..." : "Créer la formation"}
         </Button>
       </div>
     </form>

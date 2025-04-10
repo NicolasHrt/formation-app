@@ -1,44 +1,85 @@
 "use client";
 
-import { useActionState } from "react";
-import { addModule } from "@/actions/courses/addModule";
+import { useState } from "react";
+import { useCourse } from "@/hooks/useCourse";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ActionState } from "@/actions/types";
-
-const initialState: ActionState = {
-  error: "",
-};
 
 export default function AddModuleForm({ courseId }: { courseId: string }) {
-  const [state, formAction, pending] = useActionState(addModule, initialState);
+  const { addModule, loading, error } = useCourse();
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    videoUrl: "",
+    order: 1,
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await addModule({ ...formData, courseId });
+    setFormData({
+      title: "",
+      description: "",
+      videoUrl: "",
+      order: 1,
+    });
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "order" ? parseInt(value) || 1 : value,
+    }));
+  };
 
   return (
-    <form action={formAction} className="space-y-6">
-      <input type="hidden" name="courseId" value={courseId} />
-
-      {state.error && (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {error && (
         <Alert variant="destructive">
-          <AlertDescription>{state.error}</AlertDescription>
+          <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
       <div className="space-y-2">
         <Label htmlFor="title">Titre du module</Label>
-        <Input type="text" name="title" id="title" required />
+        <Input
+          type="text"
+          name="title"
+          id="title"
+          value={formData.title}
+          onChange={handleChange}
+          required
+        />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
-        <Textarea name="description" id="description" rows={4} required />
+        <Textarea
+          name="description"
+          id="description"
+          rows={4}
+          value={formData.description}
+          onChange={handleChange}
+          required
+        />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="videoUrl">URL de la vidéo</Label>
-        <Input type="url" name="videoUrl" id="videoUrl" required />
+        <Input
+          type="url"
+          name="videoUrl"
+          id="videoUrl"
+          value={formData.videoUrl}
+          onChange={handleChange}
+          required
+        />
       </div>
 
       <div className="space-y-2">
@@ -48,14 +89,16 @@ export default function AddModuleForm({ courseId }: { courseId: string }) {
           name="order"
           id="order"
           min="1"
+          value={formData.order}
+          onChange={handleChange}
           required
           placeholder="1"
         />
       </div>
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={pending}>
-          {pending ? "Ajout en cours..." : "Ajouter le module"}
+        <Button type="submit" disabled={loading}>
+          {loading ? "Ajout en cours..." : "Ajouter le module"}
         </Button>
       </div>
     </form>
