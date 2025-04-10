@@ -56,3 +56,53 @@ export async function PATCH(
     );
   }
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ moduleId: string; videoId: string }> }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "Vous devez être connecté pour supprimer une vidéo" },
+        { status: 401 }
+      );
+    }
+
+    const { moduleId, videoId } = await params;
+
+    // Vérifier que l'utilisateur est bien l'auteur du module
+    const module = await prisma.module.findUnique({
+      where: { id: moduleId },
+      include: {
+        course: true,
+      },
+    });
+
+    if (!module) {
+      return NextResponse.json({ error: "Module non trouvé" }, { status: 404 });
+    }
+
+    if (module.course.authorId !== session.user.id) {
+      return NextResponse.json(
+        { error: "Vous n'êtes pas autorisé à supprimer cette vidéo" },
+        { status: 403 }
+      );
+    }
+
+    // Supprimer la vidéo
+    await prisma.video.delete({
+      where: { id: videoId },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Erreur lors de la suppression de la vidéo:", error);
+    return NextResponse.json(
+      { error: "Une erreur est survenue lors de la suppression de la vidéo" },
+      { status: 500 }
+    );
+  }
+}

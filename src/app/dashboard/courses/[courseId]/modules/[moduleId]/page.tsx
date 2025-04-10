@@ -21,8 +21,16 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, Loader2 } from "lucide-react";
+import { Plus, GripVertical, Loader2, Trash2 } from "lucide-react";
 import AddVideoModal from "@/components/AddVideoModal";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface Video {
   id: string;
@@ -44,6 +52,8 @@ interface ModuleWithVideos extends Module {
 }
 
 function SortableVideo({ video }: { video: Video }) {
+  const [open, setOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const {
     attributes,
     listeners,
@@ -59,18 +69,88 @@ function SortableVideo({ video }: { video: Video }) {
     opacity: isDragging ? 0.5 : 1,
   };
 
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      const response = await fetch(
+        `/api/modules/${video.moduleId}/videos/${video.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Une erreur est survenue");
+      }
+
+      setOpen(false);
+      // Recharger la page pour mettre à jour l'affichage
+      window.location.reload();
+    } catch (error) {
+      console.error("Erreur lors de la suppression de la vidéo:", error);
+      alert("Une erreur est survenue lors de la suppression de la vidéo");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div
       ref={setNodeRef}
       style={style}
       className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative"
     >
-      <div
-        {...attributes}
-        {...listeners}
-        className="absolute top-2 right-2 cursor-move p-2 hover:bg-gray-100 rounded-lg transition-colors"
-      >
-        <GripVertical className="h-5 w-5 text-gray-400" />
+      <div className="absolute top-2 right-2 flex gap-2">
+        <div
+          {...attributes}
+          {...listeners}
+          className="cursor-move p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <GripVertical className="h-5 w-5 text-gray-400" />
+        </div>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <button
+              className="p-2 hover:bg-red-50 rounded-lg transition-colors text-red-500"
+              title="Supprimer la vidéo"
+            >
+              <Trash2 className="h-5 w-5" />
+            </button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Supprimer la vidéo</DialogTitle>
+              <DialogDescription>
+                Êtes-vous sûr de vouloir supprimer cette vidéo ? Cette action
+                est irréversible.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex justify-end gap-4 mt-4">
+              <Button
+                variant="outline"
+                onClick={() => setOpen(false)}
+                disabled={isDeleting}
+              >
+                Annuler
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Suppression...
+                  </>
+                ) : (
+                  "Supprimer"
+                )}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="flex flex-col space-y-4">
         <div>
