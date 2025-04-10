@@ -2,6 +2,15 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
 import { prisma } from "@/lib/prisma";
+import { S3Client, DeleteObjectCommand } from "@aws-sdk/client-s3";
+
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION!,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+  },
+});
 
 export async function PATCH(
   request: Request,
@@ -92,7 +101,28 @@ export async function DELETE(
       );
     }
 
-    // Supprimer la vidéo
+    // Récupérer la vidéo pour obtenir son URL
+    const video = await prisma.video.findUnique({
+      where: { id: videoId },
+    });
+
+    if (!video) {
+      return NextResponse.json({ error: "Vidéo non trouvée" }, { status: 404 });
+    }
+
+    // Extraire la clé S3 de l'URL
+    const url = new URL(video.videoUrl);
+    const key = url.pathname.substring(1); // Supprimer le premier slash
+
+    // Supprimer le fichier sur S3
+    const deleteCommand = new DeleteObjectCommand({
+      Bucket: process.env.AWS_BUCKET_NAME!,
+      Key: key,
+    });
+
+    await s3Client.send(deleteCommand);
+
+    // Supprimer la vidéo de la base de données
     await prisma.video.delete({
       where: { id: videoId },
     });
