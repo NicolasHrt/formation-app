@@ -84,7 +84,7 @@ function SortableVideo({ video }: { video: Video }) {
     <div
       ref={setNodeRef}
       style={style}
-      className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative"
+      className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative h-full"
     >
       <div className="absolute top-2 right-2 flex gap-2">
         <div
@@ -96,12 +96,14 @@ function SortableVideo({ video }: { video: Video }) {
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <button
-              className="p-2 hover:bg-red-50 rounded-lg transition-colors text-red-500"
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-red-500 hover:text-red-500 hover:bg-red-50"
               title="Supprimer la vidéo"
             >
               <Trash2 className="h-5 w-5" />
-            </button>
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -137,12 +139,14 @@ function SortableVideo({ video }: { video: Video }) {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="flex flex-col space-y-4">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900">{video.title}</h3>
-          <p className="text-gray-600 mt-1">{video.description}</p>
+      <div className="flex flex-col space-y-4 h-full">
+        <div className="pr-12">
+          <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
+            {video.title}
+          </h3>
+          <p className="text-gray-600 mt-1 line-clamp-2">{video.description}</p>
         </div>
-        <div className="relative pt-[56.25%]">
+        <div className="relative pt-[56.25%] flex-1">
           <video
             src={video.videoUrl}
             controls
@@ -267,7 +271,7 @@ export default function ModuleVideosPage({
             items={module.videos.map((v) => v.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {module.videos.map((video) => (
                 <SortableVideo key={video.id} video={video} />
               ))}
