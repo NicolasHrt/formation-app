@@ -44,11 +44,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const { title, description } = await request.json();
+    const { title, description, slug } = await request.json();
 
-    if (!title || !description) {
+    if (!title || !description || !slug) {
       return NextResponse.json(
-        { error: "Le titre et la description sont requis" },
+        { error: "Le titre, la description et le slug sont requis" },
         { status: 400 }
       );
     }
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
         title,
         description,
         authorId: session.user.id,
-        slug: title.toLowerCase().replace(/ /g, "-"),
+        slug,
       },
     });
 

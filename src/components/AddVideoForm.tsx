@@ -8,20 +8,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 
-interface AddModuleFormProps {
-  courseId: string;
+interface AddVideoFormProps {
+  moduleId: string;
   onSuccess?: () => void;
 }
 
-export default function AddModuleForm({
-  courseId,
+export default function AddVideoForm({
+  moduleId,
   onSuccess,
-}: AddModuleFormProps) {
+}: AddVideoFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    videoUrl: "",
     order: 1,
   });
 
@@ -31,7 +32,7 @@ export default function AddModuleForm({
     setError(null);
 
     try {
-      const response = await fetch(`/api/courses/${courseId}/modules`, {
+      const response = await fetch(`/api/modules/${moduleId}/videos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,6 +49,7 @@ export default function AddModuleForm({
       setFormData({
         title: "",
         description: "",
+        videoUrl: "",
         order: 1,
       });
 
@@ -80,7 +82,7 @@ export default function AddModuleForm({
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="title">Titre du module</Label>
+        <Label htmlFor="title">Titre de la vidéo</Label>
         <Input
           type="text"
           name="title"
@@ -104,7 +106,19 @@ export default function AddModuleForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="order">Ordre du module</Label>
+        <Label htmlFor="videoUrl">URL de la vidéo</Label>
+        <Input
+          type="url"
+          name="videoUrl"
+          id="videoUrl"
+          value={formData.videoUrl}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="order">Ordre de la vidéo</Label>
         <Input
           type="number"
           name="order"
@@ -125,7 +139,7 @@ export default function AddModuleForm({
               Ajout en cours...
             </>
           ) : (
-            "Ajouter le module"
+            "Ajouter la vidéo"
           )}
         </Button>
       </div>
