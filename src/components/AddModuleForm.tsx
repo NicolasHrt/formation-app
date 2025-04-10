@@ -22,7 +22,6 @@ export default function AddModuleForm({
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    order: 1,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,7 +47,6 @@ export default function AddModuleForm({
       setFormData({
         title: "",
         description: "",
-        order: 1,
       });
 
       if (onSuccess) {
@@ -67,7 +65,7 @@ export default function AddModuleForm({
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "order" ? parseInt(value) || 1 : value,
+      [name]: value,
     }));
   };
 
@@ -100,20 +98,6 @@ export default function AddModuleForm({
           value={formData.description}
           onChange={handleChange}
           required
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="order">Ordre du module</Label>
-        <Input
-          type="number"
-          name="order"
-          id="order"
-          min="1"
-          value={formData.order}
-          onChange={handleChange}
-          required
-          placeholder="1"
         />
       </div>
 

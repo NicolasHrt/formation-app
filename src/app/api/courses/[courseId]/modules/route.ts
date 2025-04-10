@@ -67,7 +67,7 @@ export async function POST(
     }
 
     const { courseId } = await params;
-    const { title, description, order } = await request.json();
+    const { title, description } = await request.json();
 
     if (!title || !description) {
       return NextResponse.json(
@@ -79,6 +79,14 @@ export async function POST(
     // Vérifier que l'utilisateur est bien l'auteur du cours
     const course = await prisma.course.findUnique({
       where: { id: courseId },
+      include: {
+        modules: {
+          orderBy: {
+            order: "desc",
+          },
+          take: 1,
+        },
+      },
     });
 
     if (!course) {
@@ -92,11 +100,14 @@ export async function POST(
       );
     }
 
+    const lastOrder = course.modules.length > 0 ? course.modules[0].order : 0;
+    const newOrder = lastOrder + 1;
+
     const module = await prisma.module.create({
       data: {
         title,
         description,
-        order: order || 1,
+        order: newOrder,
         courseId,
       },
     });

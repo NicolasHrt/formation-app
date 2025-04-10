@@ -5,10 +5,63 @@ import { redirect, useRouter } from "next/navigation";
 import AddModuleModal from "@/components/AddModuleModal";
 import { Module, Course, User } from "@prisma/client";
 import { use } from "react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface CourseWithModules extends Course {
   modules: Module[];
   author: User;
+}
+
+function SortableModule({ module }: { module: Module }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: module.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow cursor-move"
+    >
+      <div className="flex justify-between items-start mb-4">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900">
+            {module.title}
+          </h3>
+          <p className="text-gray-600 mt-1">{module.description}</p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function CoursePage({
@@ -21,6 +74,13 @@ export default function CoursePage({
   const [course, setCourse] = useState<CourseWithModules | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const fetchCourse = async () => {
     try {
@@ -54,6 +114,41 @@ export default function CoursePage({
       setError(err instanceof Error ? err.message : "Une erreur est survenue");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex =
+        course?.modules.findIndex((m) => m.id === active.id) ?? 0;
+      const newIndex = course?.modules.findIndex((m) => m.id === over.id) ?? 0;
+
+      if (course) {
+        const newModules = arrayMove(course.modules, oldIndex, newIndex);
+        setCourse({ ...course, modules: newModules });
+
+        // Mettre à jour l'ordre dans la base de données
+        try {
+          await fetch(`/api/courses/${courseId}/modules/reorder`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              modules: newModules.map((module, index) => ({
+                id: module.id,
+                order: index + 1,
+              })),
+            }),
+          });
+        } catch (err) {
+          console.error("Erreur lors de la mise à jour de l'ordre:", err);
+          // Recharger les modules en cas d'erreur
+          fetchCourse();
+        }
+      }
     }
   };
 
@@ -94,23 +189,22 @@ export default function CoursePage({
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {course.modules.map((module: Module) => (
-              <div
-                key={module.id}
-                className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {module.title}
-                    </h3>
-                    <p className="text-gray-600 mt-1">{module.description}</p>
-                  </div>
-                </div>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={course.modules.map((m) => m.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {course.modules.map((module) => (
+                  <SortableModule key={module.id} module={module} />
+                ))}
               </div>
-            ))}
-          </div>
+            </SortableContext>
+          </DndContext>
         )}
       </div>
     </div>
