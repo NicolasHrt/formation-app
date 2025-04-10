@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
   request: Request,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -17,7 +17,7 @@ export async function GET(
       );
     }
 
-    const { courseId } = params;
+    const { courseId } = await params;
 
     // Vérifier que l'utilisateur est bien l'auteur du cours
     const course = await prisma.course.findUnique({
@@ -54,7 +54,7 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -66,7 +66,7 @@ export async function POST(
       );
     }
 
-    const { courseId } = params;
+    const { courseId } = await params;
     const { title, description, order } = await request.json();
 
     if (!title || !description) {
