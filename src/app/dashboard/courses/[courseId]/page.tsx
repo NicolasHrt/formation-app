@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { redirect, useRouter } from "next/navigation";
 import AddModuleModal from "@/components/AddModuleModal";
+import EditModuleModal from "@/components/EditModuleModal";
 import { Module, Course, User } from "@prisma/client";
 import { use } from "react";
 import {
@@ -23,7 +24,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
-import { GripVertical } from "lucide-react";
+import { GripVertical, Trash2, Loader2 } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -32,13 +33,31 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface CourseWithModules extends Course {
   modules: Module[];
   author: User;
 }
 
-function SortableModule({ module }: { module: Module }) {
+function SortableModule({
+  module,
+  onUpdate,
+  onDelete,
+}: {
+  module: Module;
+  onUpdate: (updatedModule: Module) => void;
+  onDelete: (moduleId: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const {
     attributes,
     listeners,
@@ -54,25 +73,103 @@ function SortableModule({ module }: { module: Module }) {
     opacity: isDragging ? 0.5 : 1,
   };
 
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      const response = await fetch(
+        `/api/courses/${module.courseId}/modules/${module.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Une erreur est survenue");
+      }
+
+      setOpen(false);
+      onDelete(module.id);
+    } catch (error) {
+      console.error("Erreur lors de la suppression du module:", error);
+      alert("Une erreur est survenue lors de la suppression du module");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative"
+      className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative h-full"
     >
-      <div
-        {...attributes}
-        {...listeners}
-        className="absolute top-2 right-2 cursor-move p-2 hover:bg-gray-100 rounded-lg transition-colors"
-      >
-        <GripVertical className="h-5 w-5 text-gray-400" />
+      <div className="absolute top-2 right-2 flex gap-2">
+        <EditModuleModal
+          module={module}
+          onSuccess={(updatedModule) => onUpdate(updatedModule)}
+        />
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-red-500 hover:text-red-500 hover:bg-red-50"
+              title="Supprimer le module"
+            >
+              <Trash2 className="h-5 w-5" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Supprimer le module</DialogTitle>
+              <DialogDescription>
+                Êtes-vous sûr de vouloir supprimer ce module ? Cette action est
+                irréversible et supprimera également toutes les vidéos
+                associées.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex justify-end gap-4 mt-4">
+              <Button
+                variant="outline"
+                onClick={() => setOpen(false)}
+                disabled={isDeleting}
+              >
+                Annuler
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Suppression...
+                  </>
+                ) : (
+                  "Supprimer"
+                )}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+        <div
+          {...attributes}
+          {...listeners}
+          className="cursor-move p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <GripVertical className="h-5 w-5 text-gray-400" />
+        </div>
       </div>
-      <div className="flex flex-col gap-4">
-        <div className="flex-1 pr-8">
-          <h3 className="text-lg font-semibold text-gray-900">
+      <div className="flex flex-col space-y-4 h-full">
+        <div className="pr-12">
+          <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
             {module.title}
           </h3>
-          <p className="text-gray-600 mt-1">{module.description}</p>
+          <p className="text-gray-600 mt-1 line-clamp-2">
+            {module.description}
+          </p>
         </div>
         <div className="flex justify-end">
           <Button
@@ -142,6 +239,24 @@ export default function CoursePage({
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleModuleUpdate = (updatedModule: Module) => {
+    if (!course) return;
+    setCourse({
+      ...course,
+      modules: course.modules.map((m) =>
+        m.id === updatedModule.id ? updatedModule : m
+      ),
+    });
+  };
+
+  const handleModuleDelete = (moduleId: string) => {
+    if (!course) return;
+    setCourse({
+      ...course,
+      modules: course.modules.filter((m) => m.id !== moduleId),
+    });
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
@@ -239,7 +354,12 @@ export default function CoursePage({
             >
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {course.modules.map((module) => (
-                  <SortableModule key={module.id} module={module} />
+                  <SortableModule
+                    key={module.id}
+                    module={module}
+                    onUpdate={handleModuleUpdate}
+                    onDelete={handleModuleDelete}
+                  />
                 ))}
               </div>
             </SortableContext>
