@@ -5,10 +5,11 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
   request: Request,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
+    const { courseId } = await params;
 
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -19,7 +20,7 @@ export async function GET(
 
     const modules = await prisma.module.findMany({
       where: {
-        courseId: params.courseId,
+        courseId,
         course: {
           authorId: session.user.id,
         },
