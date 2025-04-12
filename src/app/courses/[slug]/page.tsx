@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import CourseReader from "@/components/course-reader";
+import CourseReader from "@/components/CourseReader";
 
 export default function CourseViewPage({
   params,

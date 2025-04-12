@@ -16,12 +16,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function AddCourseModal() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,7 +51,8 @@ export default function AddCourseModal() {
 
       setOpen(false);
       router.push("/dashboard");
-      window.location.reload();
+      // Invalider le cache React Query pour forcer un rafraîchissement
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Une erreur est survenue");
     } finally {
