@@ -162,7 +162,7 @@ function ModuleCard({
         </div>
         <div className="flex justify-end">
           <Button
-            variant="outline"
+            variant="black"
             size="sm"
             onClick={(e) => {
               e.preventDefault();

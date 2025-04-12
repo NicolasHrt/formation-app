@@ -20,7 +20,7 @@ export async function GET(
 
     const { courseId } = await params;
 
-    const course = await prisma.course.findUnique({
+    let course = await prisma.course.findUnique({
       where: { id: courseId },
       include: {
         modules: {
@@ -37,6 +37,26 @@ export async function GET(
         },
       },
     });
+
+    if (!course) {
+      course = await prisma.course.findUnique({
+        where: { slug: courseId },
+        include: {
+          modules: {
+            orderBy: {
+              order: "asc",
+            },
+            include: {
+              videos: {
+                orderBy: {
+                  order: "asc",
+                },
+              },
+            },
+          },
+        },
+      });
+    }
 
     if (!course) {
       return NextResponse.json(

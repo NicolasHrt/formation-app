@@ -18,7 +18,9 @@ function AuthButtons() {
         <Button asChild>
           <Link href="/dashboard">Dashboard</Link>
         </Button>
-        <Button onClick={() => signOut()}>Déconnexion</Button>
+        <Button variant="black" onClick={() => signOut()}>
+          Déconnexion
+        </Button>
       </div>
     );
   }
