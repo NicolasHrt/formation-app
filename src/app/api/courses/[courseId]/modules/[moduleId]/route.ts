@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
 import { prisma } from "@/lib/prisma";
+import { deleteAllVideosFromModule } from "@/lib/s3";
 
 export async function GET(
   request: Request,
@@ -150,6 +151,10 @@ export async function DELETE(
       );
     }
 
+    // Supprimer les vidéos sur S3
+    await deleteAllVideosFromModule(moduleId);
+
+    // Supprimer le module (cela supprimera aussi les vidéos en base de données grâce à onDelete: Cascade)
     await prisma.module.delete({
       where: { id: moduleId },
     });
