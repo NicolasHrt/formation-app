@@ -1,6 +1,8 @@
 import { Course } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Eye } from "lucide-react";
+
 interface CourseCardProps {
   course: Course;
 }
@@ -33,6 +35,12 @@ export function CourseCard({ course }: CourseCardProps) {
           <div className="flex gap-3">
             <Link href={`/dashboard/courses/${course.id}`}>
               <Button variant="default">Gérer les modules</Button>
+            </Link>
+            <Link href={`/courses/${course.id}`} target="_blank">
+              <Button variant="outline">
+                <Eye className="h-4 w-4 mr-2" />
+                Prévisualiser
+              </Button>
             </Link>
           </div>
         </div>
