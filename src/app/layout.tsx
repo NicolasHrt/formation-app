@@ -28,7 +28,7 @@ export default async function RootLayout({
           <QueryProvider>
             <div className="min-h-screen bg-gray-50">
               <Navbar />
-              <main className="container mx-auto px-4 py-8">{children}</main>
+              <main className=" mx-auto px-4">{children}</main>
             </div>
           </QueryProvider>
         </SessionProvider>

@@ -6,7 +6,6 @@ import { formatDuration } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
-import VideoPlayer from "@/components/video-player";
 
 interface CourseReaderProps {
   course: any;
@@ -54,9 +53,6 @@ export default function CourseReader({ course }: CourseReaderProps) {
           <div className="font-semibold text-xl">{course.title}</div>
         </div>
         <div className="flex items-center gap-4">
-          <Button variant="outline" size="sm">
-            Partager
-          </Button>
           <Button variant="ghost" size="icon">
             <MoreVertical className="h-5 w-5" />
           </Button>
@@ -69,7 +65,11 @@ export default function CourseReader({ course }: CourseReaderProps) {
           {activeVideo ? (
             <div className="flex h-full flex-col">
               <div className="relative aspect-video w-full bg-black">
-                <VideoPlayer videoUrl={activeVideo.videoUrl} />
+                <video
+                  src={activeVideo.videoUrl}
+                  controls
+                  className="w-full h-full"
+                />
               </div>
               <div className="flex-1 overflow-auto p-4 md:p-6">
                 <h2 className="text-2xl font-bold">{activeVideo.title}</h2>
@@ -92,13 +92,6 @@ export default function CourseReader({ course }: CourseReaderProps) {
           <div className="w-80 border-l overflow-auto">
             <div className="sticky top-0 z-10 flex items-center justify-between bg-background p-4 shadow-sm">
               <h3 className="font-semibold">Contenu du cours</h3>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setSidebarOpen(false)}
-              >
-                <X className="h-4 w-4" />
-              </Button>
             </div>
 
             <div className="p-4">
