@@ -76,11 +76,11 @@ export async function POST(
 
 export async function GET(
   request: Request,
-  { params }: { params: { moduleId: string } }
+  { params }: { params: Promise<{ moduleId: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
-
+    const { moduleId } = await params;
     if (!session?.user?.id) {
       return NextResponse.json(
         { error: "Vous devez être connecté pour accéder aux vidéos" },
@@ -90,7 +90,7 @@ export async function GET(
 
     const videos = await prisma.video.findMany({
       where: {
-        moduleId: params.moduleId,
+        moduleId: moduleId,
         module: {
           course: {
             authorId: session.user.id,
