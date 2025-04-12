@@ -3,25 +3,15 @@
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { Module, Video } from "@prisma/client";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, Loader2, Trash2, Pencil } from "lucide-react";
+import {
+  Loader2,
+  Trash2,
+  Pencil,
+  ChevronUp,
+  ChevronDown,
+  Play,
+} from "lucide-react";
 import AddVideoModal from "@/components/AddVideoModal";
 import EditVideoModal from "@/components/EditVideoModal";
 import {
@@ -48,23 +38,20 @@ interface ModuleWithVideos extends Module {
   };
 }
 
-function SortableVideo({ video }: { video: Video }) {
+function VideoItem({
+  video,
+  onReorder,
+  isFirst,
+  isLast,
+}: {
+  video: Video;
+  onReorder: (direction: "up" | "down") => void;
+  isFirst: boolean;
+  isLast: boolean;
+}) {
   const [open, setOpen] = useState(false);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: video.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -82,7 +69,6 @@ function SortableVideo({ video }: { video: Video }) {
       }
 
       setOpen(false);
-      // Recharger la page pour mettre à jour l'affichage
       window.location.reload();
     } catch (error) {
       console.error("Erreur lors de la suppression de la vidéo:", error);
@@ -93,12 +79,28 @@ function SortableVideo({ video }: { video: Video }) {
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative h-full"
-    >
+    <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative">
       <div className="absolute top-2 right-2 flex gap-2">
+        <div className="flex flex-col">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onReorder("up")}
+            disabled={isFirst}
+            className="text-gray-500 hover:text-gray-700 disabled:opacity-50"
+          >
+            <ChevronUp className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onReorder("down")}
+            disabled={isLast}
+            className="text-gray-500 hover:text-gray-700 disabled:opacity-50"
+          >
+            <ChevronDown className="h-4 w-4" />
+          </Button>
+        </div>
         <EditVideoModal
           video={video}
           onSuccess={() => window.location.reload()}
@@ -147,29 +149,39 @@ function SortableVideo({ video }: { video: Video }) {
             </div>
           </DialogContent>
         </Dialog>
-        <div
-          {...attributes}
-          {...listeners}
-          className="cursor-move p-2 hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          <GripVertical className="h-5 w-5 text-gray-400" />
-        </div>
       </div>
-      <div className="flex flex-col space-y-4 h-full">
-        <div className="pr-12">
+
+      <div className="flex items-center gap-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setVideoModalOpen(true)}
+          className="flex-shrink-0"
+        >
+          <Play className="h-8 w-8" />
+        </Button>
+        <div>
           <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
             {video.title}
           </h3>
           <p className="text-gray-600 mt-1 line-clamp-2">{video.description}</p>
         </div>
-        <div className="relative pt-[56.25%] flex-1">
-          <video
-            src={video.videoUrl}
-            controls
-            className="absolute top-0 left-0 w-full h-full rounded-lg"
-          />
-        </div>
       </div>
+
+      <Dialog open={videoModalOpen} onOpenChange={setVideoModalOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>{video.title}</DialogTitle>
+          </DialogHeader>
+          <div className="relative pt-[56.25%]">
+            <video
+              src={video.videoUrl}
+              controls
+              className="absolute top-0 left-0 w-full h-full rounded-lg"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -185,13 +197,6 @@ export default function ModuleVideosPage({
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
   const fetchModule = async () => {
     try {
       setLoading(true);
@@ -204,7 +209,6 @@ export default function ModuleVideosPage({
         throw new Error(data.error || "Une erreur est survenue");
       }
 
-      // Récupérer les informations du cours
       const courseResponse = await fetch(
         `/api/courses/${resolvedParams.courseId}`
       );
@@ -232,39 +236,34 @@ export default function ModuleVideosPage({
     fetchModule();
   }, [resolvedParams.moduleId]);
 
-  const handleDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event;
+  const moveVideo = async (fromIndex: number, toIndex: number) => {
+    if (!module) return;
 
-    if (over && active.id !== over.id) {
-      const oldIndex = module?.videos.findIndex((v) => v.id === active.id) ?? 0;
-      const newIndex = module?.videos.findIndex((v) => v.id === over.id) ?? 0;
+    const newVideos = [...module.videos];
+    const [movedVideo] = newVideos.splice(fromIndex, 1);
+    newVideos.splice(toIndex, 0, movedVideo);
 
-      const newVideos = arrayMove(module?.videos ?? [], oldIndex, newIndex);
+    setModule({ ...module, videos: newVideos });
 
-      setModule((prev) => {
-        if (!prev) return null;
-        return { ...prev, videos: newVideos };
-      });
-
-      try {
-        await fetch(
-          `/api/courses/${resolvedParams.courseId}/modules/${resolvedParams.moduleId}/videos/reorder`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              videos: newVideos.map((video, index) => ({
-                id: video.id,
-                order: index,
-              })),
-            }),
-          }
-        );
-      } catch (error) {
-        console.error("Erreur lors du réordonnancement des vidéos:", error);
-      }
+    try {
+      await fetch(
+        `/api/courses/${resolvedParams.courseId}/modules/${resolvedParams.moduleId}/videos/reorder`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            videos: newVideos.map((video, index) => ({
+              id: video.id,
+              order: index,
+            })),
+          }),
+        }
+      );
+    } catch (error) {
+      console.error("Erreur lors du réordonnancement des vidéos:", error);
+      fetchModule();
     }
   };
 
@@ -283,7 +282,7 @@ export default function ModuleVideosPage({
   const hasVideos = module.videos.length > 0;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 container px-4 mx-auto pt-8">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -304,7 +303,7 @@ export default function ModuleVideosPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="space-y-6">
+      <div className="space-y-6 ">
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">{module.title}</h1>
@@ -314,22 +313,26 @@ export default function ModuleVideosPage({
         </div>
 
         {hasVideos ? (
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={module.videos.map((v) => v.id)}
-              strategy={verticalListSortingStrategy}
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {module.videos.map((video) => (
-                  <SortableVideo key={video.id} video={video} />
-                ))}
-              </div>
-            </SortableContext>
-          </DndContext>
+          <div className="space-y-4">
+            {module.videos.map((video, index) => (
+              <VideoItem
+                key={video.id}
+                video={video}
+                onReorder={(direction) => {
+                  if (direction === "up" && index > 0) {
+                    moveVideo(index, index - 1);
+                  } else if (
+                    direction === "down" &&
+                    index < module.videos.length - 1
+                  ) {
+                    moveVideo(index, index + 1);
+                  }
+                }}
+                isFirst={index === 0}
+                isLast={index === module.videos.length - 1}
+              />
+            ))}
+          </div>
         ) : (
           <div className="bg-white rounded-lg shadow-sm p-8 text-center">
             <div className="max-w-md mx-auto space-y-4">
