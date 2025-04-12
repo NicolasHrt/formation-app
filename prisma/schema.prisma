@@ -23,6 +23,9 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@index([provider])
+  @@index([providerAccountId])
 }
 
 model Session {
@@ -31,6 +34,9 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expires])
 }
 
 model User {
@@ -42,6 +48,9 @@ model User {
   accounts      Account[]
   courses       Course[]
   sessions      Session[]
+
+  @@index([email])
+  @@index([emailVerified])
 }
 
 model Course {
@@ -54,6 +63,11 @@ model Course {
   authorId    String
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   modules     Module[]
+
+  @@index([authorId])
+  @@index([slug])
+  @@index([createdAt])
+  @@index([updatedAt])
 }
 
 model Module {
@@ -66,6 +80,11 @@ model Module {
   updatedAt   DateTime @updatedAt
   course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   videos      Video[]
+
+  @@index([courseId])
+  @@index([order])
+  @@index([createdAt])
+  @@index([updatedAt])
 }
 
 model Video {
@@ -81,4 +100,10 @@ model Video {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   module      Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@index([moduleId])
+  @@index([order])
+  @@index([duration])
+  @@index([createdAt])
+  @@index([updatedAt])
 }
