@@ -32,13 +32,22 @@ export default function AddVideoModal({
   const [description, setDescription] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [duration, setDuration] = useState<number>(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
       setTitle(file.name.split(".")[0]);
+
+      // Calcul de la durée de la vidéo
+      const video = document.createElement("video");
+      video.preload = "metadata";
+      video.onloadedmetadata = () => {
+        setDuration(Math.round(video.duration));
+      };
+      video.src = URL.createObjectURL(file);
     }
   };
 
@@ -93,6 +102,8 @@ export default function AddVideoModal({
         body: JSON.stringify({
           title,
           description,
+          duration,
+          size: selectedFile.size,
         }),
       });
 

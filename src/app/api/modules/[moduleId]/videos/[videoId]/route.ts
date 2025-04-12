@@ -27,7 +27,7 @@ export async function PATCH(
     }
 
     const { moduleId, videoId } = await params;
-    const { title, description } = await request.json();
+    const { title, description, duration, size } = await request.json();
 
     // Vérifier que l'utilisateur est bien l'auteur du module
     const module = await prisma.module.findUnique({
@@ -53,6 +53,8 @@ export async function PATCH(
       data: {
         title,
         description,
+        duration,
+        size,
       },
     });
 
