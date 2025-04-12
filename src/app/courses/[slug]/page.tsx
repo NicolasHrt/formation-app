@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import CourseReader from "@/components/CourseReader";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function CourseViewPage({
   params,
@@ -36,7 +37,7 @@ export default function CourseViewPage({
   }, [params.slug]);
 
   if (loading) {
-    return <div>Chargement...</div>;
+    return <LoadingSpinner />;
   }
 
   if (error || !course) {

@@ -26,6 +26,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useQueryClient } from "@tanstack/react-query";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface CourseWithModules extends Course {
   modules: Module[];
@@ -239,7 +240,7 @@ export default function CoursePage({
   };
 
   if (loading) {
-    return <div>Chargement...</div>;
+    return <LoadingSpinner />;
   }
 
   if (error) {

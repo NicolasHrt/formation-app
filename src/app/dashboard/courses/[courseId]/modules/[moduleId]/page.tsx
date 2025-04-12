@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import AddVideoModal from "@/components/AddVideoModal";
 import EditVideoModal from "@/components/EditVideoModal";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import {
   Dialog,
   DialogContent,
@@ -268,15 +269,11 @@ export default function ModuleVideosPage({
   };
 
   if (loading) {
-    return <div>Chargement...</div>;
+    return <LoadingSpinner />;
   }
 
-  if (error) {
+  if (error || !module) {
     return <div>Erreur: {error}</div>;
-  }
-
-  if (!module) {
-    return <div>Module non trouvé</div>;
   }
 
   const hasVideos = module.videos.length > 0;

@@ -4,6 +4,7 @@ import { CourseCard } from "@/components/CourseCard";
 import AddCourseModal from "@/components/AddCourseModal";
 import { useQuery } from "@tanstack/react-query";
 import { Course } from "@prisma/client";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function DashboardPage() {
   const {
@@ -26,7 +27,7 @@ export default function DashboardPage() {
   });
 
   if (isLoading) {
-    return <div>Chargement...</div>;
+    return <LoadingSpinner />;
   }
 
   if (error) {
