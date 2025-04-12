@@ -25,6 +25,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CourseWithModules extends Course {
   modules: Module[];
@@ -187,6 +188,7 @@ export default function CoursePage({
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const fetchCourse = async () => {
     try {
@@ -223,6 +225,8 @@ export default function CoursePage({
         throw new Error(data.error || "Une erreur est survenue");
       }
 
+      await queryClient.invalidateQueries({ queryKey: ["courses"] });
+      await queryClient.refetchQueries({ queryKey: ["courses"] });
       router.push("/dashboard");
     } catch (error) {
       console.error("Erreur lors de la suppression de la formation:", error);

@@ -20,6 +20,9 @@ export default function DashboardPage() {
       const data = await response.json();
       return data.data;
     },
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
   });
 
   if (isLoading) {
