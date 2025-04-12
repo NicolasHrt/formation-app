@@ -187,6 +187,8 @@ export default function CoursePage({
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [confirmationTitle, setConfirmationTitle] = useState("");
+  const [confirmationText, setConfirmationText] = useState("");
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -287,33 +289,70 @@ export default function CoursePage({
                 <DialogHeader>
                   <DialogTitle>Supprimer la formation</DialogTitle>
                   <DialogDescription>
-                    Êtes-vous sûr de vouloir supprimer cette formation ? Cette
-                    action est irréversible et supprimera également tous les
-                    modules et vidéos associés.
+                    Êtes-vous sûr de vouloir supprimer la formation{" "}
+                    <span className="font-semibold text-gray-900">
+                      {course.title}
+                    </span>
+                    ? Cette action est irréversible et supprimera également tous
+                    les modules et vidéos associés.
                   </DialogDescription>
                 </DialogHeader>
-                <div className="flex justify-end gap-4 mt-4">
-                  <Button
-                    variant="outline"
-                    onClick={() => setOpen(false)}
-                    disabled={isDeleting}
-                  >
-                    Annuler
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    onClick={handleDelete}
-                    disabled={isDeleting}
-                  >
-                    {isDeleting ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Suppression...
-                      </>
-                    ) : (
-                      "Supprimer"
-                    )}
-                  </Button>
+                <div className="space-y-4 mt-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">
+                      Tapez le nom de la formation pour confirmer
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full px-3 py-2 border rounded-md"
+                      value={confirmationTitle}
+                      onChange={(e) => setConfirmationTitle(e.target.value)}
+                      placeholder="Nom de la formation"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">
+                      Tapez "supprimer définitivement" pour confirmer
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full px-3 py-2 border rounded-md"
+                      value={confirmationText}
+                      onChange={(e) => setConfirmationText(e.target.value)}
+                      placeholder="supprimer définitivement"
+                    />
+                  </div>
+                  <div className="flex justify-end gap-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setOpen(false);
+                        setConfirmationTitle("");
+                        setConfirmationText("");
+                      }}
+                      disabled={isDeleting}
+                    >
+                      Annuler
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={handleDelete}
+                      disabled={
+                        isDeleting ||
+                        confirmationTitle !== course.title ||
+                        confirmationText !== "supprimer définitivement"
+                      }
+                    >
+                      {isDeleting ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Suppression...
+                        </>
+                      ) : (
+                        "Supprimer définitivement"
+                      )}
+                    </Button>
+                  </div>
                 </div>
               </DialogContent>
             </Dialog>
