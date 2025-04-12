@@ -36,20 +36,20 @@ export function CourseCard({ course }: CourseCardProps) {
             <div className="flex gap-3">
               <Link href={`/dashboard/courses/${course.id}`}>
                 <Button>
-                  <Pen className="h-4 w-4" />
+                  <Pen />
                   Gérer la formation
                 </Button>
               </Link>
               <Link href={`/dashboard/courses/${course.id}`}>
                 <Button variant="black">
-                  <StickyNote className="h-4 w-4" />
+                  <StickyNote />
                   Personnaliser la landing page
                 </Button>
               </Link>
             </div>
             <Link href={`/courses/${course.slug}`} target="_blank">
               <Button variant="outline">
-                <Eye className="h-4 w-4" />
+                <Eye />
               </Button>
             </Link>
           </div>

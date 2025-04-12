@@ -25,7 +25,7 @@ function AuthButtons() {
     return (
       <div className="flex items-center gap-4">
         <Link href="/dashboard">
-          <Button>Dashboard</Button>
+          <Button>Mon espace formateur</Button>
         </Link>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -101,17 +101,25 @@ export default function AddCourseModal() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="slug">Slug</Label>
-            <Input
-              id="slug"
-              name="slug"
-              required
-              placeholder="slug-de-la-formation"
-            />
+            <Label htmlFor="slug">URL de la landing page</Label>
+            <div className="flex items-center ">
+              <div className="bg-muted px-3 py-2 rounded-l-md text-sm text-muted-foreground border">
+                formation.com/
+              </div>
+              <Input
+                id="slug"
+                name="slug"
+                required
+                placeholder="slug"
+                className="rounded-l-none"
+              />
+            </div>
           </div>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Création en cours..." : "Créer"}
-          </Button>
+          <div className="flex justify-end">
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Création en cours..." : "Créer la formation"}
+            </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>
