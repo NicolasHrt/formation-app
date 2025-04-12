@@ -46,29 +46,19 @@ export default function CourseReader({ course }: CourseReaderProps) {
   const progressPercentage = (completedVideos / totalVideos) * 100;
 
   return (
-    <div className="flex h-screen flex-col bg-background">
+    <div className="flex h-screen flex-col container mx-auto px-4 mt-8">
       {/* Header */}
-      <header className="flex h-16 items-center justify-between border-b px-4 md:px-6">
-        <div className="flex items-center gap-2">
-          <div className="font-semibold text-xl">{course.title}</div>
-        </div>
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon">
-            <MoreVertical className="h-5 w-5" />
-          </Button>
-        </div>
-      </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 ">
         {/* Video Player */}
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto ">
           {activeVideo ? (
             <div className="flex h-full flex-col">
-              <div className="relative aspect-video w-full bg-black">
+              <div className="relative aspect-video w-full bg-black rounded-md overflow-hidden">
                 <video
                   src={activeVideo.videoUrl}
                   controls
-                  className="w-full h-full"
+                  className="w-full h-full "
                 />
               </div>
               <div className="flex-1 overflow-auto p-4 md:p-6">
@@ -89,11 +79,12 @@ export default function CourseReader({ course }: CourseReaderProps) {
 
         {/* Sidebar */}
         {sidebarOpen && (
-          <div className="w-80 border-l overflow-auto">
-            <div className="sticky top-0 z-10 flex items-center justify-between bg-background p-4 shadow-sm">
-              <h3 className="font-semibold">Contenu du cours</h3>
+          <div className="w-80 overflow-auto ml-4">
+            <div className="sticky top-0 z-10 flex items-center justify-between p-4 ">
+              <h2 className="font-semibold text-2xl">{course.title}</h2>
             </div>
 
+            {/* 
             <div className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">
@@ -104,7 +95,7 @@ export default function CourseReader({ course }: CourseReaderProps) {
                 </span>
               </div>
               <Progress value={progressPercentage} className="h-2" />
-            </div>
+            </div> */}
 
             <Separator />
 
