@@ -46,15 +46,15 @@ export default function CourseReader({ course }: CourseReaderProps) {
   const progressPercentage = (completedVideos / totalVideos) * 100;
 
   return (
-    <div className="flex h-screen flex-col container mx-auto px-4 mt-8">
+    <div className="container mx-auto px-4 mt-8">
       {/* Header */}
 
       <div className="flex flex-1 ">
         {/* Video Player */}
         <div className="flex-1 overflow-auto ">
           {activeVideo ? (
-            <div className="flex h-full flex-col">
-              <div className="relative aspect-video w-full bg-black rounded-md overflow-hidden">
+            <div className="flex flex-col">
+              <div className="relative aspect-video w-full bg-black rounded-xl overflow-hidden">
                 <video
                   src={activeVideo.videoUrl}
                   controls

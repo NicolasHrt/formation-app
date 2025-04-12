@@ -15,9 +15,9 @@ function AuthButtons() {
   if (status === "authenticated") {
     return (
       <div className="flex items-center gap-4">
-        <Button asChild>
-          <Link href="/dashboard">Dashboard</Link>
-        </Button>
+        <Link href="/dashboard">
+          <Button>Dashboard</Button>
+        </Link>
         <Button variant="black" onClick={() => signOut()}>
           Déconnexion
         </Button>
@@ -26,9 +26,9 @@ function AuthButtons() {
   }
 
   return (
-    <Button asChild>
-      <Link href="/auth/signin">Connexion</Link>
-    </Button>
+    <Link href="/auth/signin">
+      <Button>Connexion</Button>
+    </Link>
   );
 }
 
