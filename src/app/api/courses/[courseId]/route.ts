@@ -27,6 +27,13 @@ export async function GET(
           orderBy: {
             order: "asc",
           },
+          include: {
+            videos: {
+              orderBy: {
+                order: "asc",
+              },
+            },
+          },
         },
       },
     });

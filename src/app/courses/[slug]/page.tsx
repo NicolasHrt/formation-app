@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import CourseReader from "@/components/CourseReader";
 import LoadingSpinner from "@/components/LoadingSpinner";
-
+import { use } from "react";
 export default function CourseViewPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const resolvedParams = use(params);
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -16,7 +17,7 @@ export default function CourseViewPage({
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`/api/courses/${params.slug}`);
+        const response = await fetch(`/api/courses/${resolvedParams.slug}`);
         const data = await response.json();
 
         if (!response.ok) {
@@ -34,7 +35,7 @@ export default function CourseViewPage({
     };
 
     fetchCourse();
-  }, [params.slug]);
+  }, [resolvedParams.slug]);
 
   if (loading) {
     return <LoadingSpinner />;
