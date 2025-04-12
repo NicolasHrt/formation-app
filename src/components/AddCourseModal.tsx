@@ -16,16 +16,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
-import { useAddCourse } from "@/hooks/useCourses";
 
 export default function AddCourseModal() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const addCourse = useAddCourse();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     const formData = new FormData(e.currentTarget);
     const courseData = {
       title: formData.get("title") as string,
@@ -34,12 +34,26 @@ export default function AddCourseModal() {
     };
 
     try {
-      await addCourse.mutateAsync(courseData);
+      const response = await fetch("/api/courses", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(courseData),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Erreur lors de la création du cours");
+      }
+
       setOpen(false);
       router.push("/dashboard");
-      router.refresh();
+      window.location.reload();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Une erreur est survenue");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -92,8 +106,8 @@ export default function AddCourseModal() {
               placeholder="slug-de-la-formation"
             />
           </div>
-          <Button type="submit" disabled={addCourse.isPending}>
-            {addCourse.isPending ? "Création en cours..." : "Créer"}
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Création en cours..." : "Créer"}
           </Button>
         </form>
       </DialogContent>

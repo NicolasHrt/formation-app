@@ -16,7 +16,6 @@ function AuthButtons() {
     return (
       <div className="flex items-center gap-4">
         <Button asChild>
-          
           <Link href="/dashboard">Dashboard</Link>
         </Button>
         <Button onClick={() => signOut()}>Déconnexion</Button>

@@ -1,30 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import AddModuleModal from "@/components/AddModuleModal";
 import EditModuleModal from "@/components/EditModuleModal";
 import { Module, Course, User } from "@prisma/client";
 import { use } from "react";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
-import { GripVertical, Trash2, Loader2 } from "lucide-react";
+import { Trash2, Loader2, ChevronUp, ChevronDown } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -47,31 +30,25 @@ interface CourseWithModules extends Course {
   author: User;
 }
 
-function SortableModule({
+function ModuleCard({
   module,
   onUpdate,
   onDelete,
+  onMoveUp,
+  onMoveDown,
+  isFirst,
+  isLast,
 }: {
   module: Module;
   onUpdate: (updatedModule: Module) => void;
   onDelete: (moduleId: string) => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+  isFirst: boolean;
+  isLast: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: module.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -99,12 +76,28 @@ function SortableModule({
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative h-full"
-    >
+    <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative">
       <div className="absolute top-2 right-2 flex gap-2">
+        <div className="flex flex-col">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onMoveUp}
+            disabled={isFirst}
+            className="text-gray-500 hover:text-gray-700 disabled:opacity-50"
+          >
+            <ChevronUp className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onMoveDown}
+            disabled={isLast}
+            className="text-gray-500 hover:text-gray-700 disabled:opacity-50"
+          >
+            <ChevronDown className="h-4 w-4" />
+          </Button>
+        </div>
         <EditModuleModal
           module={module}
           onSuccess={(updatedModule) => onUpdate(updatedModule)}
@@ -154,16 +147,9 @@ function SortableModule({
             </div>
           </DialogContent>
         </Dialog>
-        <div
-          {...attributes}
-          {...listeners}
-          className="cursor-move p-2 hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          <GripVertical className="h-5 w-5 text-gray-400" />
-        </div>
       </div>
-      <div className="flex flex-col space-y-4 h-full">
-        <div className="pr-12">
+      <div className="flex flex-col space-y-4">
+        <div className="pr-24">
           <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
             {module.title}
           </h3>
@@ -198,13 +184,6 @@ export default function CoursePage({
   const [course, setCourse] = useState<CourseWithModules | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
 
   const fetchCourse = async () => {
     try {
@@ -259,38 +238,31 @@ export default function CoursePage({
     });
   };
 
-  const handleDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event;
+  const moveModule = async (fromIndex: number, toIndex: number) => {
+    if (!course) return;
 
-    if (over && active.id !== over.id) {
-      const oldIndex =
-        course?.modules.findIndex((m) => m.id === active.id) ?? 0;
-      const newIndex = course?.modules.findIndex((m) => m.id === over.id) ?? 0;
+    const newModules = [...course.modules];
+    const [movedModule] = newModules.splice(fromIndex, 1);
+    newModules.splice(toIndex, 0, movedModule);
 
-      if (course) {
-        const newModules = arrayMove(course.modules, oldIndex, newIndex);
-        setCourse({ ...course, modules: newModules });
+    setCourse({ ...course, modules: newModules });
 
-        // Mettre à jour l'ordre dans la base de données
-        try {
-          await fetch(`/api/courses/${courseId}/modules/reorder`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              modules: newModules.map((module, index) => ({
-                id: module.id,
-                order: index + 1,
-              })),
-            }),
-          });
-        } catch (err) {
-          console.error("Erreur lors de la mise à jour de l'ordre:", err);
-          // Recharger les modules en cas d'erreur
-          fetchCourse();
-        }
-      }
+    try {
+      await fetch(`/api/courses/${courseId}/modules/reorder`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          modules: newModules.map((module, index) => ({
+            id: module.id,
+            order: index + 1,
+          })),
+        }),
+      });
+    } catch (err) {
+      console.error("Erreur lors de la mise à jour de l'ordre:", err);
+      fetchCourse();
     }
   };
 
@@ -309,7 +281,7 @@ export default function CoursePage({
   const hasModules = Array.isArray(course.modules) && course.modules.length > 0;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 container mx-auto px-4 pt-8">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -343,27 +315,20 @@ export default function CoursePage({
             </p>
           </div>
         ) : (
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={course.modules.map((m) => m.id)}
-              strategy={verticalListSortingStrategy}
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {course.modules.map((module) => (
-                  <SortableModule
-                    key={module.id}
-                    module={module}
-                    onUpdate={handleModuleUpdate}
-                    onDelete={handleModuleDelete}
-                  />
-                ))}
-              </div>
-            </SortableContext>
-          </DndContext>
+          <div className="space-y-4">
+            {course.modules.map((module, index) => (
+              <ModuleCard
+                key={module.id}
+                module={module}
+                onUpdate={handleModuleUpdate}
+                onDelete={handleModuleDelete}
+                onMoveUp={() => moveModule(index, index - 1)}
+                onMoveDown={() => moveModule(index, index + 1)}
+                isFirst={index === 0}
+                isLast={index === course.modules.length - 1}
+              />
+            ))}
+          </div>
         )}
       </div>
     </div>
