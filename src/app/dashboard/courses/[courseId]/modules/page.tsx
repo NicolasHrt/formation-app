@@ -172,9 +172,10 @@ function ModuleCard({
       </div>
 
       <div className="p-6">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">
-            Module {module.order}
+        <div className="flex items-center gap-3 mb-3">
+          <span className="px-3 py-1 bg-primary/10  text-sm font-medium rounded-full flex items-center gap-2 text-primary/70">
+            <span>Module</span>
+            <span>{module.order + 1}</span>
           </span>
           <span className="text-sm text-gray-500">•</span>
           <span className="text-sm text-gray-500">{totalVideos} vidéos</span>
@@ -372,7 +373,16 @@ export default function ModulesPage({
                     const newModules = [...course.modules];
                     const [movedModule] = newModules.splice(index, 1);
                     newModules.splice(index - 1, 0, movedModule);
-                    setCourse({ ...course, modules: newModules });
+
+                    // Mettre à jour l'ordre de tous les modules
+                    const updatedModules = newModules.map(
+                      (module, newIndex) => ({
+                        ...module,
+                        order: newIndex,
+                      })
+                    );
+
+                    setCourse({ ...course, modules: updatedModules });
 
                     fetch(`/api/courses/${course.id}/modules/reorder`, {
                       method: "POST",
@@ -380,9 +390,9 @@ export default function ModulesPage({
                         "Content-Type": "application/json",
                       },
                       body: JSON.stringify({
-                        modules: newModules.map((module, index) => ({
+                        modules: updatedModules.map((module) => ({
                           id: module.id,
-                          order: index,
+                          order: module.order,
                         })),
                       }),
                     }).catch((error) => {
@@ -396,7 +406,16 @@ export default function ModulesPage({
                     const newModules = [...course.modules];
                     const [movedModule] = newModules.splice(index, 1);
                     newModules.splice(index + 1, 0, movedModule);
-                    setCourse({ ...course, modules: newModules });
+
+                    // Mettre à jour l'ordre de tous les modules
+                    const updatedModules = newModules.map(
+                      (module, newIndex) => ({
+                        ...module,
+                        order: newIndex,
+                      })
+                    );
+
+                    setCourse({ ...course, modules: updatedModules });
 
                     fetch(`/api/courses/${course.id}/modules/reorder`, {
                       method: "POST",
@@ -404,9 +423,9 @@ export default function ModulesPage({
                         "Content-Type": "application/json",
                       },
                       body: JSON.stringify({
-                        modules: newModules.map((module, index) => ({
+                        modules: updatedModules.map((module) => ({
                           id: module.id,
-                          order: index,
+                          order: module.order,
                         })),
                       }),
                     }).catch((error) => {
