@@ -183,10 +183,12 @@ export default function AddVideoModal({
               ></div>
             </div>
           )}
-          <Button type="submit" disabled={loading || !selectedFile}>
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {loading ? "Upload en cours..." : "Ajouter"}
-          </Button>
+          <div className="flex justify-end">
+            <Button type="submit" disabled={loading || !selectedFile}>
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {loading ? "Upload en cours..." : "Ajouter la vidéo"}
+            </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>
