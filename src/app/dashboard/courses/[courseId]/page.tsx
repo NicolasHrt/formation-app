@@ -79,8 +79,8 @@ function ModuleCard({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative">
-      <div className="absolute top-2 right-2 flex gap-2">
+    <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border border-gray-100 relative">
+      <div className="absolute top-2 right-2 flex items-center gap-2">
         <div className="flex flex-col">
           <Button
             variant="ghost"
@@ -160,7 +160,7 @@ function ModuleCard({
             {module.description}
           </p>
         </div>
-        <div className="flex justify-end">
+        <div>
           <Button
             variant="black"
             size="sm"

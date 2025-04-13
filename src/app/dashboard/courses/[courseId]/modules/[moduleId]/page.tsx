@@ -80,7 +80,7 @@ function VideoItem({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative">
+    <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md border border-gray-100 transition-shadow relative">
       <div className="absolute top-2 right-2 flex items-center gap-2">
         <div className="flex flex-col">
           <Button
