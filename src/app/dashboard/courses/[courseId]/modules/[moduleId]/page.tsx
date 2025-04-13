@@ -40,6 +40,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Navbar from "@/components/Navbar";
 
 interface ModuleWithVideos extends Module {
   videos: Video[];
@@ -327,201 +328,204 @@ export default function VideosPage({
   );
 
   return (
-    <div className="space-y-8 container px-4 mx-auto py-8">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/dashboard">Mes formations</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href={`/dashboard/courses/${module.course.id}`}>
-              {module.course.title}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink
-              href={`/dashboard/courses/${module.course.id}/modules`}
-            >
-              Modules
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>{module.title}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <div>
+      <Navbar />
+      <div className="space-y-8 container px-4 mx-auto py-8">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/dashboard">Mes formations</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/dashboard/courses/${module.course.id}`}>
+                {module.course.title}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                href={`/dashboard/courses/${module.course.id}/modules`}
+              >
+                Modules
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{module.title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div>
-            <CardTitle className="text-2xl">{module.title}</CardTitle>
-            <CardDescription className="mt-1">
-              {module.videos.length} vidéos • {Math.round(totalDuration / 60)}{" "}
-              min au total
-            </CardDescription>
-          </div>
-          <AddVideoModal
-            moduleId={module.id}
-            onSuccess={() => window.location.reload()}
-          />
-        </CardHeader>
-      </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="text-2xl">{module.title}</CardTitle>
+              <CardDescription className="mt-1">
+                {module.videos.length} vidéos • {Math.round(totalDuration / 60)}{" "}
+                min au total
+              </CardDescription>
+            </div>
+            <AddVideoModal
+              moduleId={module.id}
+              onSuccess={() => window.location.reload()}
+            />
+          </CardHeader>
+        </Card>
 
-      {hasVideos ? (
-        <div className="space-y-4">
-          {module.videos.map((video, index) => (
-            <VideoCard
-              key={video.id}
-              video={video}
-              onUpdate={(updatedVideo: Video) => {
-                setModule((prev) => {
-                  if (!prev) return null;
-                  return {
-                    ...prev,
-                    videos: prev.videos.map((v) =>
-                      v.id === updatedVideo.id ? updatedVideo : v
-                    ),
-                  };
-                });
-              }}
-              onDelete={async (videoId) => {
-                try {
+        {hasVideos ? (
+          <div className="space-y-4">
+            {module.videos.map((video, index) => (
+              <VideoCard
+                key={video.id}
+                video={video}
+                onUpdate={(updatedVideo: Video) => {
                   setModule((prev) => {
                     if (!prev) return null;
                     return {
                       ...prev,
-                      videos: prev.videos.filter((v) => v.id !== videoId),
+                      videos: prev.videos.map((v) =>
+                        v.id === updatedVideo.id ? updatedVideo : v
+                      ),
                     };
                   });
+                }}
+                onDelete={async (videoId) => {
+                  try {
+                    setModule((prev) => {
+                      if (!prev) return null;
+                      return {
+                        ...prev,
+                        videos: prev.videos.filter((v) => v.id !== videoId),
+                      };
+                    });
 
-                  const response = await fetch(
-                    `/api/modules/${module.id}/videos/${videoId}`,
-                    {
-                      method: "DELETE",
+                    const response = await fetch(
+                      `/api/modules/${module.id}/videos/${videoId}`,
+                      {
+                        method: "DELETE",
+                      }
+                    );
+
+                    if (!response.ok) {
+                      window.location.reload();
                     }
-                  );
-
-                  if (!response.ok) {
+                  } catch (error) {
+                    console.error(
+                      "Erreur lors de la suppression de la vidéo:",
+                      error
+                    );
                     window.location.reload();
                   }
-                } catch (error) {
-                  console.error(
-                    "Erreur lors de la suppression de la vidéo:",
-                    error
-                  );
-                  window.location.reload();
-                }
-              }}
-              onMoveUp={() => {
-                if (index > 0) {
-                  const newVideos = [...module.videos];
-                  const [movedVideo] = newVideos.splice(index, 1);
-                  newVideos.splice(index - 1, 0, movedVideo);
+                }}
+                onMoveUp={() => {
+                  if (index > 0) {
+                    const newVideos = [...module.videos];
+                    const [movedVideo] = newVideos.splice(index, 1);
+                    newVideos.splice(index - 1, 0, movedVideo);
 
-                  // Mettre à jour l'ordre de toutes les vidéos
-                  const updatedVideos = newVideos.map((video, newIndex) => ({
-                    ...video,
-                    order: newIndex,
-                  }));
+                    // Mettre à jour l'ordre de toutes les vidéos
+                    const updatedVideos = newVideos.map((video, newIndex) => ({
+                      ...video,
+                      order: newIndex,
+                    }));
 
-                  setModule({ ...module, videos: updatedVideos });
+                    setModule({ ...module, videos: updatedVideos });
 
-                  fetch(`/api/modules/${module.id}/videos/reorder`, {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      videos: updatedVideos.map((video) => ({
-                        id: video.id,
-                        order: video.order,
-                      })),
-                    }),
-                  }).catch((error) => {
-                    console.error("Erreur lors du réordonnancement:", error);
-                    queryClient.invalidateQueries({
-                      queryKey: ["module", resolvedParams.moduleId],
+                    fetch(`/api/modules/${module.id}/videos/reorder`, {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        videos: updatedVideos.map((video) => ({
+                          id: video.id,
+                          order: video.order,
+                        })),
+                      }),
+                    }).catch((error) => {
+                      console.error("Erreur lors du réordonnancement:", error);
+                      queryClient.invalidateQueries({
+                        queryKey: ["module", resolvedParams.moduleId],
+                      });
                     });
-                  });
-                }
-              }}
-              onMoveDown={() => {
-                if (index < module.videos.length - 1) {
-                  const newVideos = [...module.videos];
-                  const [movedVideo] = newVideos.splice(index, 1);
-                  newVideos.splice(index + 1, 0, movedVideo);
+                  }
+                }}
+                onMoveDown={() => {
+                  if (index < module.videos.length - 1) {
+                    const newVideos = [...module.videos];
+                    const [movedVideo] = newVideos.splice(index, 1);
+                    newVideos.splice(index + 1, 0, movedVideo);
 
-                  // Mettre à jour l'ordre de toutes les vidéos
-                  const updatedVideos = newVideos.map((video, newIndex) => ({
-                    ...video,
-                    order: newIndex,
-                  }));
+                    // Mettre à jour l'ordre de toutes les vidéos
+                    const updatedVideos = newVideos.map((video, newIndex) => ({
+                      ...video,
+                      order: newIndex,
+                    }));
 
-                  setModule({ ...module, videos: updatedVideos });
+                    setModule({ ...module, videos: updatedVideos });
 
-                  fetch(`/api/modules/${module.id}/videos/reorder`, {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      videos: updatedVideos.map((video) => ({
-                        id: video.id,
-                        order: video.order,
-                      })),
-                    }),
-                  }).catch((error) => {
-                    console.error("Erreur lors du réordonnancement:", error);
-                    queryClient.invalidateQueries({
-                      queryKey: ["module", resolvedParams.moduleId],
+                    fetch(`/api/modules/${module.id}/videos/reorder`, {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        videos: updatedVideos.map((video) => ({
+                          id: video.id,
+                          order: video.order,
+                        })),
+                      }),
+                    }).catch((error) => {
+                      console.error("Erreur lors du réordonnancement:", error);
+                      queryClient.invalidateQueries({
+                        queryKey: ["module", resolvedParams.moduleId],
+                      });
                     });
-                  });
-                }
-              }}
-              isFirst={index === 0}
-              isLast={index === module.videos.length - 1}
-            />
-          ))}
-        </div>
-      ) : (
-        <Card>
-          <CardContent className="p-8 text-center">
-            <div className="max-w-md mx-auto space-y-4">
-              <div className="text-gray-400">
-                <svg
-                  className="mx-auto h-12 w-12"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  }
+                }}
+                isFirst={index === 0}
+                isLast={index === module.videos.length - 1}
+              />
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="p-8 text-center">
+              <div className="max-w-md mx-auto space-y-4">
+                <div className="text-gray-400">
+                  <svg
+                    className="mx-auto h-12 w-12"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+                <CardTitle className="text-lg">
+                  Aucune vidéo dans ce module
+                </CardTitle>
+                <CardDescription>
+                  Commencez par ajouter votre première vidéo à ce module.
+                </CardDescription>
+                <div className="mt-6">
+                  <AddVideoModal
+                    moduleId={module.id}
+                    onSuccess={() => window.location.reload()}
                   />
-                </svg>
+                </div>
               </div>
-              <CardTitle className="text-lg">
-                Aucune vidéo dans ce module
-              </CardTitle>
-              <CardDescription>
-                Commencez par ajouter votre première vidéo à ce module.
-              </CardDescription>
-              <div className="mt-6">
-                <AddVideoModal
-                  moduleId={module.id}
-                  onSuccess={() => window.location.reload()}
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </div>
   );
 }

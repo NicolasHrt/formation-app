@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import CourseReader from "@/components/CourseReader";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { use } from "react";
+import Navbar from "@/components/Navbar";
 export default function CourseViewPage({
   params,
 }: {
@@ -46,7 +47,8 @@ export default function CourseViewPage({
   }
 
   return (
-    <div className=" mx-auto ">
+    <div className="">
+      <Navbar />
       <CourseReader course={course} />
     </div>
   );

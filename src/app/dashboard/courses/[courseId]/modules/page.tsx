@@ -32,6 +32,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
 interface CourseWithModules extends Course {
   modules: (Module & {
@@ -281,191 +282,201 @@ export default function ModulesPage({
   const hasModules = course.modules.length > 0;
 
   return (
-    <div className="space-y-8 container px-4 mx-auto py-8">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/dashboard">Mes formations</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href={`/dashboard/courses/${course.id}`}>
-              {course.title}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Modules</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <div>
+      <Navbar />
+      <div className="space-y-8 container px-4 mx-auto py-8">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/dashboard">Mes formations</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/dashboard/courses/${course.id}`}>
+                {course.title}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Modules</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Modules</h1>
-            <p className="text-gray-500 mt-1">
-              Gérez les modules de votre formation
-            </p>
+        <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Modules</h1>
+              <p className="text-gray-500 mt-1">
+                Gérez les modules de votre formation
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <Link href={`/courses/${course.slug}`} target="_blank">
+                <Button variant="outline">
+                  <Eye className="w-4 h-4 mr-2" />
+                  Prévisualiser la formation
+                </Button>
+              </Link>
+              <AddModuleModal courseId={course.id} onSuccess={fetchCourse} />
+            </div>
           </div>
-          <div className="flex items-center gap-4">
-            <Link href={`/courses/${course.slug}`} target="_blank">
-              <Button variant="outline">
-                <Eye className="w-4 h-4 mr-2" />
-                Prévisualiser la formation
-              </Button>
-            </Link>
-            <AddModuleModal courseId={course.id} onSuccess={fetchCourse} />
-          </div>
-        </div>
 
-        {hasModules ? (
-          <div className="space-y-4">
-            {course.modules.map((module, index) => (
-              <ModuleCard
-                key={module.id}
-                module={module}
-                index={index}
-                onUpdate={(updatedModule) => {
-                  setCourse((prev) => {
-                    if (!prev) return null;
-                    return {
-                      ...prev,
-                      modules: prev.modules.map((m) =>
-                        m.id === updatedModule.id
-                          ? { ...updatedModule, videos: m.videos }
-                          : m
-                      ),
-                    };
-                  });
-                }}
-                onDelete={async (moduleId) => {
-                  // Mise à jour immédiate de l'interface
-                  setCourse((prev) => {
-                    if (!prev) return null;
-                    return {
-                      ...prev,
-                      modules: prev.modules.filter((m) => m.id !== moduleId),
-                    };
-                  });
-
-                  // Appel API en arrière-plan
-                  fetch(`/api/courses/${course.id}/modules/${moduleId}`, {
-                    method: "DELETE",
-                  }).catch((error) => {
-                    console.error(
-                      "Erreur lors de la suppression du module:",
-                      error
-                    );
-                  });
-                }}
-                onMoveUp={() => {
-                  if (index > 0) {
-                    const newModules = [...course.modules];
-                    const [movedModule] = newModules.splice(index, 1);
-                    newModules.splice(index - 1, 0, movedModule);
-
-                    // Mettre à jour l'ordre de tous les modules
-                    const updatedModules = newModules.map(
-                      (module, newIndex) => ({
-                        ...module,
-                        order: newIndex,
-                      })
-                    );
-
-                    setCourse({ ...course, modules: updatedModules });
-
-                    fetch(`/api/courses/${course.id}/modules/reorder`, {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        modules: updatedModules.map((module) => ({
-                          id: module.id,
-                          order: module.order,
-                        })),
-                      }),
-                    }).catch((error) => {
-                      console.error("Erreur lors du réordonnancement:", error);
-                      fetchCourse();
+          {hasModules ? (
+            <div className="space-y-4">
+              {course.modules.map((module, index) => (
+                <ModuleCard
+                  key={module.id}
+                  module={module}
+                  index={index}
+                  onUpdate={(updatedModule) => {
+                    setCourse((prev) => {
+                      if (!prev) return null;
+                      return {
+                        ...prev,
+                        modules: prev.modules.map((m) =>
+                          m.id === updatedModule.id
+                            ? { ...updatedModule, videos: m.videos }
+                            : m
+                        ),
+                      };
                     });
-                  }
-                }}
-                onMoveDown={() => {
-                  if (index < course.modules.length - 1) {
-                    const newModules = [...course.modules];
-                    const [movedModule] = newModules.splice(index, 1);
-                    newModules.splice(index + 1, 0, movedModule);
-
-                    // Mettre à jour l'ordre de tous les modules
-                    const updatedModules = newModules.map(
-                      (module, newIndex) => ({
-                        ...module,
-                        order: newIndex,
-                      })
-                    );
-
-                    setCourse({ ...course, modules: updatedModules });
-
-                    fetch(`/api/courses/${course.id}/modules/reorder`, {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        modules: updatedModules.map((module) => ({
-                          id: module.id,
-                          order: module.order,
-                        })),
-                      }),
-                    }).catch((error) => {
-                      console.error("Erreur lors du réordonnancement:", error);
-                      fetchCourse();
+                  }}
+                  onDelete={async (moduleId) => {
+                    // Mise à jour immédiate de l'interface
+                    setCourse((prev) => {
+                      if (!prev) return null;
+                      return {
+                        ...prev,
+                        modules: prev.modules.filter((m) => m.id !== moduleId),
+                      };
                     });
-                  }
-                }}
-                isFirst={index === 0}
-                isLast={index === course.modules.length - 1}
-              />
-            ))}
-          </div>
-        ) : (
-          <Card>
-            <CardContent className="p-8 text-center">
-              <div className="max-w-md mx-auto space-y-4">
-                <div className="text-gray-400">
-                  <svg
-                    className="mx-auto h-12 w-12"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+
+                    // Appel API en arrière-plan
+                    fetch(`/api/courses/${course.id}/modules/${moduleId}`, {
+                      method: "DELETE",
+                    }).catch((error) => {
+                      console.error(
+                        "Erreur lors de la suppression du module:",
+                        error
+                      );
+                    });
+                  }}
+                  onMoveUp={() => {
+                    if (index > 0) {
+                      const newModules = [...course.modules];
+                      const [movedModule] = newModules.splice(index, 1);
+                      newModules.splice(index - 1, 0, movedModule);
+
+                      // Mettre à jour l'ordre de tous les modules
+                      const updatedModules = newModules.map(
+                        (module, newIndex) => ({
+                          ...module,
+                          order: newIndex,
+                        })
+                      );
+
+                      setCourse({ ...course, modules: updatedModules });
+
+                      fetch(`/api/courses/${course.id}/modules/reorder`, {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          modules: updatedModules.map((module) => ({
+                            id: module.id,
+                            order: module.order,
+                          })),
+                        }),
+                      }).catch((error) => {
+                        console.error(
+                          "Erreur lors du réordonnancement:",
+                          error
+                        );
+                        fetchCourse();
+                      });
+                    }
+                  }}
+                  onMoveDown={() => {
+                    if (index < course.modules.length - 1) {
+                      const newModules = [...course.modules];
+                      const [movedModule] = newModules.splice(index, 1);
+                      newModules.splice(index + 1, 0, movedModule);
+
+                      // Mettre à jour l'ordre de tous les modules
+                      const updatedModules = newModules.map(
+                        (module, newIndex) => ({
+                          ...module,
+                          order: newIndex,
+                        })
+                      );
+
+                      setCourse({ ...course, modules: updatedModules });
+
+                      fetch(`/api/courses/${course.id}/modules/reorder`, {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          modules: updatedModules.map((module) => ({
+                            id: module.id,
+                            order: module.order,
+                          })),
+                        }),
+                      }).catch((error) => {
+                        console.error(
+                          "Erreur lors du réordonnancement:",
+                          error
+                        );
+                        fetchCourse();
+                      });
+                    }
+                  }}
+                  isFirst={index === 0}
+                  isLast={index === course.modules.length - 1}
+                />
+              ))}
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="p-8 text-center">
+                <div className="max-w-md mx-auto space-y-4">
+                  <div className="text-gray-400">
+                    <svg
+                      className="mx-auto h-12 w-12"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                      />
+                    </svg>
+                  </div>
+                  <CardTitle className="text-lg">
+                    Aucun module dans cette formation
+                  </CardTitle>
+                  <CardDescription>
+                    Commencez par ajouter votre premier module à cette
+                    formation.
+                  </CardDescription>
+                  <div className="mt-6">
+                    <AddModuleModal
+                      courseId={course.id}
+                      onSuccess={() => window.location.reload()}
                     />
-                  </svg>
+                  </div>
                 </div>
-                <CardTitle className="text-lg">
-                  Aucun module dans cette formation
-                </CardTitle>
-                <CardDescription>
-                  Commencez par ajouter votre premier module à cette formation.
-                </CardDescription>
-                <div className="mt-6">
-                  <AddModuleModal
-                    courseId={course.id}
-                    onSuccess={() => window.location.reload()}
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+              </CardContent>
+            </Card>
+          )}
+        </div>
       </div>
     </div>
   );

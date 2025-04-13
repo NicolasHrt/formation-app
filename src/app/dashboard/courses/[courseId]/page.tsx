@@ -44,7 +44,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
+import Navbar from "@/components/Navbar";
 interface CourseWithModules extends Course {
   modules: Module[];
   author: User;
@@ -254,118 +254,121 @@ export default function CoursePage({
   }
 
   return (
-    <div className="space-y-8 container px-4 mx-auto py-8">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/dashboard">Mes formations</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>{course.title}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <div>
+      <Navbar />
+      <div className="space-y-8 container px-4 mx-auto py-8">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/dashboard">Mes formations</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{course.title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-      <div className="space-y-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle>{course.title}</CardTitle>
-              <p className="text-gray-600 mt-1">{course.description}</p>
-            </div>
-            <div className="flex gap-2">
-              <EditCourseModal course={course} onSuccess={fetchCourse} />
-              <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-red-500 hover:text-red-500 hover:bg-red-50"
-                    title="Supprimer la formation"
-                  >
-                    <Trash2 className="h-5 w-5" />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Supprimer la formation</DialogTitle>
-                    <DialogDescription>
-                      Êtes-vous sûr de vouloir supprimer la formation{" "}
-                      <span className="font-semibold text-gray-900">
-                        {course.title}
-                      </span>
-                      ? Cette action est irréversible et supprimera également
-                      tous les modules et vidéos associés.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4 mt-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">
-                        Tapez le nom de la formation pour confirmer
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full px-3 py-2 border rounded-md"
-                        value={confirmationTitle}
-                        onChange={(e) => setConfirmationTitle(e.target.value)}
-                        placeholder="Nom de la formation"
-                      />
+        <div className="space-y-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>{course.title}</CardTitle>
+                <p className="text-gray-600 mt-1">{course.description}</p>
+              </div>
+              <div className="flex gap-2">
+                <EditCourseModal course={course} onSuccess={fetchCourse} />
+                <Dialog open={open} onOpenChange={setOpen}>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-red-500 hover:text-red-500 hover:bg-red-50"
+                      title="Supprimer la formation"
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Supprimer la formation</DialogTitle>
+                      <DialogDescription>
+                        Êtes-vous sûr de vouloir supprimer la formation{" "}
+                        <span className="font-semibold text-gray-900">
+                          {course.title}
+                        </span>
+                        ? Cette action est irréversible et supprimera également
+                        tous les modules et vidéos associés.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 mt-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">
+                          Tapez le nom de la formation pour confirmer
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full px-3 py-2 border rounded-md"
+                          value={confirmationTitle}
+                          onChange={(e) => setConfirmationTitle(e.target.value)}
+                          placeholder="Nom de la formation"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">
+                          Tapez "supprimer définitivement" pour confirmer
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full px-3 py-2 border rounded-md"
+                          value={confirmationText}
+                          onChange={(e) => setConfirmationText(e.target.value)}
+                          placeholder="supprimer définitivement"
+                        />
+                      </div>
+                      <div className="flex justify-end gap-4">
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setOpen(false);
+                            setConfirmationTitle("");
+                            setConfirmationText("");
+                          }}
+                          disabled={isDeleting}
+                        >
+                          Annuler
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          onClick={handleDelete}
+                          disabled={
+                            isDeleting ||
+                            confirmationTitle !== course.title ||
+                            confirmationText !== "supprimer définitivement"
+                          }
+                        >
+                          {isDeleting ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Suppression...
+                            </>
+                          ) : (
+                            "Supprimer définitivement"
+                          )}
+                        </Button>
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">
-                        Tapez "supprimer définitivement" pour confirmer
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full px-3 py-2 border rounded-md"
-                        value={confirmationText}
-                        onChange={(e) => setConfirmationText(e.target.value)}
-                        placeholder="supprimer définitivement"
-                      />
-                    </div>
-                    <div className="flex justify-end gap-4">
-                      <Button
-                        variant="outline"
-                        onClick={() => {
-                          setOpen(false);
-                          setConfirmationTitle("");
-                          setConfirmationText("");
-                        }}
-                        disabled={isDeleting}
-                      >
-                        Annuler
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        onClick={handleDelete}
-                        disabled={
-                          isDeleting ||
-                          confirmationTitle !== course.title ||
-                          confirmationText !== "supprimer définitivement"
-                        }
-                      >
-                        {isDeleting ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Suppression...
-                          </>
-                        ) : (
-                          "Supprimer définitivement"
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-          </CardHeader>
-        </Card>
+                  </DialogContent>
+                </Dialog>
+              </div>
+            </CardHeader>
+          </Card>
 
-        <div className="flex gap-6">
-          <CourseSidebar courseId={course.id} courseSlug={course.slug} />
-          <div className="flex-1">
-            <CourseStats course={course} />
+          <div className="flex gap-6">
+            <CourseSidebar courseId={course.id} courseSlug={course.slug} />
+            <div className="flex-1">
+              <CourseStats course={course} />
+            </div>
           </div>
         </div>
       </div>

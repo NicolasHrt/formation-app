@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { LandingSidebarEditor } from "@/components/landing-editor/LandingSidebarEditor";
-import { Landing } from "@/components/landing-editor/Landing";
-import { TemplateSelector } from "@/components/landing-editor/TemplateSelector";
+import { Sidebar } from "../../components/landing-editor/LandingSidebarEditor";
+import { Landing } from "../../components/landing-editor/Landing";
+import { TemplateSelector } from "../../components/landing-editor/TemplateSelector";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -81,7 +81,7 @@ export default function LandingEditor() {
           selectedTemplate={template}
           onTemplateChange={setTemplate}
         />
-        <LandingSidebarEditor
+        <Sidebar
           selectedSection={selectedSection}
           onSectionSelect={setSelectedSection}
           content={content}

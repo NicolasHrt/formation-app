@@ -27,7 +27,6 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           <QueryProvider>
             <div className="min-h-screen bg-gray-50">
-              <Navbar />
               <main className="">{children}</main>
             </div>
           </QueryProvider>

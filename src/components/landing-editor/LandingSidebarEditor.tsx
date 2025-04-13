@@ -54,7 +54,7 @@ interface SidebarProps {
   onContentChange: (content: any) => void;
 }
 
-export function Sidebar({
+export function LandingSidebarEditor({
   selectedSection,
   onSectionSelect,
   content,
