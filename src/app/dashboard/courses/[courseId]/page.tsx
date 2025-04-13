@@ -14,6 +14,7 @@ import {
   Mail,
   BookOpen,
   Eye,
+  Layout,
 } from "lucide-react";
 import {
   Breadcrumb,
@@ -81,6 +82,12 @@ function CourseSidebar({
           <a href={`/dashboard/courses/${courseId}/analytics`}>
             <BarChart2 className="mr-2 h-4 w-4" />
             Analytics
+          </a>
+        </Button>
+        <Button variant="ghost" className="w-full justify-start" asChild>
+          <a href={`/dashboard/landing-editor?courseId=${courseId}`}>
+            <Layout className="mr-2 h-4 w-4" />
+            Landing page
           </a>
         </Button>
         <div className="pt-2 border-t border-gray-100">
