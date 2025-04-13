@@ -30,6 +30,7 @@ export default function AddVideoModal({
   const [error, setError] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [finalDescription, setFinalDescription] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [duration, setDuration] = useState<number>(0);
@@ -101,7 +102,7 @@ export default function AddVideoModal({
         },
         body: JSON.stringify({
           title,
-          description,
+          description: finalDescription,
           duration,
           size: selectedFile.size,
         }),
@@ -109,6 +110,7 @@ export default function AddVideoModal({
 
       setTitle("");
       setDescription("");
+      setFinalDescription("");
       setSelectedFile(null);
       setUploadProgress(0);
       setOpen(false);
@@ -151,11 +153,13 @@ export default function AddVideoModal({
                 onChange={handleFileChange}
                 ref={fileInputRef}
                 className="hidden"
+                disabled={loading}
               />
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => fileInputRef.current?.click()}
+                disabled={loading}
               >
                 <Upload className="mr-2 h-4 w-4" />
                 {selectedFile ? selectedFile.name : "Sélectionner une vidéo"}
@@ -169,11 +173,19 @@ export default function AddVideoModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <RichTextEditor content={description} onChange={setDescription} />
+            <RichTextEditor
+              content={description}
+              onChange={(content) => {
+                setDescription(content);
+                setFinalDescription(content);
+              }}
+              disabled={loading}
+            />
           </div>
           {uploadProgress > 0 && (
             <div className="w-full bg-gray-200 rounded-full h-2.5">
