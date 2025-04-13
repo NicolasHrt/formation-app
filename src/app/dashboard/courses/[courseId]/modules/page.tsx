@@ -26,7 +26,12 @@ import {
 } from "@/components/ui/dialog";
 
 interface CourseWithModules extends Course {
-  modules: Module[];
+  modules: (Module & {
+    videos: {
+      id: string;
+      duration: number;
+    }[];
+  })[];
   author: User;
 }
 
@@ -39,7 +44,12 @@ function ModuleCard({
   isFirst,
   isLast,
 }: {
-  module: Module;
+  module: Module & {
+    videos: {
+      id: string;
+      duration: number;
+    }[];
+  };
   onUpdate: (updatedModule: Module) => void;
   onDelete: (moduleId: string) => void;
   onMoveUp: () => void;
@@ -49,6 +59,18 @@ function ModuleCard({
 }) {
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Calculer les statistiques réelles
+  const totalVideos = module.videos.length;
+  const totalDuration = module.videos.reduce(
+    (acc, video) => acc + (video.duration || 0),
+    0
+  );
+  const publishedAt = new Date(module.createdAt).toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -76,8 +98,8 @@ function ModuleCard({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border border-gray-100 relative">
-      <div className="absolute top-2 right-2 flex items-center gap-2">
+    <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 relative group overflow-hidden">
+      <div className="absolute top-3 right-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <div className="flex flex-col">
           <Button
             variant="ghost"
@@ -148,16 +170,48 @@ function ModuleCard({
           </DialogContent>
         </Dialog>
       </div>
-      <div className="flex flex-col space-y-4">
-        <div className="pr-24">
-          <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
-            {module.title}
-          </h3>
-          <p className="text-gray-600 mt-1 line-clamp-2">
-            {module.description}
-          </p>
+
+      <div className="p-6">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">
+            Module {module.order}
+          </span>
+          <span className="text-sm text-gray-500">•</span>
+          <span className="text-sm text-gray-500">{totalVideos} vidéos</span>
         </div>
-        <div>
+
+        <h3 className="text-xl font-semibold text-gray-900 line-clamp-2 mb-2">
+          {module.title}
+        </h3>
+        <p className="text-gray-600 line-clamp-2 mb-6">{module.description}</p>
+
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <div className="text-sm font-medium text-gray-500">
+              Durée totale
+            </div>
+            <div className="text-lg font-semibold text-gray-900">
+              {Math.round(totalDuration / 60)} min
+            </div>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <div className="text-sm font-medium text-gray-500">
+              Taux de complétion
+            </div>
+            <div className="text-lg font-semibold text-gray-900">0%</div>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <div className="text-sm font-medium text-gray-500">Vidéos</div>
+            <div className="text-lg font-semibold text-gray-900">
+              {totalVideos}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+          <div className="text-sm text-gray-500">
+            Mis en ligne le {publishedAt}
+          </div>
           <Button
             variant="black"
             size="sm"
@@ -194,7 +248,24 @@ export default function ModulesPage({
         throw new Error(data.error || "Une erreur est survenue");
       }
 
-      setCourse(data.data);
+      // Récupérer les vidéos pour chaque module
+      const modulesWithVideos = await Promise.all(
+        data.data.modules.map(async (module: Module) => {
+          const videosResponse = await fetch(
+            `/api/modules/${module.id}/videos`
+          );
+          const videosData = await videosResponse.json();
+          return {
+            ...module,
+            videos: videosData.data || [],
+          };
+        })
+      );
+
+      setCourse({
+        ...data.data,
+        modules: modulesWithVideos,
+      });
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Une erreur est survenue");
@@ -222,7 +293,7 @@ export default function ModulesPage({
   const hasModules = course.modules.length > 0;
 
   return (
-    <div className="space-y-8 container px-4 mx-auto pt-8">
+    <div className="space-y-8 container px-4 mx-auto py-8">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -243,7 +314,12 @@ export default function ModulesPage({
 
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">Modules</h1>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Modules</h1>
+            <p className="text-gray-500 mt-1">
+              Gérez les modules de votre formation
+            </p>
+          </div>
           <AddModuleModal courseId={course.id} onSuccess={fetchCourse} />
         </div>
 
@@ -259,7 +335,9 @@ export default function ModulesPage({
                     return {
                       ...prev,
                       modules: prev.modules.map((m) =>
-                        m.id === updatedModule.id ? updatedModule : m
+                        m.id === updatedModule.id
+                          ? { ...updatedModule, videos: m.videos }
+                          : m
                       ),
                     };
                   });
