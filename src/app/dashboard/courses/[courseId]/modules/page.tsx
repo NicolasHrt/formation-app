@@ -84,7 +84,7 @@ function ModuleCard({
 
   return (
     <Card className="relative group overflow-hidden">
-      <div className="absolute top-3 right-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="absolute top-3 right-3 flex items-center gap-2  transition-opacity">
         <div className="flex flex-col">
           <Button
             variant="ghost"
