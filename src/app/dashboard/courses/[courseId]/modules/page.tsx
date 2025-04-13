@@ -24,6 +24,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface CourseWithModules extends Course {
   modules: (Module & {
@@ -74,33 +81,8 @@ function ModuleCard({
     year: "numeric",
   });
 
-  const handleDelete = async () => {
-    setIsDeleting(true);
-    try {
-      const response = await fetch(
-        `/api/courses/${module.courseId}/modules/${module.id}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Une erreur est survenue");
-      }
-
-      setOpen(false);
-      onDelete(module.id);
-    } catch (error) {
-      console.error("Erreur lors de la suppression du module:", error);
-      alert("Une erreur est survenue lors de la suppression du module");
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
   return (
-    <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 relative group overflow-hidden">
+    <Card className="relative group overflow-hidden">
       <div className="absolute top-3 right-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <div className="flex flex-col">
           <Button
@@ -142,8 +124,7 @@ function ModuleCard({
               <DialogTitle>Supprimer le module</DialogTitle>
               <DialogDescription>
                 Êtes-vous sûr de vouloir supprimer ce module ? Cette action est
-                irréversible et supprimera également toutes les vidéos
-                associées.
+                irréversible.
               </DialogDescription>
             </DialogHeader>
             <div className="flex justify-end gap-4 mt-4">
@@ -156,7 +137,11 @@ function ModuleCard({
               </Button>
               <Button
                 variant="destructive"
-                onClick={handleDelete}
+                onClick={() => {
+                  setIsDeleting(true);
+                  onDelete(module.id);
+                  setOpen(false);
+                }}
                 disabled={isDeleting}
               >
                 {isDeleting ? (
@@ -173,19 +158,22 @@ function ModuleCard({
         </Dialog>
       </div>
 
-      <div className="p-6">
+      <CardContent className="pt-6">
         <div className="flex items-center gap-3 mb-3">
-          <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
-            Module {index + 1}
+          <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full flex items-center gap-2">
+            <span className="text-primary/70">Module</span>
+            <span>{index + 1}</span>
           </span>
           <span className="text-sm text-gray-500">•</span>
           <span className="text-sm text-gray-500">{totalVideos} vidéos</span>
         </div>
 
-        <h3 className="text-xl font-semibold text-gray-900 line-clamp-2 mb-2">
+        <CardTitle className="text-xl line-clamp-2 mb-2">
           {module.title}
-        </h3>
-        <p className="text-gray-600 line-clamp-2 mb-6">{module.description}</p>
+        </CardTitle>
+        <CardDescription className="line-clamp-2 mb-6">
+          {module.description}
+        </CardDescription>
 
         <div className="grid grid-cols-3 gap-4 mb-6">
           <div className="bg-gray-50 rounded-lg p-4">
@@ -210,12 +198,12 @@ function ModuleCard({
           </div>
         </div>
 
-        <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+        <CardFooter className="flex justify-between items-center pt-4 pb-0 border-t border-gray-100 px-0">
           <div className="text-sm text-gray-500">
             Mis en ligne le {publishedAt}
           </div>
           <Button
-            variant="black"
+            variant="outline"
             size="sm"
             onClick={(e) => {
               e.preventDefault();
@@ -224,9 +212,9 @@ function ModuleCard({
           >
             Gérer les vidéos
           </Button>
-        </div>
-      </div>
-    </div>
+        </CardFooter>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -439,35 +427,40 @@ export default function ModulesPage({
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-            <div className="max-w-md mx-auto space-y-4">
-              <div className="text-gray-400">
-                <svg
-                  className="mx-auto h-12 w-12"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+          <Card>
+            <CardContent className="p-8 text-center">
+              <div className="max-w-md mx-auto space-y-4">
+                <div className="text-gray-400">
+                  <svg
+                    className="mx-auto h-12 w-12"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                    />
+                  </svg>
+                </div>
+                <CardTitle className="text-lg">
+                  Aucun module dans cette formation
+                </CardTitle>
+                <CardDescription>
+                  Commencez par ajouter votre premier module à cette formation.
+                </CardDescription>
+                <div className="mt-6">
+                  <AddModuleModal
+                    courseId={course.id}
+                    onSuccess={() => window.location.reload()}
                   />
-                </svg>
+                </div>
               </div>
-              <h3 className="text-lg font-medium text-gray-900">
-                Aucun module dans cette formation
-              </h3>
-              <p className="text-gray-500">
-                Commencez par ajouter votre premier module à cette formation.
-              </p>
-              <div className="mt-6">
-                <AddModuleModal courseId={course.id} onSuccess={fetchCourse} />
-              </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         )}
       </div>
     </div>
