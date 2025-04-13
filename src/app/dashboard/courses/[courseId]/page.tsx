@@ -45,6 +45,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import Navbar from "@/components/Navbar";
+import { CourseDashboardSidebar } from "@/components/dashboard/CourseDashboardSidebar";
+
 interface CourseWithModules extends Course {
   modules: Module[];
   author: User;
@@ -365,7 +367,10 @@ export default function CoursePage({
           </Card>
 
           <div className="flex gap-6">
-            <CourseSidebar courseId={course.id} courseSlug={course.slug} />
+            <CourseDashboardSidebar
+              courseId={course.id}
+              courseSlug={course.slug}
+            />
             <div className="flex-1">
               <CourseStats course={course} />
             </div>
