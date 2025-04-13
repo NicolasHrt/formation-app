@@ -12,9 +12,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Plus, Upload } from "lucide-react";
+import RichTextEditor from "./RichTextEditor";
 
 interface AddVideoModalProps {
   moduleId: string;
@@ -173,12 +173,7 @@ export default function AddVideoModal({
           </div>
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
+            <RichTextEditor content={description} onChange={setDescription} />
           </div>
           {uploadProgress > 0 && (
             <div className="w-full bg-gray-200 rounded-full h-2.5">

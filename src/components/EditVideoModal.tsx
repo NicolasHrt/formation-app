@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Loader2, Pencil } from "lucide-react";
+import RichTextEditor from "./RichTextEditor";
 
 interface EditVideoModalProps {
   video: Video;
@@ -98,11 +99,7 @@ export default function EditVideoModal({
             <label htmlFor="description" className="text-sm font-medium">
               Description
             </label>
-            <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+            <RichTextEditor content={description} onChange={setDescription} />
           </div>
           <div className="flex justify-end gap-4 mt-6">
             <Button

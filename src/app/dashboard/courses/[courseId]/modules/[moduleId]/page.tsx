@@ -81,7 +81,7 @@ function VideoItem({
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow relative">
-      <div className="absolute top-2 right-2 flex gap-2">
+      <div className="absolute top-2 right-2 flex items-center gap-2">
         <div className="flex flex-col">
           <Button
             variant="ghost"
@@ -165,7 +165,6 @@ function VideoItem({
           <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
             {video.title}
           </h3>
-          <p className="text-gray-600 mt-1 line-clamp-2">{video.description}</p>
         </div>
       </div>
 
