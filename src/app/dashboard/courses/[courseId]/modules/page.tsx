@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Module, Course, User } from "@prisma/client";
 import { use } from "react";
 import { Button } from "@/components/ui/button";
-import { Trash2, Loader2, ChevronUp, ChevronDown } from "lucide-react";
+import { Trash2, Loader2, ChevronUp, ChevronDown, Eye } from "lucide-react";
 import AddModuleModal from "@/components/AddModuleModal";
 import EditModuleModal from "@/components/EditModuleModal";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -31,6 +31,7 @@ import {
   CardFooter,
   CardTitle,
 } from "@/components/ui/card";
+import Link from "next/link";
 
 interface CourseWithModules extends Course {
   modules: (Module & {
@@ -312,7 +313,15 @@ export default function ModulesPage({
               Gérez les modules de votre formation
             </p>
           </div>
-          <AddModuleModal courseId={course.id} onSuccess={fetchCourse} />
+          <div className="flex items-center gap-4">
+            <Link href={`/courses/${course.slug}`} target="_blank">
+              <Button variant="outline">
+                <Eye className="w-4 h-4 mr-2" />
+                Prévisualiser la formation
+              </Button>
+            </Link>
+            <AddModuleModal courseId={course.id} onSuccess={fetchCourse} />
+          </div>
         </div>
 
         {hasModules ? (

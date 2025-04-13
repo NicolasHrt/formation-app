@@ -13,6 +13,7 @@ import {
   Users,
   Mail,
   BookOpen,
+  Eye,
 } from "lucide-react";
 import {
   Breadcrumb,
@@ -48,7 +49,13 @@ interface CourseWithModules extends Course {
   author: User;
 }
 
-function CourseSidebar({ courseId }: { courseId: string }) {
+function CourseSidebar({
+  courseId,
+  courseSlug,
+}: {
+  courseId: string;
+  courseSlug: string;
+}) {
   return (
     <Card className="w-64">
       <CardContent className="p-4 space-y-2">
@@ -76,6 +83,14 @@ function CourseSidebar({ courseId }: { courseId: string }) {
             Analytics
           </a>
         </Button>
+        <div className="pt-2 border-t border-gray-100">
+          <Button variant="ghost" className="w-full justify-start" asChild>
+            <a href={`/courses/${courseSlug}`} target="_blank">
+              <Eye className="mr-2 h-4 w-4" />
+              Prévisualiser la formation
+            </a>
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
@@ -341,7 +356,7 @@ export default function CoursePage({
         </Card>
 
         <div className="flex gap-6">
-          <CourseSidebar courseId={course.id} />
+          <CourseSidebar courseId={course.id} courseSlug={course.slug} />
           <div className="flex-1">
             <CourseStats course={course} />
           </div>
