@@ -85,7 +85,7 @@ function CourseSidebar({
           </a>
         </Button>
         <Button variant="ghost" className="w-full justify-start" asChild>
-          <a href={`/dashboard/landing-editor?courseId=${courseId}`}>
+          <a href={`/landing-editor/${courseSlug}`}>
             <Layout className="mr-2 h-4 w-4" />
             Landing page
           </a>
