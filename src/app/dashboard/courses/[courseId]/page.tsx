@@ -8,7 +8,16 @@ import EditCourseModal from "@/components/EditCourseModal";
 import { Module, Course, User } from "@prisma/client";
 import { use } from "react";
 import { Button } from "@/components/ui/button";
-import { Trash2, Loader2, ChevronUp, ChevronDown } from "lucide-react";
+import {
+  Trash2,
+  Loader2,
+  ChevronUp,
+  ChevronDown,
+  BarChart2,
+  Users,
+  Mail,
+  BookOpen,
+} from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -27,6 +36,16 @@ import {
 } from "@/components/ui/dialog";
 import { useQueryClient } from "@tanstack/react-query";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 interface CourseWithModules extends Course {
   modules: Module[];
@@ -173,6 +192,113 @@ function ModuleCard({
           </Button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function CourseSidebar({ courseId }: { courseId: string }) {
+  return (
+    <div className="w-64 bg-white rounded-lg shadow-sm p-4 space-y-2">
+      <Button variant="ghost" className="w-full justify-start" asChild>
+        <a href={`/dashboard/courses/${courseId}/modules`}>
+          <BookOpen className="mr-2 h-4 w-4" />
+          Modules
+        </a>
+      </Button>
+      <Button variant="ghost" className="w-full justify-start" asChild>
+        <a href={`/dashboard/courses/${courseId}/students`}>
+          <Users className="mr-2 h-4 w-4" />
+          Étudiants
+        </a>
+      </Button>
+      <Button variant="ghost" className="w-full justify-start" asChild>
+        <a href={`/dashboard/courses/${courseId}/emails`}>
+          <Mail className="mr-2 h-4 w-4" />
+          Emails
+        </a>
+      </Button>
+      <Button variant="ghost" className="w-full justify-start" asChild>
+        <a href={`/dashboard/courses/${courseId}/analytics`}>
+          <BarChart2 className="mr-2 h-4 w-4" />
+          Analytics
+        </a>
+      </Button>
+    </div>
+  );
+}
+
+function CourseStats({ course }: { course: CourseWithModules }) {
+  // Données mockées pour l'exemple
+  const salesData = [
+    { date: "2024-01", sales: 12 },
+    { date: "2024-02", sales: 19 },
+    { date: "2024-03", sales: 15 },
+    { date: "2024-04", sales: 8 },
+  ];
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Ventes totales
+            </CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">54</div>
+            <p className="text-xs text-muted-foreground">
+              +20% depuis le mois dernier
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Revenus</CardTitle>
+            <BarChart2 className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">2 700€</div>
+            <p className="text-xs text-muted-foreground">
+              +15% depuis le mois dernier
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Taux de complétion
+            </CardTitle>
+            <BookOpen className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">65%</div>
+            <p className="text-xs text-muted-foreground">
+              +5% depuis le mois dernier
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Évolution des ventes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={salesData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Line type="monotone" dataKey="sales" stroke="#8884d8" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
@@ -491,6 +617,13 @@ export default function CoursePage({
             </div>
           </div>
         )}
+      </div>
+
+      <div className="flex gap-6">
+        <CourseSidebar courseId={course.id} />
+        <div className="flex-1">
+          <CourseStats course={course} />
+        </div>
       </div>
     </div>
   );
