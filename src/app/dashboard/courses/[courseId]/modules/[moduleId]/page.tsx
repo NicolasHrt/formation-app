@@ -3,6 +3,7 @@
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { Module, Video } from "@prisma/client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
   Loader2,
@@ -31,28 +32,43 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface ModuleWithVideos extends Module {
   videos: Video[];
   course: {
     title: string;
+    id: string;
   };
 }
 
-function VideoItem({
+function VideoCard({
   video,
-  onReorder,
+  onUpdate,
+  onDelete,
+  onMoveUp,
+  onMoveDown,
   isFirst,
   isLast,
 }: {
   video: Video;
-  onReorder: (direction: "up" | "down") => void;
+  onUpdate: (updatedVideo: Video) => void;
+  onDelete: (videoId: string) => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
   isFirst: boolean;
   isLast: boolean;
 }) {
   const [open, setOpen] = useState(false);
-  const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -70,7 +86,7 @@ function VideoItem({
       }
 
       setOpen(false);
-      window.location.reload();
+      onDelete(video.id);
     } catch (error) {
       console.error("Erreur lors de la suppression de la vidéo:", error);
       alert("Une erreur est survenue lors de la suppression de la vidéo");
@@ -80,13 +96,13 @@ function VideoItem({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md border border-gray-100 transition-shadow relative">
-      <div className="absolute top-2 right-2 flex items-center gap-2">
+    <Card className="relative group overflow-hidden">
+      <div className="absolute top-3 right-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <div className="flex flex-col">
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => onReorder("up")}
+            onClick={onMoveUp}
             disabled={isFirst}
             className="text-gray-500 hover:text-gray-700 disabled:opacity-50"
           >
@@ -95,7 +111,7 @@ function VideoItem({
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => onReorder("down")}
+            onClick={onMoveDown}
             disabled={isLast}
             className="text-gray-500 hover:text-gray-700 disabled:opacity-50"
           >
@@ -104,7 +120,7 @@ function VideoItem({
         </div>
         <EditVideoModal
           video={video}
-          onSuccess={() => window.location.reload()}
+          onSuccess={(updatedVideo: Video) => onUpdate(updatedVideo)}
         />
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
@@ -152,23 +168,42 @@ function VideoItem({
         </Dialog>
       </div>
 
-      <div className="flex items-center gap-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setVideoModalOpen(true)}
-          className="flex-shrink-0"
-        >
-          <Play className="h-8 w-8" />
-        </Button>
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
-            {video.title}
-          </h3>
+      <CardContent className="pt-6">
+        <div className="flex items-center gap-3 mb-3">
+          <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full flex items-center gap-2">
+            <span className="text-primary/70">Vidéo</span>
+            <span>{video.order + 1}</span>
+          </span>
+          <span className="text-sm text-gray-500">•</span>
+          <span className="text-sm text-gray-500">
+            {video.duration ? Math.round(video.duration / 60) : 0} min
+          </span>
         </div>
-      </div>
 
-      <Dialog open={videoModalOpen} onOpenChange={setVideoModalOpen}>
+        <CardTitle className="text-xl line-clamp-2 mb-6">
+          {video.title}
+        </CardTitle>
+
+        <CardFooter className="flex justify-between items-center pt-4 pb-0 border-t border-gray-100 px-0">
+          <div className="text-sm text-gray-500">
+            Mis en ligne le{" "}
+            {new Date(video.createdAt).toLocaleDateString("fr-FR", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setPreviewOpen(true)}
+          >
+            Prévisualiser
+          </Button>
+        </CardFooter>
+      </CardContent>
+
+      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle>{video.title}</DialogTitle>
@@ -180,26 +215,36 @@ function VideoItem({
               className="absolute top-0 left-0 w-full h-full rounded-lg"
             />
           </div>
+          {video.description && (
+            <div className="prose max-w-none mt-4">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: video.description,
+                }}
+              />
+            </div>
+          )}
         </DialogContent>
       </Dialog>
-    </div>
+    </Card>
   );
 }
 
-export default function ModuleVideosPage({
+export default function VideosPage({
   params,
 }: {
   params: Promise<{ courseId: string; moduleId: string }>;
 }) {
   const resolvedParams = use(params);
+  const queryClient = useQueryClient();
+  const router = useRouter();
   const [module, setModule] = useState<ModuleWithVideos | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
-  const fetchModule = async () => {
-    try {
-      setLoading(true);
+  const { data: moduleData, isLoading } = useQuery({
+    queryKey: ["module", resolvedParams.moduleId],
+    queryFn: async () => {
       const response = await fetch(
         `/api/courses/${resolvedParams.courseId}/modules/${resolvedParams.moduleId}`
       );
@@ -218,67 +263,71 @@ export default function ModuleVideosPage({
         throw new Error(courseData.error || "Une erreur est survenue");
       }
 
-      setModule({
+      return {
         ...data.data,
         course: {
           title: courseData.data.title,
+          id: courseData.data.id,
         },
-      });
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Une erreur est survenue");
-    } finally {
-      setLoading(false);
-    }
-  };
+      };
+    },
+  });
 
-  useEffect(() => {
-    fetchModule();
-  }, [resolvedParams.moduleId]);
-
-  const moveVideo = async (fromIndex: number, toIndex: number) => {
-    if (!module) return;
-
-    const newVideos = [...module.videos];
-    const [movedVideo] = newVideos.splice(fromIndex, 1);
-    newVideos.splice(toIndex, 0, movedVideo);
-
-    setModule({ ...module, videos: newVideos });
-
-    try {
-      await fetch(
-        `/api/courses/${resolvedParams.courseId}/modules/${resolvedParams.moduleId}/videos/reorder`,
+  const deleteVideoMutation = useMutation({
+    mutationFn: async (videoId: string) => {
+      const response = await fetch(
+        `/api/modules/${resolvedParams.moduleId}/videos/${videoId}`,
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            videos: newVideos.map((video, index) => ({
-              id: video.id,
-              order: index,
-            })),
-          }),
+          method: "DELETE",
         }
       );
-    } catch (error) {
-      console.error("Erreur lors du réordonnancement des vidéos:", error);
-      fetchModule();
-    }
-  };
 
-  if (loading) {
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Une erreur est survenue");
+      }
+    },
+    onSuccess: () => {
+      // Invalider et recharger les données du module
+      queryClient.invalidateQueries({
+        queryKey: ["module", resolvedParams.moduleId],
+      });
+    },
+    onError: (error) => {
+      console.error("Erreur lors de la suppression de la vidéo:", error);
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (moduleData) {
+      setModule(moduleData);
+      setLoading(false);
+    }
+  }, [moduleData]);
+
+  if (isLoading) {
     return <LoadingSpinner />;
   }
 
-  if (error || !module) {
+  if (error) {
     return <div>Erreur: {error}</div>;
   }
 
+  if (!module) {
+    return <div>Module non trouvé</div>;
+  }
+
   const hasVideos = module.videos.length > 0;
+  const totalDuration = module.videos.reduce(
+    (acc, video) => acc + (video.duration || 0),
+    0
+  );
 
   return (
-    <div className="space-y-8 container px-4 mx-auto pt-8">
+    <div className="space-y-8 container px-4 mx-auto py-8">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -286,51 +335,160 @@ export default function ModuleVideosPage({
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink
-              href={`/dashboard/courses/${resolvedParams.courseId}`}
-            >
-              {module?.course?.title}
+            <BreadcrumbLink href={`/dashboard/courses/${module.course.id}`}>
+              {module.course.title}
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>{module?.title}</BreadcrumbPage>
+            <BreadcrumbLink
+              href={`/dashboard/courses/${module.course.id}/modules`}
+            >
+              Modules
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{module.title}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="space-y-6 ">
-        <div className="flex justify-between items-center">
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{module.title}</h1>
-            <p className="text-gray-600 mt-1">{module.description}</p>
+            <CardTitle className="text-2xl">{module.title}</CardTitle>
+            <CardDescription className="mt-1">
+              {module.videos.length} vidéos • {Math.round(totalDuration / 60)}{" "}
+              min au total
+            </CardDescription>
           </div>
-          <AddVideoModal moduleId={module.id} onSuccess={fetchModule} />
-        </div>
+          <AddVideoModal
+            moduleId={module.id}
+            onSuccess={() => window.location.reload()}
+          />
+        </CardHeader>
+      </Card>
 
-        {hasVideos ? (
-          <div className="space-y-4">
-            {module.videos.map((video, index) => (
-              <VideoItem
-                key={video.id}
-                video={video}
-                onReorder={(direction) => {
-                  if (direction === "up" && index > 0) {
-                    moveVideo(index, index - 1);
-                  } else if (
-                    direction === "down" &&
-                    index < module.videos.length - 1
-                  ) {
-                    moveVideo(index, index + 1);
+      {hasVideos ? (
+        <div className="space-y-4">
+          {module.videos.map((video, index) => (
+            <VideoCard
+              key={video.id}
+              video={video}
+              onUpdate={(updatedVideo: Video) => {
+                setModule((prev) => {
+                  if (!prev) return null;
+                  return {
+                    ...prev,
+                    videos: prev.videos.map((v) =>
+                      v.id === updatedVideo.id ? updatedVideo : v
+                    ),
+                  };
+                });
+              }}
+              onDelete={async (videoId) => {
+                try {
+                  setModule((prev) => {
+                    if (!prev) return null;
+                    return {
+                      ...prev,
+                      videos: prev.videos.filter((v) => v.id !== videoId),
+                    };
+                  });
+
+                  const response = await fetch(
+                    `/api/modules/${module.id}/videos/${videoId}`,
+                    {
+                      method: "DELETE",
+                    }
+                  );
+
+                  if (!response.ok) {
+                    window.location.reload();
                   }
-                }}
-                isFirst={index === 0}
-                isLast={index === module.videos.length - 1}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+                } catch (error) {
+                  console.error(
+                    "Erreur lors de la suppression de la vidéo:",
+                    error
+                  );
+                  window.location.reload();
+                }
+              }}
+              onMoveUp={() => {
+                if (index > 0) {
+                  const newVideos = [...module.videos];
+                  const [movedVideo] = newVideos.splice(index, 1);
+                  newVideos.splice(index - 1, 0, movedVideo);
+
+                  // Mettre à jour l'ordre de toutes les vidéos
+                  const updatedVideos = newVideos.map((video, newIndex) => ({
+                    ...video,
+                    order: newIndex,
+                  }));
+
+                  setModule({ ...module, videos: updatedVideos });
+
+                  fetch(`/api/modules/${module.id}/videos/reorder`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      videos: updatedVideos.map((video) => ({
+                        id: video.id,
+                        order: video.order,
+                      })),
+                    }),
+                  }).catch((error) => {
+                    console.error("Erreur lors du réordonnancement:", error);
+                    queryClient.invalidateQueries({
+                      queryKey: ["module", resolvedParams.moduleId],
+                    });
+                  });
+                }
+              }}
+              onMoveDown={() => {
+                if (index < module.videos.length - 1) {
+                  const newVideos = [...module.videos];
+                  const [movedVideo] = newVideos.splice(index, 1);
+                  newVideos.splice(index + 1, 0, movedVideo);
+
+                  // Mettre à jour l'ordre de toutes les vidéos
+                  const updatedVideos = newVideos.map((video, newIndex) => ({
+                    ...video,
+                    order: newIndex,
+                  }));
+
+                  setModule({ ...module, videos: updatedVideos });
+
+                  fetch(`/api/modules/${module.id}/videos/reorder`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      videos: updatedVideos.map((video) => ({
+                        id: video.id,
+                        order: video.order,
+                      })),
+                    }),
+                  }).catch((error) => {
+                    console.error("Erreur lors du réordonnancement:", error);
+                    queryClient.invalidateQueries({
+                      queryKey: ["module", resolvedParams.moduleId],
+                    });
+                  });
+                }
+              }}
+              isFirst={index === 0}
+              isLast={index === module.videos.length - 1}
+            />
+          ))}
+        </div>
+      ) : (
+        <Card>
+          <CardContent className="p-8 text-center">
             <div className="max-w-md mx-auto space-y-4">
               <div className="text-gray-400">
                 <svg
@@ -348,19 +506,22 @@ export default function ModuleVideosPage({
                   />
                 </svg>
               </div>
-              <h3 className="text-lg font-medium text-gray-900">
+              <CardTitle className="text-lg">
                 Aucune vidéo dans ce module
-              </h3>
-              <p className="text-gray-500">
-                Commencez par ajouter votre première vidéo pour ce module.
-              </p>
+              </CardTitle>
+              <CardDescription>
+                Commencez par ajouter votre première vidéo à ce module.
+              </CardDescription>
               <div className="mt-6">
-                <AddVideoModal moduleId={module.id} onSuccess={fetchModule} />
+                <AddVideoModal
+                  moduleId={module.id}
+                  onSuccess={() => window.location.reload()}
+                />
               </div>
             </div>
-          </div>
-        )}
-      </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

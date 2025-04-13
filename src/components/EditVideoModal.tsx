@@ -18,7 +18,7 @@ import RichTextEditor from "./RichTextEditor";
 
 interface EditVideoModalProps {
   video: Video;
-  onSuccess: () => void;
+  onSuccess: (updatedVideo: Video) => void;
 }
 
 export default function EditVideoModal({
@@ -54,8 +54,9 @@ export default function EditVideoModal({
         throw new Error(data.error || "Une erreur est survenue");
       }
 
+      const updatedVideo = await response.json();
       setOpen(false);
-      onSuccess();
+      onSuccess(updatedVideo.data);
     } catch (error) {
       console.error("Erreur lors de la mise à jour de la vidéo:", error);
       alert("Une erreur est survenue lors de la mise à jour de la vidéo");
