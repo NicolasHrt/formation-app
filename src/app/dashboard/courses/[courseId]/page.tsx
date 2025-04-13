@@ -247,7 +247,7 @@ export default function CoursePage({
   }
 
   return (
-    <div className="space-y-8 container px-4 mx-auto pt-8">
+    <div className="space-y-8 container px-4 mx-auto py-8">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

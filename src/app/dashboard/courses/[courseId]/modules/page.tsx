@@ -203,16 +203,11 @@ function ModuleCard({
           <div className="text-sm text-gray-500">
             Mis en ligne le {publishedAt}
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = `/dashboard/courses/${module.courseId}/modules/${module.id}`;
-            }}
+          <Link
+            href={`/dashboard/courses/${module.courseId}/modules/${module.id}`}
           >
-            Gérer les vidéos
-          </Button>
+            <Button variant="black">Gérer les vidéos</Button>
+          </Link>
         </CardFooter>
       </CardContent>
     </Card>
