@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import EditCourseModal from "@/components/EditCourseModal";
-import { Course, User } from "@prisma/client";
+import { Course, Module, User } from "@prisma/client";
 import { use } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -50,32 +50,34 @@ interface CourseWithModules extends Course {
 
 function CourseSidebar({ courseId }: { courseId: string }) {
   return (
-    <div className="w-64 bg-white rounded-lg shadow-sm p-4 space-y-2">
-      <Button variant="ghost" className="w-full justify-start" asChild>
-        <a href={`/dashboard/courses/${courseId}/modules`}>
-          <BookOpen className="mr-2 h-4 w-4" />
-          Modules
-        </a>
-      </Button>
-      <Button variant="ghost" className="w-full justify-start" asChild>
-        <a href={`/dashboard/courses/${courseId}/students`}>
-          <Users className="mr-2 h-4 w-4" />
-          Étudiants
-        </a>
-      </Button>
-      <Button variant="ghost" className="w-full justify-start" asChild>
-        <a href={`/dashboard/courses/${courseId}/emails`}>
-          <Mail className="mr-2 h-4 w-4" />
-          Emails
-        </a>
-      </Button>
-      <Button variant="ghost" className="w-full justify-start" asChild>
-        <a href={`/dashboard/courses/${courseId}/analytics`}>
-          <BarChart2 className="mr-2 h-4 w-4" />
-          Analytics
-        </a>
-      </Button>
-    </div>
+    <Card className="w-64">
+      <CardContent className="p-4 space-y-2">
+        <Button variant="ghost" className="w-full justify-start" asChild>
+          <a href={`/dashboard/courses/${courseId}/modules`}>
+            <BookOpen className="mr-2 h-4 w-4" />
+            Modules
+          </a>
+        </Button>
+        <Button variant="ghost" className="w-full justify-start" asChild>
+          <a href={`/dashboard/courses/${courseId}/students`}>
+            <Users className="mr-2 h-4 w-4" />
+            Étudiants
+          </a>
+        </Button>
+        <Button variant="ghost" className="w-full justify-start" asChild>
+          <a href={`/dashboard/courses/${courseId}/emails`}>
+            <Mail className="mr-2 h-4 w-4" />
+            Emails
+          </a>
+        </Button>
+        <Button variant="ghost" className="w-full justify-start" asChild>
+          <a href={`/dashboard/courses/${courseId}/analytics`}>
+            <BarChart2 className="mr-2 h-4 w-4" />
+            Analytics
+          </a>
+        </Button>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -244,97 +246,99 @@ export default function CoursePage({
       </Breadcrumb>
 
       <div className="space-y-6">
-        <div className="flex justify-between items-center shadow-sm p-6 rounded-lg border border-gray-100 bg-white">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">{course.title}</h1>
-            <p className="text-gray-600 mt-1">{course.description}</p>
-          </div>
-          <div className="flex gap-2">
-            <EditCourseModal course={course} onSuccess={fetchCourse} />
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-red-500 hover:text-red-500 hover:bg-red-50"
-                  title="Supprimer la formation"
-                >
-                  <Trash2 className="h-5 w-5" />
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Supprimer la formation</DialogTitle>
-                  <DialogDescription>
-                    Êtes-vous sûr de vouloir supprimer la formation{" "}
-                    <span className="font-semibold text-gray-900">
-                      {course.title}
-                    </span>
-                    ? Cette action est irréversible et supprimera également tous
-                    les modules et vidéos associés.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 mt-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">
-                      Tapez le nom de la formation pour confirmer
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 border rounded-md"
-                      value={confirmationTitle}
-                      onChange={(e) => setConfirmationTitle(e.target.value)}
-                      placeholder="Nom de la formation"
-                    />
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>{course.title}</CardTitle>
+              <p className="text-gray-600 mt-1">{course.description}</p>
+            </div>
+            <div className="flex gap-2">
+              <EditCourseModal course={course} onSuccess={fetchCourse} />
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-red-500 hover:text-red-500 hover:bg-red-50"
+                    title="Supprimer la formation"
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Supprimer la formation</DialogTitle>
+                    <DialogDescription>
+                      Êtes-vous sûr de vouloir supprimer la formation{" "}
+                      <span className="font-semibold text-gray-900">
+                        {course.title}
+                      </span>
+                      ? Cette action est irréversible et supprimera également
+                      tous les modules et vidéos associés.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 mt-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">
+                        Tapez le nom de la formation pour confirmer
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-3 py-2 border rounded-md"
+                        value={confirmationTitle}
+                        onChange={(e) => setConfirmationTitle(e.target.value)}
+                        placeholder="Nom de la formation"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">
+                        Tapez "supprimer définitivement" pour confirmer
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-3 py-2 border rounded-md"
+                        value={confirmationText}
+                        onChange={(e) => setConfirmationText(e.target.value)}
+                        placeholder="supprimer définitivement"
+                      />
+                    </div>
+                    <div className="flex justify-end gap-4">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setOpen(false);
+                          setConfirmationTitle("");
+                          setConfirmationText("");
+                        }}
+                        disabled={isDeleting}
+                      >
+                        Annuler
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        onClick={handleDelete}
+                        disabled={
+                          isDeleting ||
+                          confirmationTitle !== course.title ||
+                          confirmationText !== "supprimer définitivement"
+                        }
+                      >
+                        {isDeleting ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Suppression...
+                          </>
+                        ) : (
+                          "Supprimer définitivement"
+                        )}
+                      </Button>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">
-                      Tapez "supprimer définitivement" pour confirmer
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 border rounded-md"
-                      value={confirmationText}
-                      onChange={(e) => setConfirmationText(e.target.value)}
-                      placeholder="supprimer définitivement"
-                    />
-                  </div>
-                  <div className="flex justify-end gap-4">
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setOpen(false);
-                        setConfirmationTitle("");
-                        setConfirmationText("");
-                      }}
-                      disabled={isDeleting}
-                    >
-                      Annuler
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      onClick={handleDelete}
-                      disabled={
-                        isDeleting ||
-                        confirmationTitle !== course.title ||
-                        confirmationText !== "supprimer définitivement"
-                      }
-                    >
-                      {isDeleting ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Suppression...
-                        </>
-                      ) : (
-                        "Supprimer définitivement"
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </div>
-        </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </CardHeader>
+        </Card>
 
         <div className="flex gap-6">
           <CourseSidebar courseId={course.id} />
