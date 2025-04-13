@@ -43,6 +43,7 @@ function ModuleCard({
   onMoveDown,
   isFirst,
   isLast,
+  index,
 }: {
   module: Module & {
     videos: {
@@ -56,6 +57,7 @@ function ModuleCard({
   onMoveDown: () => void;
   isFirst: boolean;
   isLast: boolean;
+  index: number;
 }) {
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -173,9 +175,8 @@ function ModuleCard({
 
       <div className="p-6">
         <div className="flex items-center gap-3 mb-3">
-          <span className="px-3 py-1 bg-primary/10  text-sm font-medium rounded-full flex items-center gap-2 text-primary/70">
-            <span>Module</span>
-            <span>{module.order + 1}</span>
+          <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
+            Module {index + 1}
           </span>
           <span className="text-sm text-gray-500">•</span>
           <span className="text-sm text-gray-500">{totalVideos} vidéos</span>
@@ -251,16 +252,18 @@ export default function ModulesPage({
 
       // Récupérer les vidéos pour chaque module
       const modulesWithVideos = await Promise.all(
-        data.data.modules.map(async (module: Module) => {
-          const videosResponse = await fetch(
-            `/api/modules/${module.id}/videos`
-          );
-          const videosData = await videosResponse.json();
-          return {
-            ...module,
-            videos: videosData.data || [],
-          };
-        })
+        data.data.modules
+          .sort((a: Module, b: Module) => a.order - b.order)
+          .map(async (module: Module) => {
+            const videosResponse = await fetch(
+              `/api/modules/${module.id}/videos`
+            );
+            const videosData = await videosResponse.json();
+            return {
+              ...module,
+              videos: videosData.data || [],
+            };
+          })
       );
 
       setCourse({
@@ -330,6 +333,7 @@ export default function ModulesPage({
               <ModuleCard
                 key={module.id}
                 module={module}
+                index={index}
                 onUpdate={(updatedModule) => {
                   setCourse((prev) => {
                     if (!prev) return null;
@@ -344,29 +348,24 @@ export default function ModulesPage({
                   });
                 }}
                 onDelete={async (moduleId) => {
-                  try {
-                    const response = await fetch(
-                      `/api/courses/${course.id}/modules/${moduleId}`,
-                      {
-                        method: "DELETE",
-                      }
-                    );
+                  // Mise à jour immédiate de l'interface
+                  setCourse((prev) => {
+                    if (!prev) return null;
+                    return {
+                      ...prev,
+                      modules: prev.modules.filter((m) => m.id !== moduleId),
+                    };
+                  });
 
-                    if (!response.ok) {
-                      const data = await response.json();
-                      throw new Error(data.error || "Une erreur est survenue");
-                    }
-
-                    fetchCourse();
-                  } catch (error) {
+                  // Appel API en arrière-plan
+                  fetch(`/api/courses/${course.id}/modules/${moduleId}`, {
+                    method: "DELETE",
+                  }).catch((error) => {
                     console.error(
                       "Erreur lors de la suppression du module:",
                       error
                     );
-                    alert(
-                      "Une erreur est survenue lors de la suppression du module"
-                    );
-                  }
+                  });
                 }}
                 onMoveUp={() => {
                   if (index > 0) {
