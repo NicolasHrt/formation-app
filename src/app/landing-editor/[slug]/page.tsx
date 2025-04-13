@@ -70,7 +70,7 @@ export default function LandingEditor({
     <div className="flex">
       <div className="w-1/4 border-r p-4 overflow-scroll max-h-screen">
         <Link href={`/dashboard/courses/${courseId}`} className="mb-4 block">
-          <Button variant="outline" className="w-full">
+          <Button variant="black" className="w-full">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Retour à la formation
           </Button>
