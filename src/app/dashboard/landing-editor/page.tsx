@@ -6,6 +6,9 @@ import { Sidebar } from "../../../components/landing-editor/Sidebar";
 import { Landing } from "../../../components/landing-editor/Landing";
 import { TemplateSelector } from "../../../components/landing-editor/TemplateSelector";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 import LoadingSpinner from "@/components/LoadingSpinner";
 
@@ -68,6 +71,12 @@ export default function LandingEditor() {
   return (
     <div className="flex">
       <div className="w-1/4 border-r p-4 overflow-scroll max-h-screen">
+        <Link href="/dashboard" className="mb-4 block">
+          <Button variant="outline" className="w-full">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Retour au dashboard
+          </Button>
+        </Link>
         <TemplateSelector
           selectedTemplate={template}
           onTemplateChange={setTemplate}
