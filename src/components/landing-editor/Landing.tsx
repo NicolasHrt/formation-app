@@ -1,9 +1,8 @@
 import { Hero } from "./sections/Hero";
-import { Benefits } from "./sections/Benefits";
 import { FAQ } from "./sections/FAQ";
-import { Pricing } from "./sections/Pricing";
 import { ProblemSection } from "./sections/ProblemSection";
 import { TestimonialsSection } from "./sections/TestimonialsSection";
+import { AuthoritySection } from "./sections/AuthoritySection";
 
 interface LandingProps {
   content: any;
@@ -18,6 +17,14 @@ export function Landing({ content }: LandingProps) {
         cta={content.hero?.cta}
       />
       <ProblemSection primaryColor={content.hero?.primaryColor || "#D84B2F"} />
+      <AuthoritySection
+        title={content.authority?.title}
+        subtitle={content.authority?.subtitle}
+        description={content.authority?.description}
+        imageUrl={content.authority?.imageUrl}
+        achievements={content.authority?.achievements}
+        primaryColor={content.hero?.primaryColor || "#D84B2F"}
+      />
       <TestimonialsSection
         title={content.testimonials?.title}
         subtitle={content.testimonials?.subtitle}
