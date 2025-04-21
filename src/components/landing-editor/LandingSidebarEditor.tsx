@@ -19,17 +19,6 @@ interface HeroContent {
   videoUrl: string;
 }
 
-interface ProblemSectionContent {
-  title: string;
-  problems: Array<{
-    title: string;
-    description: string;
-    note: string;
-    details: string[];
-    icon: string;
-  }>;
-}
-
 interface LandingSidebarEditorProps {
   heroContent: HeroContent;
   onHeroContentChange: Dispatch<SetStateAction<HeroContent>>;
