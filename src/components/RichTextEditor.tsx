@@ -28,12 +28,30 @@ interface RichTextEditorProps {
   content: string;
   onChange: (content: string) => void;
   disabled?: boolean;
+  features?: {
+    bold?: boolean;
+    italic?: boolean;
+    bulletList?: boolean;
+    orderedList?: boolean;
+    link?: boolean;
+    undo?: boolean;
+    redo?: boolean;
+  };
 }
 
 export default function RichTextEditor({
   content,
   onChange,
   disabled = false,
+  features = {
+    bold: true,
+    italic: true,
+    bulletList: true,
+    orderedList: true,
+    link: true,
+    undo: true,
+    redo: true,
+  },
 }: RichTextEditorProps) {
   const [linkDialogOpen, setLinkDialogOpen] = useState(false);
   const [linkUrl, setLinkUrl] = useState("");
@@ -83,107 +101,128 @@ export default function RichTextEditor({
           }`}
         >
           <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => editor.chain().focus().toggleBold().run()}
-              className={editor.isActive("bold") ? "bg-accent" : ""}
-              title="Gras (Ctrl+B)"
-              disabled={disabled}
-            >
-              <Bold className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => editor.chain().focus().toggleItalic().run()}
-              className={editor.isActive("italic") ? "bg-accent" : ""}
-              title="Italique (Ctrl+I)"
-              disabled={disabled}
-            >
-              <Italic className="h-4 w-4" />
-            </Button>
+            {features.bold && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => editor.chain().focus().toggleBold().run()}
+                className={editor.isActive("bold") ? "bg-accent" : ""}
+                title="Gras (Ctrl+B)"
+                disabled={disabled}
+                type="button"
+              >
+                <Bold className="h-4 w-4" />
+              </Button>
+            )}
+            {features.italic && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => editor.chain().focus().toggleItalic().run()}
+                className={editor.isActive("italic") ? "bg-accent" : ""}
+                title="Italique (Ctrl+I)"
+                disabled={disabled}
+                type="button"
+              >
+                <Italic className="h-4 w-4" />
+              </Button>
+            )}
           </div>
 
           <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => editor.chain().focus().toggleBulletList().run()}
-              className={editor.isActive("bulletList") ? "bg-accent" : ""}
-              title="Liste à puces"
-              disabled={disabled}
-            >
-              <List className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => editor.chain().focus().toggleOrderedList().run()}
-              className={editor.isActive("orderedList") ? "bg-accent" : ""}
-              title="Liste numérotée"
-              disabled={disabled}
-            >
-              <ListOrdered className="h-4 w-4" />
-            </Button>
+            {features.bulletList && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => editor.chain().focus().toggleBulletList().run()}
+                className={editor.isActive("bulletList") ? "bg-accent" : ""}
+                title="Liste à puces"
+                disabled={disabled}
+                type="button"
+              >
+                <List className="h-4 w-4" />
+              </Button>
+            )}
+            {features.orderedList && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                className={editor.isActive("orderedList") ? "bg-accent" : ""}
+                title="Liste numérotée"
+                disabled={disabled}
+                type="button"
+              >
+                <ListOrdered className="h-4 w-4" />
+              </Button>
+            )}
           </div>
 
           <div className="flex gap-2">
-            <Dialog open={linkDialogOpen} onOpenChange={setLinkDialogOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={editor.isActive("link") ? "bg-accent" : ""}
-                  title="Ajouter un lien"
-                  disabled={disabled}
-                >
-                  <LinkIcon className="h-4 w-4" />
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Ajouter un lien</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <Input
-                    placeholder="URL du lien"
-                    value={linkUrl}
-                    onChange={(e) => setLinkUrl(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        addLink();
-                      }
-                    }}
+            {features.link && (
+              <Dialog open={linkDialogOpen} onOpenChange={setLinkDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={editor.isActive("link") ? "bg-accent" : ""}
+                    title="Ajouter un lien"
                     disabled={disabled}
-                  />
-                  <Button onClick={addLink} disabled={disabled}>
-                    Ajouter
+                    type="button"
+                  >
+                    <LinkIcon className="h-4 w-4" />
                   </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Ajouter un lien</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <Input
+                      placeholder="URL du lien"
+                      value={linkUrl}
+                      onChange={(e) => setLinkUrl(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          addLink();
+                        }
+                      }}
+                      disabled={disabled}
+                    />
+                    <Button onClick={addLink} disabled={disabled}>
+                      Ajouter
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            )}
           </div>
 
           <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => editor.chain().focus().undo().run()}
-              disabled={!editor.can().undo() || disabled}
-              title="Annuler (Ctrl+Z)"
-            >
-              <Undo className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => editor.chain().focus().redo().run()}
-              disabled={!editor.can().redo() || disabled}
-              title="Rétablir (Ctrl+Y)"
-            >
-              <Redo className="h-4 w-4" />
-            </Button>
+            {features.undo && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => editor.chain().focus().undo().run()}
+                disabled={!editor.can().undo() || disabled}
+                title="Annuler (Ctrl+Z)"
+                type="button"
+              >
+                <Undo className="h-4 w-4" />
+              </Button>
+            )}
+            {features.redo && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => editor.chain().focus().redo().run()}
+                disabled={!editor.can().redo() || disabled}
+                title="Rétablir (Ctrl+Y)"
+                type="button"
+              >
+                <Redo className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         </div>
         <div
