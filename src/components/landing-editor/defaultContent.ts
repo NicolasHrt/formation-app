@@ -1,4 +1,4 @@
-import { HeroContent, TransformationContent } from "./types";
+import { HeroContent, TransformationContent, Capability } from "./types";
 
 export const defaultHeroContent: HeroContent = {
   headerTitle: "Créateurs, Formateurs, Coachs :",
@@ -17,10 +17,25 @@ export const defaultTransformationContent: TransformationContent = {
     "Cette formation va vous permettre de maîtriser complètement la création de landing pages qui convertissent",
   capabilitiesTitle: "À la fin, vous serez capable de :",
   capabilities: [
-    "Créer des landing pages professionnelles de A à Z",
-    "Comprendre les principes de copywriting qui convertissent",
-    "Optimiser votre taux de conversion",
-    "Analyser et améliorer vos performances",
-    "Générer plus de leads qualifiés",
+    {
+      order: 0,
+      text: "Créer des landing pages professionnelles de A à Z",
+    },
+    {
+      order: 1,
+      text: "Comprendre les principes de copywriting qui convertissent",
+    },
+    {
+      order: 2,
+      text: "Optimiser votre taux de conversion",
+    },
+    {
+      order: 3,
+      text: "Analyser et améliorer vos performances",
+    },
+    {
+      order: 4,
+      text: "Générer plus de leads qualifiés",
+    },
   ],
 };

@@ -6,10 +6,15 @@ export interface HeroContent {
   videoUrl: string;
 }
 
+export interface Capability {
+  order: number;
+  text: string;
+}
+
 export interface TransformationContent {
   title: string;
   subtitle: string;
   mainPromise: string;
   capabilitiesTitle: string;
-  capabilities: string[];
+  capabilities: Capability[];
 }

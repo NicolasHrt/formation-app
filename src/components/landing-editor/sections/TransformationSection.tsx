@@ -1,33 +1,13 @@
 import { CheckCircle } from "lucide-react";
-
-interface TransformationSectionContent {
-  title: string;
-  subtitle: string;
-  mainPromise: string;
-  capabilitiesTitle: string;
-  capabilities: string[];
-}
+import { TransformationContent } from "../types";
 
 interface TransformationSectionProps {
-  content?: TransformationSectionContent;
+  content: TransformationContent;
   primaryColor?: string;
 }
 
 export function TransformationSection({
-  content = {
-    title: "Transformez votre potentiel",
-    subtitle: "Une formation qui change la donne",
-    mainPromise:
-      "Cette formation va vous permettre de maîtriser complètement la création de landing pages qui convertissent",
-    capabilitiesTitle: "À la fin, vous serez capable de :",
-    capabilities: [
-      "Créer des landing pages professionnelles de A à Z",
-      "Comprendre les principes de copywriting qui convertissent",
-      "Optimiser votre taux de conversion",
-      "Analyser et améliorer vos performances",
-      "Générer plus de leads qualifiés",
-    ],
-  },
+  content,
   primaryColor = "#D84B2F",
 }: TransformationSectionProps) {
   return (
@@ -57,18 +37,20 @@ export function TransformationSection({
             {content.capabilitiesTitle}
           </h3>
           <div className="grid gap-4">
-            {content.capabilities.map((capability, index) => (
-              <div
-                key={index}
-                className="flex items-start gap-4 bg-[#2A2A2A] p-4 rounded-lg"
-              >
-                <CheckCircle
-                  className="w-6 h-6 mt-1 flex-shrink-0"
-                  style={{ color: primaryColor }}
-                />
-                <p className="text-lg text-gray-200">{capability}</p>
-              </div>
-            ))}
+            {content.capabilities
+              .sort((a, b) => a.order - b.order)
+              .map((capability) => (
+                <div
+                  key={capability.order}
+                  className="flex items-start gap-4 bg-[#2A2A2A] p-4 rounded-lg"
+                >
+                  <CheckCircle
+                    className="w-6 h-6 mt-1 flex-shrink-0"
+                    style={{ color: primaryColor }}
+                  />
+                  <p className="text-lg text-gray-200">{capability.text}</p>
+                </div>
+              ))}
           </div>
         </div>
       </div>
