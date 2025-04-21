@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useRef, useState } from "react";
 
+// Image de couverture par défaut en base64 (dégradé gris foncé)
+
 interface HeroProps {
   title?: string;
   subtitle?: string;
@@ -30,6 +32,7 @@ export function Hero({
 }: HeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -79,11 +82,19 @@ export function Hero({
 
         {/* Conteneur vidéo */}
         <div className="relative w-full max-w-4xl mx-auto mt-12 rounded-lg overflow-hidden">
-          <div className="relative aspect-video">
+          <div
+            className="relative aspect-video bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg"
+            style={{
+              backgroundImage: !isLoaded
+                ? "linear-gradient(135deg, #1a1a1a 25%, #2a2a2a 100%)"
+                : "none",
+            }}
+          >
             <video
               ref={videoRef}
               className="w-full h-full object-cover rounded-lg"
-              poster="/video-poster.jpg"
+              playsInline
+              onLoadedData={() => setIsLoaded(true)}
               onEnded={() => setIsPlaying(false)}
             >
               <source src={videoUrl} type="video/mp4" />
