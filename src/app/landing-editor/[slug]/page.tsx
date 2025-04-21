@@ -47,7 +47,7 @@ export default function LandingEditor({
         className={`${
           isSidebarFullscreen
             ? "fixed inset-0 z-50 bg-background"
-            : "w-1/4 border-r p-4 overflow-y-scroll max-h-screen"
+            : "w-1/4 p-4 overflow-y-scroll max-h-screen"
         }`}
       >
         <div

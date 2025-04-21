@@ -198,13 +198,13 @@ export function LandingSidebarEditor({
   return (
     <div
       className={`${
-        isFullscreen ? "h-screen overflow-y-auto bg-background" : ""
+        isFullscreen ? "h-screen overflow-y-auto bg-background px-4" : ""
       }`}
     >
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold flex items-center gap-2">
           <PencilRuler className="w-5 h-5" />
-          Éditeur de contenu
+          Landing Editor
         </h2>
         <Button
           variant="ghost"
@@ -225,7 +225,7 @@ export function LandingSidebarEditor({
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
             <div className="flex items-center gap-2">
               <Layout className="w-4 h-4" />
-              Section Hero
+              Hero
             </div>
           </AccordionTrigger>
           <AccordionContent>
@@ -280,7 +280,7 @@ export function LandingSidebarEditor({
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-4 h-4" />
-              Section Problème
+              Problème à resoudre
             </div>
           </AccordionTrigger>
           <AccordionContent>
@@ -294,7 +294,7 @@ export function LandingSidebarEditor({
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4" />
-              Section Transformation
+              Promesse
             </div>
           </AccordionTrigger>
           <AccordionContent>
@@ -407,7 +407,7 @@ export function LandingSidebarEditor({
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
             <div className="flex items-center gap-2">
               <Package className="w-4 h-4" />
-              Section Produit
+              Produit
             </div>
           </AccordionTrigger>
           <AccordionContent>
@@ -421,7 +421,7 @@ export function LandingSidebarEditor({
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
             <div className="flex items-center gap-2">
               <User className="w-4 h-4" />
-              Section Autorité
+              Autorité
             </div>
           </AccordionTrigger>
           <AccordionContent>
@@ -435,7 +435,7 @@ export function LandingSidebarEditor({
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
             <div className="flex items-center gap-2">
               <MessageSquare className="w-4 h-4" />
-              Section Témoignages
+              Témoignages
             </div>
           </AccordionTrigger>
           <AccordionContent>
@@ -589,26 +589,12 @@ export function LandingSidebarEditor({
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
             <div className="flex items-center gap-2">
               <CreditCard className="w-4 h-4" />
-              Section Tarifs
+              Prix
             </div>
           </AccordionTrigger>
           <AccordionContent>
             <div className="text-sm text-gray-500 p-2">
               Édition des tarifs à venir...
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="cta">
-          <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
-            <div className="flex items-center gap-2">
-              <ArrowRight className="w-4 h-4" />
-              Section CTA
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <div className="text-sm text-gray-500 p-2">
-              Édition du CTA à venir...
             </div>
           </AccordionContent>
         </AccordionItem>

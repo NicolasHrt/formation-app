@@ -6,7 +6,6 @@ import { AuthoritySection } from "./sections/AuthoritySection";
 import { TransformationSection } from "./sections/TransformationSection";
 import { ProductSection } from "./sections/ProductSection";
 import { PricingSection } from "./sections/PricingSection";
-import { CTASection } from "./sections/CTASection";
 import {
   HeroContent,
   TransformationContent,
@@ -40,7 +39,6 @@ export function Landing({
         content={testimonialsContent}
       />
       <PricingSection primaryColor={primaryColor} />
-      <CTASection primaryColor={primaryColor} />
       <FAQ />
     </div>
   );
