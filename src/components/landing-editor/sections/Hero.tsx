@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useRef, useState } from "react";
 
 interface HeroProps {
   title?: string;
@@ -27,6 +28,30 @@ export function Hero({
   videoUrl = "https://formation-app.s3.us-east-1.amazonaws.com/videos/cm9r95ytw000a4uajwyv3bwhq/1745250845112-ey6wzbilvp.mp4",
   primaryColor = "#D84B2F",
 }: HeroProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const toggleFullscreen = () => {
+    if (videoRef.current) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        videoRef.current.requestFullscreen();
+      }
+    }
+  };
+
   return (
     <div className="relative min-h-screen bg-[#1C1C1C] text-white py-16 px-4">
       <div className="max-w-6xl mx-auto">
@@ -56,25 +81,36 @@ export function Hero({
         <div className="relative w-full max-w-4xl mx-auto mt-12 rounded-lg overflow-hidden">
           <div className="relative aspect-video">
             <video
-              autoPlay
-              loop
-              muted
-              playsInline
+              ref={videoRef}
               className="w-full h-full object-cover rounded-lg"
               poster="/video-poster.jpg"
+              onEnded={() => setIsPlaying(false)}
             >
               <source src={videoUrl} type="video/mp4" />
             </video>
 
             {/* Bouton play au centre */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-16 h-16 bg-black/50 rounded-full flex items-center justify-center">
-                <div className="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-white border-b-8 border-b-transparent ml-1" />
+            <button
+              onClick={togglePlay}
+              className="absolute inset-0 flex items-center justify-center group"
+            >
+              <div className="w-16 h-16 bg-black/50 rounded-full flex items-center justify-center group-hover:bg-black/70 transition-colors">
+                {isPlaying ? (
+                  <div className="w-8 h-8 flex items-center justify-center">
+                    <div className="w-2 h-8 bg-white mx-1" />
+                    <div className="w-2 h-8 bg-white mx-1" />
+                  </div>
+                ) : (
+                  <div className="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-white border-b-8 border-b-transparent ml-1" />
+                )}
               </div>
-            </div>
+            </button>
 
             {/* Bouton plein écran */}
-            <button className="absolute bottom-4 right-4 p-2 hover:bg-black/20 rounded-lg transition-colors">
+            <button
+              onClick={toggleFullscreen}
+              className="absolute bottom-4 right-4 p-2 hover:bg-black/20 rounded-lg transition-colors"
+            >
               <svg
                 width="24"
                 height="24"
