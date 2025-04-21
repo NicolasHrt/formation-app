@@ -60,9 +60,15 @@ export function Hero({
         <div className="text-center mb-8">
           <p className="text-2xl font-light mb-6">{content.headerTitle}</p>
 
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            {content.title}
-          </h1>
+          <h1
+            className="text-5xl md:text-6xl font-bold mb-6"
+            dangerouslySetInnerHTML={{
+              __html: content.title.replace(
+                /<strong>(.*?)<\/strong>/g,
+                `<strong style="color: ${primaryColor}">$1</strong>`
+              ),
+            }}
+          />
 
           <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto">
             {content.subtitle}

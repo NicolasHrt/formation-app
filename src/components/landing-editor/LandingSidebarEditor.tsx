@@ -1,5 +1,6 @@
 import { PencilRuler } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dispatch, SetStateAction } from "react";
 import {
@@ -8,6 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import RichTextEditor from "@/components/RichTextEditor";
 
 interface HeroContent {
   headerTitle: string;
@@ -69,15 +71,23 @@ export function LandingSidebarEditor({
             </div>
             <div className="space-y-2">
               <Label htmlFor="title">Titre principal</Label>
-              <Input
-                id="title"
-                value={heroContent.title}
-                onChange={(e) => handleHeroChange("title", e.target.value)}
+              <RichTextEditor
+                content={heroContent.title}
+                onChange={(value) => handleHeroChange("title", value)}
+                features={{
+                  bold: true,
+                  italic: false,
+                  bulletList: false,
+                  orderedList: false,
+                  link: false,
+                  undo: false,
+                  redo: false,
+                }}
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="subtitle">Sous-titre</Label>
-              <Input
+              <Textarea
                 id="subtitle"
                 value={heroContent.subtitle}
                 onChange={(e) => handleHeroChange("subtitle", e.target.value)}
