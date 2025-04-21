@@ -205,15 +205,12 @@ export function LandingSidebarEditor({
             </div>
             <div className="space-y-2">
               <Label htmlFor="mainPromise">Promesse principale</Label>
-              <RichTextEditor
-                content={transformationContent.mainPromise}
-                onChange={(value) =>
-                  handleTransformationChange("mainPromise", value)
+              <Textarea
+                id="mainPromise"
+                value={transformationContent.mainPromise}
+                onChange={(e) =>
+                  handleTransformationChange("mainPromise", e.target.value)
                 }
-                features={{
-                  bold: true,
-                  italic: true,
-                }}
               />
             </div>
             <div className="space-y-2">
