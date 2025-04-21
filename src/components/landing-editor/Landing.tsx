@@ -7,22 +7,11 @@ import { TransformationSection } from "./sections/TransformationSection";
 import { ProductSection } from "./sections/ProductSection";
 import { PricingSection } from "./sections/PricingSection";
 import { CTASection } from "./sections/CTASection";
+import { HeroContent, TransformationContent } from "./types";
 
 interface LandingProps {
-  heroContent?: {
-    headerTitle: string;
-    title: string;
-    subtitle: string;
-    cta: string;
-    videoUrl: string;
-  };
-  transformationContent?: {
-    title: string;
-    subtitle: string;
-    mainPromise: string;
-    capabilitiesTitle: string;
-    capabilities: string[];
-  };
+  heroContent: HeroContent;
+  transformationContent: TransformationContent;
 }
 
 export function Landing({ heroContent, transformationContent }: LandingProps) {

@@ -23,7 +23,7 @@ export function CTASection({
   primaryColor = "#D84B2F",
 }: CTASectionProps) {
   return (
-    <div className="bg-[#1C1C1C] text-white py-32">
+    <div className="bg-[#1C1C1C] text-white py-20">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">

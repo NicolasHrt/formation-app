@@ -1,31 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
-
-// Image de couverture par défaut en base64 (dégradé gris foncé)
-
-interface HeroContent {
-  headerTitle: string;
-  title: string;
-  subtitle: string;
-  cta: string;
-  videoUrl: string;
-}
+import { HeroContent } from "../types";
+import { defaultHeroContent } from "../defaultContent";
 
 interface HeroProps {
-  content?: HeroContent;
+  content: HeroContent;
   primaryColor?: string;
 }
 
 export function Hero({
-  content = {
-    headerTitle: "Créateurs, Formateurs, Coachs :",
-    title: "Vous allez adorer développer votre business avec TinyPages",
-    subtitle:
-      "1 workspace simple et élégant pour piloter toute votre activité — site web, landing pages, email marketing, produits numériques, et bien plus",
-    cta: "Démarrer l'essai gratuit",
-    videoUrl:
-      "https://formation-app.s3.us-east-1.amazonaws.com/videos/cm9r95ytw000a4uajwyv3bwhq/1745250845112-ey6wzbilvp.mp4",
-  },
+  content = defaultHeroContent,
   primaryColor = "#D84B2F",
 }: HeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -54,7 +38,7 @@ export function Hero({
   };
 
   return (
-    <div className="relative min-h-screen bg-[#1C1C1C] text-white py-16 px-4">
+    <div className="relative min-h-screen bg-[#1C1C1C] text-white py-20 px-4">
       <div className="max-w-6xl mx-auto">
         {/* En-tête */}
         <div className="text-center mb-8">
