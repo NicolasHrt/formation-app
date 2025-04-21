@@ -1,22 +1,26 @@
-import {
-  FileText,
-  Mail,
-  ShoppingBag,
-  PenTool,
-  BarChart,
-  Settings,
-} from "lucide-react";
+import * as LucideIcons from "lucide-react";
+import { Icon } from "@/components/ui/icon";
 
 interface ProblemSectionProps {
   primaryColor?: string;
 }
 
+type IconName = keyof typeof LucideIcons;
+
+interface Feature {
+  icon: IconName;
+  title: string;
+  description: string;
+  note: string;
+  details: string[];
+}
+
 export function ProblemSection({
   primaryColor = "#D84B2F",
 }: ProblemSectionProps) {
-  const features = [
+  const features: Feature[] = [
     {
-      icon: FileText,
+      icon: "FileText",
       title: "Vous en avez marre des outils de landing page complexes ?",
       description:
         "Les constructeurs de page actuels sont devenus des usines à gaz impossibles à maîtriser.",
@@ -28,7 +32,7 @@ export function ProblemSection({
       ],
     },
     {
-      icon: Mail,
+      icon: "Mail",
       title: "L'email marketing vous donne des migraines ?",
       description:
         "Les plateformes email sont devenues tellement complexes qu'elles en sont paralysantes.",
@@ -39,9 +43,8 @@ export function ProblemSection({
         "Vous avez peur d'envoyer des emails qui finissent en spam à cause d'une mauvaise configuration ?",
       ],
     },
-
     {
-      icon: BarChart,
+      icon: "BarChart",
       title: "Les analytics vous donnent le vertige ?",
       description:
         "Trop de données tue la donnée. Les tableaux de bord actuels sont incompréhensibles.",
@@ -53,7 +56,7 @@ export function ProblemSection({
       ],
     },
     {
-      icon: Settings,
+      icon: "Settings",
       title: "La technique vous fait perdre un temps fou ?",
       description:
         "Entre l'hébergement, les domaines, et les intégrations, c'est un cauchemar sans fin.",
@@ -80,7 +83,7 @@ export function ProblemSection({
             <div key={index} className="flex gap-16 items-start">
               <div className="w-24 h-24 flex-shrink-0">
                 <div className="w-full h-full bg-white/10 rounded-lg flex items-center justify-center">
-                  <feature.icon size={36} className="text-white" />
+                  <Icon name={feature.icon} size={36} className="text-white" />
                 </div>
               </div>
 
