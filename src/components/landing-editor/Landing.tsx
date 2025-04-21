@@ -9,7 +9,6 @@ import { PricingSection } from "./sections/PricingSection";
 import { CTASection } from "./sections/CTASection";
 
 interface LandingProps {
-  content: any;
   heroContent?: {
     headerTitle: string;
     title: string;
@@ -26,11 +25,7 @@ interface LandingProps {
   };
 }
 
-export function Landing({
-  content,
-  heroContent,
-  transformationContent,
-}: LandingProps) {
+export function Landing({ heroContent, transformationContent }: LandingProps) {
   const primaryColor = "#D84B2F"; // Orange vif
   return (
     <div className="overflow-y-scroll max-h-screen">

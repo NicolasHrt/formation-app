@@ -36,7 +36,7 @@ export default function LandingEditor({
   const courseId = searchParams.get("courseId");
 
   const [heroContent, setHeroContent] = useState<HeroContent>({
-    headerTitle: "Créateurs, Formateurs, Coachs :",
+    headerTitle: "Créateurs, Formateurs,  :",
     title: "Vous allez adorer développer votre business avec TinyPages",
     subtitle:
       "1 workspace simple et élégant pour piloter toute votre activité — site web, landing pages, email marketing, produits numériques, et bien plus",
@@ -61,12 +61,6 @@ export default function LandingEditor({
       ],
     });
 
-  const [content, setContent] = useState<any>({});
-
-  // if (!courseId) {
-  //   return <LoadingSpinner />;
-  // }
-
   return (
     <div className="flex">
       <div className="w-1/4 border-r p-4 overflow-y-scroll max-h-screen">
@@ -85,7 +79,6 @@ export default function LandingEditor({
       </div>
       <div className="w-3/4">
         <Landing
-          content={content}
           heroContent={heroContent}
           transformationContent={transformationContent}
         />
