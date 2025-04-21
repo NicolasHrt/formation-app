@@ -3,6 +3,7 @@ import { Benefits } from "./sections/Benefits";
 import { FAQ } from "./sections/FAQ";
 import { Pricing } from "./sections/Pricing";
 import { ProblemSection } from "./sections/ProblemSection";
+import { TestimonialsSection } from "./sections/TestimonialsSection";
 
 interface LandingProps {
   content: any;
@@ -17,9 +18,13 @@ export function Landing({ content }: LandingProps) {
         cta={content.hero?.cta}
       />
       <ProblemSection primaryColor={content.hero?.primaryColor || "#D84B2F"} />
-      <Benefits title={content.benefits?.title} />
+      <TestimonialsSection
+        title={content.testimonials?.title}
+        subtitle={content.testimonials?.subtitle}
+        testimonials={content.testimonials?.items}
+        primaryColor={content.hero?.primaryColor || "#D84B2F"}
+      />
       <FAQ title={content.faq?.title} />
-      <Pricing title={content.pricing?.title} />
     </div>
   );
 }
