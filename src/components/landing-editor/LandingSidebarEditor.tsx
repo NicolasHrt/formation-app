@@ -102,7 +102,7 @@ export function LandingSidebarEditor({
   };
 
   return (
-    <div className="w-80 p-4 border-r border-gray-200 overflow-y-auto bg-white">
+    <div className=" p-4  overflow-y-auto ">
       <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
         <PencilRuler className="w-5 h-5" />
         Éditeur de contenu
@@ -225,7 +225,7 @@ export function LandingSidebarEditor({
                     .map((capability, index) => (
                       <div
                         key={capability.order}
-                        className="flex items-center gap-2 bg-gray-50 p-4 rounded-lg"
+                        className="flex items-center gap-2 p-2 rounded-lg"
                       >
                         <Input
                           value={capability.text}
