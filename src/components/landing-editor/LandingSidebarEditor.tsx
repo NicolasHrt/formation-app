@@ -76,12 +76,7 @@ export function LandingSidebarEditor({
                 onChange={(value) => handleHeroChange("title", value)}
                 features={{
                   bold: true,
-                  italic: false,
-                  bulletList: false,
-                  orderedList: false,
-                  link: false,
-                  undo: false,
-                  redo: false,
+                  italic: true,
                 }}
               />
             </div>
