@@ -1,14 +1,13 @@
 import * as LucideIcons from "lucide-react";
 import { Icon } from "@/components/ui/icon";
+import "@/styles/rich-text.css";
 
 type IconName = keyof typeof LucideIcons;
 
 interface Problem {
-  icon: IconName;
   title: string;
   description: string;
-  note: string;
-  details: string[];
+  icon: IconName;
 }
 
 interface ProblemSectionContent {
@@ -21,63 +20,26 @@ interface ProblemSectionProps {
   primaryColor?: string;
 }
 
-const defaultProblems: Problem[] = [
-  {
-    icon: "FileText",
-    title: "Vous en avez marre des outils de landing page complexes ?",
-    description:
-      "Les constructeurs de page actuels sont devenus des usines à gaz impossibles à maîtriser.",
-    note: "(et on ne parle même pas du temps perdu à comprendre leur fonctionnement)",
-    details: [
-      "Vous passez plus de temps à comprendre l'interface qu'à créer votre contenu ?",
-      "Vous avez l'impression que ces outils sont faits pour des développeurs, pas pour vous ?",
-      "Vous êtes frustré de payer pour des fonctionnalités que vous n'utilisez jamais ?",
-    ],
-  },
-  {
-    icon: "Mail",
-    title: "L'email marketing vous donne des migraines ?",
-    description:
-      "Les plateformes email sont devenues tellement complexes qu'elles en sont paralysantes.",
-    note: "(pendant ce temps, vos prospects attendent vos messages)",
-    details: [
-      "Vous avez déjà abandonné une campagne email parce que c'était trop compliqué ?",
-      "Vous redoutez chaque fois de devoir configurer une nouvelle séquence d'emails ?",
-      "Vous avez peur d'envoyer des emails qui finissent en spam à cause d'une mauvaise configuration ?",
-    ],
-  },
-  {
-    icon: "BarChart",
-    title: "Les analytics vous donnent le vertige ?",
-    description:
-      "Trop de données tue la donnée. Les tableaux de bord actuels sont incompréhensibles.",
-    note: "(impossible de savoir ce qui fonctionne vraiment)",
-    details: [
-      "Vous vous noyez dans des métriques qui ne vous disent rien ?",
-      "Vous avez du mal à comprendre ce qui marche et ce qui ne marche pas ?",
-      "Vous prenez des décisions à l'aveugle parce que vos données sont trop complexes ?",
-    ],
-  },
-  {
-    icon: "Settings",
-    title: "La technique vous fait perdre un temps fou ?",
-    description:
-      "Entre l'hébergement, les domaines, et les intégrations, c'est un cauchemar sans fin.",
-    note: "(ce n'est pas votre métier, et pourtant vous devez être expert en tout)",
-    details: [
-      "Vous avez déjà passé des heures à essayer de configurer un simple domaine ?",
-      "Vous avez peur de casser quelque chose à chaque fois que vous touchez aux paramètres ?",
-      "Vous en avez assez de devoir être développeur, designer et technicien en même temps ?",
-    ],
-  },
-];
-
 export function ProblemSection({
-  primaryColor = "#D84B2F",
   content = {
-    title: "Ces problèmes vous semblent familiers ?",
-    problems: defaultProblems,
+    title: "Les problèmes que vous rencontrez",
+    problems: [
+      {
+        title: "Gestion complexe des outils",
+        description: `<p>Vous utilisez plusieurs outils différents pour gérer votre activité, ce qui rend la gestion quotidienne complexe et chronophage.</p>
+
+<p><strong>Note :</strong> La multiplication des outils crée de la confusion et des pertes de temps</p>
+
+<ul>
+  <li>Difficulté à synchroniser les données entre les outils</li>
+  <li>Temps perdu à naviguer entre différentes interfaces</li>
+  <li>Coûts d'abonnement qui s'accumulent</li>
+</ul>`,
+        icon: "AlertTriangle",
+      },
+    ],
   },
+  primaryColor = "#D84B2F",
 }: ProblemSectionProps) {
   return (
     <div className="bg-[#1C1C1C] text-white py-32">
@@ -103,16 +65,10 @@ export function ProblemSection({
               <div className="space-y-8">
                 <div>
                   <h2 className="text-4xl font-bold mb-4">{problem.title}</h2>
-                  <p className="text-xl text-white/90">{problem.description}</p>
-                  <p className="text-lg text-white/70 mt-2">{problem.note}</p>
-                </div>
-
-                <div className="space-y-6">
-                  {problem.details.map((detail, idx) => (
-                    <p key={idx} className="text-lg text-white/80">
-                      {detail}
-                    </p>
-                  ))}
+                  <div
+                    className="rich-text-content max-w-none"
+                    dangerouslySetInnerHTML={{ __html: problem.description }}
+                  />
                 </div>
               </div>
             </div>
