@@ -7,6 +7,15 @@ import {
   CheckCircle,
   Maximize2,
   Minimize2,
+  Layout,
+  AlertTriangle,
+  Sparkles,
+  Package,
+  User,
+  MessageSquare,
+  CreditCard,
+  ArrowRight,
+  HelpCircle,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -213,7 +222,12 @@ export function LandingSidebarEditor({
 
       <Accordion type="multiple" className="w-full">
         <AccordionItem value="hero">
-          <AccordionTrigger>Section Hero</AccordionTrigger>
+          <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
+            <div className="flex items-center gap-2">
+              <Layout className="w-4 h-4" />
+              Section Hero
+            </div>
+          </AccordionTrigger>
           <AccordionContent>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -263,8 +277,11 @@ export function LandingSidebarEditor({
         </AccordionItem>
 
         <AccordionItem value="problem">
-          <AccordionTrigger className="hover:no-underline">
-            <h4 className="font-medium">Section Problème</h4>
+          <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4" />
+              Section Problème
+            </div>
           </AccordionTrigger>
           <AccordionContent>
             <div className="text-sm text-gray-500 p-2">
@@ -274,7 +291,12 @@ export function LandingSidebarEditor({
         </AccordionItem>
 
         <AccordionItem value="transformation">
-          <AccordionTrigger>Section Transformation</AccordionTrigger>
+          <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4" />
+              Section Transformation
+            </div>
+          </AccordionTrigger>
           <AccordionContent>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -382,8 +404,11 @@ export function LandingSidebarEditor({
         </AccordionItem>
 
         <AccordionItem value="product">
-          <AccordionTrigger className="hover:no-underline">
-            <h4 className="font-medium">Section Produit</h4>
+          <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
+            <div className="flex items-center gap-2">
+              <Package className="w-4 h-4" />
+              Section Produit
+            </div>
           </AccordionTrigger>
           <AccordionContent>
             <div className="text-sm text-gray-500 p-2">
@@ -393,8 +418,11 @@ export function LandingSidebarEditor({
         </AccordionItem>
 
         <AccordionItem value="authority">
-          <AccordionTrigger className="hover:no-underline">
-            <h4 className="font-medium">Section Autorité</h4>
+          <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
+            <div className="flex items-center gap-2">
+              <User className="w-4 h-4" />
+              Section Autorité
+            </div>
           </AccordionTrigger>
           <AccordionContent>
             <div className="text-sm text-gray-500 p-2">
@@ -404,7 +432,12 @@ export function LandingSidebarEditor({
         </AccordionItem>
 
         <AccordionItem value="testimonials">
-          <AccordionTrigger>Section Témoignages</AccordionTrigger>
+          <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
+            <div className="flex items-center gap-2">
+              <MessageSquare className="w-4 h-4" />
+              Section Témoignages
+            </div>
+          </AccordionTrigger>
           <AccordionContent>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -553,8 +586,11 @@ export function LandingSidebarEditor({
         </AccordionItem>
 
         <AccordionItem value="pricing">
-          <AccordionTrigger className="hover:no-underline">
-            <h4 className="font-medium">Section Tarifs</h4>
+          <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
+            <div className="flex items-center gap-2">
+              <CreditCard className="w-4 h-4" />
+              Section Tarifs
+            </div>
           </AccordionTrigger>
           <AccordionContent>
             <div className="text-sm text-gray-500 p-2">
@@ -564,8 +600,11 @@ export function LandingSidebarEditor({
         </AccordionItem>
 
         <AccordionItem value="cta">
-          <AccordionTrigger className="hover:no-underline">
-            <h4 className="font-medium">Section CTA</h4>
+          <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
+            <div className="flex items-center gap-2">
+              <ArrowRight className="w-4 h-4" />
+              Section CTA
+            </div>
           </AccordionTrigger>
           <AccordionContent>
             <div className="text-sm text-gray-500 p-2">
@@ -575,8 +614,11 @@ export function LandingSidebarEditor({
         </AccordionItem>
 
         <AccordionItem value="faq">
-          <AccordionTrigger className="hover:no-underline">
-            <h4 className="font-medium">Section FAQ</h4>
+          <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
+            <div className="flex items-center gap-2">
+              <HelpCircle className="w-4 h-4" />
+              Section FAQ
+            </div>
           </AccordionTrigger>
           <AccordionContent>
             <div className="text-sm text-gray-500 p-2">
