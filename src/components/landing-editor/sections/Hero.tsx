@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useRef, useState } from "react";
 
 // Image de couverture par défaut en base64 (dégradé gris foncé)
