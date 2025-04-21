@@ -45,7 +45,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import Navbar from "@/components/Navbar";
-import { CourseDashboardSidebar } from "@/components/dashboard/CourseDashboardSidebar";
+import { CourseDashboardSidebar } from "@/components/CourseDashboardSidebar";
 
 interface CourseWithModules extends Course {
   modules: Module[];
