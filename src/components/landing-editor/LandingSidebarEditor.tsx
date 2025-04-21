@@ -5,12 +5,14 @@ import {
   Trash2,
   Plus,
   CheckCircle,
+  Maximize2,
+  Minimize2,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -35,6 +37,7 @@ interface LandingSidebarEditorProps {
   onTransformationContentChange: Dispatch<
     SetStateAction<TransformationContent>
   >;
+  onFullscreenChange?: (isFullscreen: boolean) => void;
 }
 
 export function LandingSidebarEditor({
@@ -42,7 +45,16 @@ export function LandingSidebarEditor({
   onHeroContentChange = () => {},
   transformationContent = defaultTransformationContent,
   onTransformationContentChange = () => {},
+  onFullscreenChange,
 }: LandingSidebarEditorProps) {
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const toggleFullscreen = () => {
+    const newFullscreenState = !isFullscreen;
+    setIsFullscreen(newFullscreenState);
+    onFullscreenChange?.(newFullscreenState);
+  };
+
   const handleHeroChange = (field: keyof HeroContent, value: string) => {
     onHeroContentChange((prev) => ({
       ...prev,
@@ -102,11 +114,29 @@ export function LandingSidebarEditor({
   };
 
   return (
-    <div className=" p-4  overflow-y-auto ">
-      <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        <PencilRuler className="w-5 h-5" />
-        Éditeur de contenu
-      </h2>
+    <div
+      className={`${
+        isFullscreen ? "h-screen overflow-y-auto bg-background" : ""
+      }`}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold flex items-center gap-2">
+          <PencilRuler className="w-5 h-5" />
+          Éditeur de contenu
+        </h2>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleFullscreen}
+          className="ml-2"
+        >
+          {isFullscreen ? (
+            <Minimize2 className="h-4 w-4" />
+          ) : (
+            <Maximize2 className="h-4 w-4" />
+          )}
+        </Button>
+      </div>
 
       <Accordion type="multiple" className="w-full">
         <AccordionItem value="hero">

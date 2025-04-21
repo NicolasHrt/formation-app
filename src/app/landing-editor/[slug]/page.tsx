@@ -34,23 +34,38 @@ export default function LandingEditor({
   const [transformationContent, setTransformationContent] =
     useState<TransformationContent>(defaultTransformationContent);
 
+  const [isSidebarFullscreen, setIsSidebarFullscreen] = useState(false);
+
   return (
     <div className="flex">
-      <div className="w-1/4 border-r p-4 overflow-y-scroll max-h-screen">
-        <Link href={`/dashboard/courses/${courseId}`} className="mb-4 block">
-          <Button variant="black" className="w-full">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Retour à la page d'accueil
-          </Button>
-        </Link>
-        <LandingSidebarEditor
-          heroContent={heroContent}
-          onHeroContentChange={setHeroContent}
-          transformationContent={transformationContent}
-          onTransformationContentChange={setTransformationContent}
-        />
+      <div
+        className={`${
+          isSidebarFullscreen
+            ? "fixed inset-0 z-50 bg-background"
+            : "w-1/4 border-r p-4 overflow-y-scroll max-h-screen"
+        }`}
+      >
+        <div
+          className={`${
+            isSidebarFullscreen ? "max-w-4xl mx-auto px-8 py-6" : ""
+          }`}
+        >
+          <Link href={`/dashboard/courses/${courseId}`} className="mb-4 block">
+            <Button variant="black" className="w-full">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Retour à la page d'accueil
+            </Button>
+          </Link>
+          <LandingSidebarEditor
+            heroContent={heroContent}
+            onHeroContentChange={setHeroContent}
+            transformationContent={transformationContent}
+            onTransformationContentChange={setTransformationContent}
+            onFullscreenChange={setIsSidebarFullscreen}
+          />
+        </div>
       </div>
-      <div className="w-3/4">
+      <div className={`${isSidebarFullscreen ? "hidden" : "w-3/4"}`}>
         <Landing
           heroContent={heroContent}
           transformationContent={transformationContent}
