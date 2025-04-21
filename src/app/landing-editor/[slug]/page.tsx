@@ -10,6 +10,14 @@ import { ArrowLeft } from "lucide-react";
 import { use } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
+interface HeroContent {
+  headerTitle: string;
+  title: string;
+  subtitle: string;
+  cta: string;
+  videoUrl: string;
+}
+
 export default function LandingEditor({
   params,
 }: {
@@ -21,6 +29,15 @@ export default function LandingEditor({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [content, setContent] = useState<any>(null);
+  const [heroContent, setHeroContent] = useState<HeroContent>({
+    headerTitle: "Créateurs, Formateurs, Coachs :",
+    title: "Vous allez adorer développer votre business avec TinyPages",
+    subtitle:
+      "1 workspace simple et élégant pour piloter toute votre activité — site web, landing pages, email marketing, produits numériques, et bien plus",
+    cta: "Démarrer l'essai gratuit",
+    videoUrl:
+      "https://formation-app.s3.us-east-1.amazonaws.com/videos/cm9r95ytw000a4uajwyv3bwhq/1745250845112-ey6wzbilvp.mp4",
+  });
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -62,10 +79,13 @@ export default function LandingEditor({
             Retour à la page d'accueil
           </Button>
         </Link>
-        <LandingSidebarEditor />
+        <LandingSidebarEditor
+          heroContent={heroContent}
+          onHeroContentChange={setHeroContent}
+        />
       </div>
       <div className="w-3/4">
-        <Landing content={content} />
+        <Landing content={content} heroContent={heroContent} />
       </div>
     </div>
   );

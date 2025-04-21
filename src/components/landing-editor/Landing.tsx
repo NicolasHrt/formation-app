@@ -10,13 +10,20 @@ import { CTASection } from "./sections/CTASection";
 
 interface LandingProps {
   content: any;
+  heroContent?: {
+    headerTitle: string;
+    title: string;
+    subtitle: string;
+    cta: string;
+    videoUrl: string;
+  };
 }
 
-export function Landing({ content }: LandingProps) {
+export function Landing({ content, heroContent }: LandingProps) {
   const primaryColor = "#D84B2F"; // Orange vif
   return (
     <div className="overflow-y-scroll max-h-screen">
-      <Hero primaryColor={primaryColor} />
+      <Hero primaryColor={primaryColor} content={heroContent} />
       <ProblemSection primaryColor={primaryColor} />
       <TransformationSection primaryColor={primaryColor} />
       <ProductSection primaryColor={primaryColor} />

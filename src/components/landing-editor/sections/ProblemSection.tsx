@@ -17,8 +17,8 @@ interface ProblemSectionContent {
 }
 
 interface ProblemSectionProps {
-  primaryColor?: string;
   content?: ProblemSectionContent;
+  primaryColor?: string;
 }
 
 const defaultProblems: Problem[] = [
