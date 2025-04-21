@@ -24,7 +24,7 @@ function AuthButtons() {
   if (status === "authenticated") {
     return (
       <div className="flex items-center gap-4">
-        <Link href="/dashboard">
+        <Link href="/dashboard/courses">
           <Button>Mon espace formateur</Button>
         </Link>
         <DropdownMenu>

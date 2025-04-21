@@ -19,7 +19,7 @@ export default function NotFound() {
             </Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/dashboard">Tableau de bord</Link>
+            <Link href="/dashboard/courses">Tableau de bord</Link>
           </Button>
         </div>
       </div>

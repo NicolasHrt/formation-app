@@ -50,7 +50,7 @@ export default function AddCourseModal() {
       }
 
       setOpen(false);
-      router.push("/dashboard");
+      router.push("/dashboard/courses");
       // Invalider le cache React Query pour forcer un rafraîchissement
       queryClient.invalidateQueries({ queryKey: ["courses"] });
     } catch (err) {

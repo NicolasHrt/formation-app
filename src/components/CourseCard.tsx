@@ -43,22 +43,32 @@ export function CourseCard({ course }: CourseCardProps) {
       <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-6 border-t">
         <div className="flex flex-col sm:flex-row w-full gap-3">
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-            <Link href={`/dashboard/courses/${course.id}`} className="w-full sm:w-auto">
+            <Link
+              href={`/dashboard/courses/${course.id}`}
+              className="w-full sm:w-auto"
+            >
               <Button className="w-full sm:w-auto bg-gradient-to-r from-primary to-primary/90">
                 <Pen className="mr-2 h-4 w-4" />
                 Gérer la formation
               </Button>
             </Link>
-            <Link href={`/dashboard/courses/${course.id}`} className="w-full sm:w-auto">
+            <Link
+              href={`/dashboard/courses/${course.id}`}
+              className="w-full sm:w-auto"
+            >
               <Button variant="black" className="w-full sm:w-auto">
                 <StickyNote className="mr-2 h-4 w-4" />
                 Landing page
               </Button>
             </Link>
           </div>
-          <Link href={`/courses/${course.slug}`} target="_blank" className="sm:ml-auto">
-            <Button 
-              variant="outline" 
+          <Link
+            href={`/courses/${course.slug}`}
+            target="_blank"
+            className="sm:ml-auto"
+          >
+            <Button
+              variant="outline"
               className="w-full sm:w-auto hover:bg-primary hover:text-white transition-colors"
               title="Prévisualiser la formation"
             >

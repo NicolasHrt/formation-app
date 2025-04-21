@@ -288,7 +288,9 @@ export default function ModulesPage({
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Mes formations</BreadcrumbLink>
+              <BreadcrumbLink href="/dashboard/courses">
+                Mes formations
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
