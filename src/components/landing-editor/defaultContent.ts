@@ -1,4 +1,9 @@
-import { HeroContent, TransformationContent, Capability } from "./types";
+import {
+  HeroContent,
+  TransformationContent,
+  Capability,
+  TestimonialsContent,
+} from "./types";
 
 export const defaultHeroContent: HeroContent = {
   headerTitle: "Créateurs, Formateurs, Coachs :",
@@ -36,6 +41,43 @@ export const defaultTransformationContent: TransformationContent = {
     {
       order: 4,
       text: "Générer plus de leads qualifiés",
+    },
+  ],
+};
+
+export const defaultTestimonialsContent: TestimonialsContent = {
+  title: "Ce que nos clients disent",
+  subtitle: "Découvrez pourquoi les créateurs adorent TinyPages",
+  testimonials: [
+    {
+      author: {
+        name: "Marie Laurent",
+        role: "Coach en développement personnel",
+        avatar: "https://i.pravatar.cc/150?img=1",
+      },
+      content:
+        "TinyPages a transformé ma façon de vendre mes formations en ligne. L'interface est tellement intuitive que j'ai pu créer ma première landing page en moins d'une heure. Mes ventes ont augmenté de 40% le mois suivant !",
+      rating: 5,
+    },
+    {
+      author: {
+        name: "Thomas Dubois",
+        role: "Expert en marketing digital",
+        avatar: "https://i.pravatar.cc/150?img=2",
+      },
+      content:
+        "Après avoir essayé de nombreuses plateformes, j'ai enfin trouvé celle qui me correspond. La simplicité de TinyPages ne sacrifie en rien la puissance des fonctionnalités. C'est exactement ce dont j'avais besoin.",
+      rating: 5,
+    },
+    {
+      author: {
+        name: "Sophie Martin",
+        role: "Formatrice indépendante",
+        avatar: "https://i.pravatar.cc/150?img=3",
+      },
+      content:
+        "Ce qui me plaît le plus, c'est la rapidité avec laquelle on peut mettre en place une page qui convertit. Plus besoin de passer des heures en configuration, je peux me concentrer sur mon contenu.",
+      rating: 5,
     },
   ],
 };

@@ -18,3 +18,19 @@ export interface TransformationContent {
   capabilitiesTitle: string;
   capabilities: Capability[];
 }
+
+export interface Testimonial {
+  author: {
+    name: string;
+    role: string;
+    avatar?: string;
+  };
+  content: string;
+  rating: number;
+}
+
+export interface TestimonialsContent {
+  title: string;
+  subtitle: string;
+  testimonials: Testimonial[];
+}

@@ -12,11 +12,13 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import {
   HeroContent,
   TransformationContent,
+  TestimonialsContent,
 } from "@/components/landing-editor/types";
 
 import {
   defaultHeroContent,
   defaultTransformationContent,
+  defaultTestimonialsContent,
 } from "@/components/landing-editor/defaultContent";
 
 export default function LandingEditor({
@@ -33,6 +35,9 @@ export default function LandingEditor({
 
   const [transformationContent, setTransformationContent] =
     useState<TransformationContent>(defaultTransformationContent);
+
+  const [testimonialsContent, setTestimonialsContent] =
+    useState<TestimonialsContent>(defaultTestimonialsContent);
 
   const [isSidebarFullscreen, setIsSidebarFullscreen] = useState(false);
 
@@ -61,6 +66,8 @@ export default function LandingEditor({
             onHeroContentChange={setHeroContent}
             transformationContent={transformationContent}
             onTransformationContentChange={setTransformationContent}
+            testimonialsContent={testimonialsContent}
+            onTestimonialsContentChange={setTestimonialsContent}
             onFullscreenChange={setIsSidebarFullscreen}
           />
         </div>
@@ -69,6 +76,7 @@ export default function LandingEditor({
         <Landing
           heroContent={heroContent}
           transformationContent={transformationContent}
+          testimonialsContent={testimonialsContent}
         />
       </div>
     </div>

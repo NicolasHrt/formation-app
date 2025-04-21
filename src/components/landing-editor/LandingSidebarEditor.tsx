@@ -24,10 +24,13 @@ import {
   HeroContent,
   TransformationContent,
   Capability,
+  TestimonialsContent,
+  Testimonial,
 } from "@/components/landing-editor/types";
 import {
   defaultHeroContent,
   defaultTransformationContent,
+  defaultTestimonialsContent,
 } from "@/components/landing-editor/defaultContent";
 
 interface LandingSidebarEditorProps {
@@ -37,6 +40,8 @@ interface LandingSidebarEditorProps {
   onTransformationContentChange: Dispatch<
     SetStateAction<TransformationContent>
   >;
+  testimonialsContent: TestimonialsContent;
+  onTestimonialsContentChange: Dispatch<SetStateAction<TestimonialsContent>>;
   onFullscreenChange?: (isFullscreen: boolean) => void;
 }
 
@@ -45,6 +50,8 @@ export function LandingSidebarEditor({
   onHeroContentChange = () => {},
   transformationContent = defaultTransformationContent,
   onTransformationContentChange = () => {},
+  testimonialsContent = defaultTestimonialsContent,
+  onTestimonialsContentChange = () => {},
   onFullscreenChange,
 }: LandingSidebarEditorProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -110,6 +117,72 @@ export function LandingSidebarEditor({
         cap.order = i;
       });
       handleTransformationChange("capabilities", newCapabilities);
+    }
+  };
+
+  const handleTestimonialsChange = (
+    field: keyof TestimonialsContent,
+    value: string | Testimonial[]
+  ) => {
+    onTestimonialsContentChange((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleTestimonialChange = (
+    index: number,
+    field: keyof Testimonial,
+    value: string | number | { name: string; role: string; avatar?: string }
+  ) => {
+    const newTestimonials = [...testimonialsContent.testimonials];
+    if (field === "author") {
+      newTestimonials[index] = {
+        ...newTestimonials[index],
+        author: value as { name: string; role: string; avatar?: string },
+      };
+    } else {
+      newTestimonials[index] = {
+        ...newTestimonials[index],
+        [field]: value,
+      };
+    }
+    handleTestimonialsChange("testimonials", newTestimonials);
+  };
+
+  const addTestimonial = () => {
+    const newTestimonial: Testimonial = {
+      author: {
+        name: "",
+        role: "",
+        avatar: "https://i.pravatar.cc/150",
+      },
+      content: "",
+      rating: 5,
+    };
+    handleTestimonialsChange("testimonials", [
+      ...testimonialsContent.testimonials,
+      newTestimonial,
+    ]);
+  };
+
+  const removeTestimonial = (index: number) => {
+    const newTestimonials = testimonialsContent.testimonials.filter(
+      (_, i) => i !== index
+    );
+    handleTestimonialsChange("testimonials", newTestimonials);
+  };
+
+  const moveTestimonial = (index: number, direction: "up" | "down") => {
+    const newTestimonials = [...testimonialsContent.testimonials];
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+
+    if (newIndex >= 0 && newIndex < newTestimonials.length) {
+      [newTestimonials[index], newTestimonials[newIndex]] = [
+        newTestimonials[newIndex],
+        newTestimonials[index],
+      ];
+      handleTestimonialsChange("testimonials", newTestimonials);
     }
   };
 
@@ -331,12 +404,150 @@ export function LandingSidebarEditor({
         </AccordionItem>
 
         <AccordionItem value="testimonials">
-          <AccordionTrigger className="hover:no-underline">
-            <h4 className="font-medium">Section Témoignages</h4>
-          </AccordionTrigger>
+          <AccordionTrigger>Section Témoignages</AccordionTrigger>
           <AccordionContent>
-            <div className="text-sm text-gray-500 p-2">
-              Édition des témoignages à venir...
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="testimonialsTitle">Titre</Label>
+                <Input
+                  id="testimonialsTitle"
+                  value={testimonialsContent.title}
+                  onChange={(e) =>
+                    handleTestimonialsChange("title", e.target.value)
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="testimonialsSubtitle">Sous-titre</Label>
+                <Input
+                  id="testimonialsSubtitle"
+                  value={testimonialsContent.subtitle}
+                  onChange={(e) =>
+                    handleTestimonialsChange("subtitle", e.target.value)
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Témoignages</Label>
+                <div className="space-y-4">
+                  {testimonialsContent.testimonials.map(
+                    (testimonial, index) => (
+                      <div
+                        key={index}
+                        className="border rounded-lg p-4 space-y-4"
+                      >
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-medium">
+                            Témoignage {index + 1}
+                          </h4>
+                          <div className="flex gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => moveTestimonial(index, "up")}
+                              disabled={index === 0}
+                            >
+                              <ArrowUp className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => moveTestimonial(index, "down")}
+                              disabled={
+                                index ===
+                                testimonialsContent.testimonials.length - 1
+                              }
+                            >
+                              <ArrowDown className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeTestimonial(index)}
+                              className="text-red-500"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Nom</Label>
+                          <Input
+                            value={testimonial.author.name}
+                            onChange={(e) =>
+                              handleTestimonialChange(index, "author", {
+                                ...testimonial.author,
+                                name: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Rôle</Label>
+                          <Input
+                            value={testimonial.author.role}
+                            onChange={(e) =>
+                              handleTestimonialChange(index, "author", {
+                                ...testimonial.author,
+                                role: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Avatar URL</Label>
+                          <Input
+                            value={testimonial.author.avatar}
+                            onChange={(e) =>
+                              handleTestimonialChange(index, "author", {
+                                ...testimonial.author,
+                                avatar: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Contenu</Label>
+                          <Textarea
+                            value={testimonial.content}
+                            onChange={(e) =>
+                              handleTestimonialChange(
+                                index,
+                                "content",
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Note</Label>
+                          <Input
+                            type="number"
+                            min="1"
+                            max="5"
+                            value={testimonial.rating}
+                            onChange={(e) =>
+                              handleTestimonialChange(
+                                index,
+                                "rating",
+                                parseInt(e.target.value)
+                              )
+                            }
+                          />
+                        </div>
+                      </div>
+                    )
+                  )}
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={addTestimonial}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Ajouter un témoignage
+                  </Button>
+                </div>
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>
