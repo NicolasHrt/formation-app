@@ -18,6 +18,14 @@ interface HeroContent {
   videoUrl: string;
 }
 
+interface TransformationContent {
+  title: string;
+  subtitle: string;
+  mainPromise: string;
+  capabilitiesTitle: string;
+  capabilities: string[];
+}
+
 export default function LandingEditor({
   params,
 }: {
@@ -25,10 +33,8 @@ export default function LandingEditor({
 }) {
   const resolvedParams = use(params);
   const searchParams = useSearchParams();
-  const [courseId, setCourseId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [content, setContent] = useState<any>(null);
+  const courseId = searchParams.get("courseId");
+
   const [heroContent, setHeroContent] = useState<HeroContent>({
     headerTitle: "Créateurs, Formateurs, Coachs :",
     title: "Vous allez adorer développer votre business avec TinyPages",
@@ -39,36 +45,27 @@ export default function LandingEditor({
       "https://formation-app.s3.us-east-1.amazonaws.com/videos/cm9r95ytw000a4uajwyv3bwhq/1745250845112-ey6wzbilvp.mp4",
   });
 
-  useEffect(() => {
-    const fetchCourse = async () => {
-      try {
-        const response = await fetch(`/api/courses/${resolvedParams.slug}`);
-        const data = await response.json();
+  const [transformationContent, setTransformationContent] =
+    useState<TransformationContent>({
+      title: "Transformez votre potentiel",
+      subtitle: "Une formation qui change la donne",
+      mainPromise:
+        "Cette formation va vous permettre de maîtriser complètement la création de landing pages qui convertissent",
+      capabilitiesTitle: "À la fin, vous serez capable de :",
+      capabilities: [
+        "Créer des landing pages professionnelles de A à Z",
+        "Comprendre les principes de copywriting qui convertissent",
+        "Optimiser votre taux de conversion",
+        "Analyser et améliorer vos performances",
+        "Générer plus de leads qualifiés",
+      ],
+    });
 
-        if (!response.ok) {
-          throw new Error(data.error || "Une erreur est survenue");
-        }
+  const [content, setContent] = useState<any>({});
 
-        setCourseId(data.data.id);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Une erreur est survenue"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCourse();
-  }, [resolvedParams.slug]);
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  if (error) {
-    return <div>Erreur: {error}</div>;
-  }
+  // if (!courseId) {
+  //   return <LoadingSpinner />;
+  // }
 
   return (
     <div className="flex">
@@ -82,10 +79,16 @@ export default function LandingEditor({
         <LandingSidebarEditor
           heroContent={heroContent}
           onHeroContentChange={setHeroContent}
+          transformationContent={transformationContent}
+          onTransformationContentChange={setTransformationContent}
         />
       </div>
       <div className="w-3/4">
-        <Landing content={content} heroContent={heroContent} />
+        <Landing
+          content={content}
+          heroContent={heroContent}
+          transformationContent={transformationContent}
+        />
       </div>
     </div>
   );

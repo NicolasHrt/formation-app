@@ -43,9 +43,8 @@ export function TransformationSection({
           <p
             className="text-3xl font-bold text-center leading-relaxed"
             style={{ color: primaryColor }}
-          >
-            {content.mainPromise}
-          </p>
+            dangerouslySetInnerHTML={{ __html: content.mainPromise }}
+          />
           <div
             className="w-24 h-1 mx-auto mt-8 rounded-full"
             style={{ backgroundColor: primaryColor, opacity: 0.5 }}

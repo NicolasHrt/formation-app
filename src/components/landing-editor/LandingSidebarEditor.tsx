@@ -19,20 +19,91 @@ interface HeroContent {
   videoUrl: string;
 }
 
+interface TransformationContent {
+  title: string;
+  subtitle: string;
+  mainPromise: string;
+  capabilitiesTitle: string;
+  capabilities: string[];
+}
+
 interface LandingSidebarEditorProps {
   heroContent: HeroContent;
   onHeroContentChange: Dispatch<SetStateAction<HeroContent>>;
+  transformationContent?: TransformationContent;
+  onTransformationContentChange?: Dispatch<
+    SetStateAction<TransformationContent>
+  >;
 }
 
+const defaultHeroContent: HeroContent = {
+  headerTitle: "Créateurs, Formateurs, Coachs :",
+  title: "Vous allez adorer développer votre business avec TinyPages",
+  subtitle:
+    "1 workspace simple et élégant pour piloter toute votre activité — site web, landing pages, email marketing, produits numériques, et bien plus",
+  cta: "Démarrer l'essai gratuit",
+  videoUrl:
+    "https://formation-app.s3.us-east-1.amazonaws.com/videos/cm9r95ytw000a4uajwyv3bwhq/1745250845112-ey6wzbilvp.mp4",
+};
+
+const defaultTransformationContent: TransformationContent = {
+  title: "Transformez votre potentiel",
+  subtitle: "Une formation qui change la donne",
+  mainPromise:
+    "Cette formation va vous permettre de maîtriser complètement la création de landing pages qui convertissent",
+  capabilitiesTitle: "À la fin, vous serez capable de :",
+  capabilities: [
+    "Créer des landing pages professionnelles de A à Z",
+    "Comprendre les principes de copywriting qui convertissent",
+    "Optimiser votre taux de conversion",
+    "Analyser et améliorer vos performances",
+    "Générer plus de leads qualifiés",
+  ],
+};
+
 export function LandingSidebarEditor({
-  heroContent,
-  onHeroContentChange,
+  heroContent = defaultHeroContent,
+  onHeroContentChange = () => {},
+  transformationContent = defaultTransformationContent,
+  onTransformationContentChange = () => {},
 }: LandingSidebarEditorProps) {
   const handleHeroChange = (field: keyof HeroContent, value: string) => {
     onHeroContentChange((prev) => ({
       ...prev,
       [field]: value,
     }));
+  };
+
+  const handleTransformationChange = (
+    field: keyof TransformationContent,
+    value: string | string[]
+  ) => {
+    if (onTransformationContentChange) {
+      onTransformationContentChange((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+    }
+  };
+
+  const handleCapabilityChange = (index: number, value: string) => {
+    const newCapabilities = [...transformationContent.capabilities];
+    newCapabilities[index] = value;
+    handleTransformationChange("capabilities", newCapabilities);
+  };
+
+  const addCapability = () => {
+    handleTransformationChange("capabilities", [
+      ...transformationContent.capabilities,
+      "",
+    ]);
+  };
+
+  const removeCapability = (index: number) => {
+    const newCapabilities = transformationContent.capabilities.filter(
+      (_, i) => i !== index
+    );
+    handleTransformationChange("capabilities", newCapabilities);
   };
 
   return (
@@ -111,9 +182,77 @@ export function LandingSidebarEditor({
           <AccordionTrigger className="hover:no-underline">
             <h4 className="font-medium">Section Transformation</h4>
           </AccordionTrigger>
-          <AccordionContent>
-            <div className="text-sm text-gray-500 p-2">
-              Édition des transformations à venir...
+          <AccordionContent className="space-y-4 pl-2">
+            <div className="space-y-2">
+              <Label htmlFor="transformationTitle">Titre</Label>
+              <Input
+                id="transformationTitle"
+                value={transformationContent.title}
+                onChange={(e) =>
+                  handleTransformationChange("title", e.target.value)
+                }
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="transformationSubtitle">Sous-titre</Label>
+              <Input
+                id="transformationSubtitle"
+                value={transformationContent.subtitle}
+                onChange={(e) =>
+                  handleTransformationChange("subtitle", e.target.value)
+                }
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="mainPromise">Promesse principale</Label>
+              <RichTextEditor
+                content={transformationContent.mainPromise}
+                onChange={(value) =>
+                  handleTransformationChange("mainPromise", value)
+                }
+                features={{
+                  bold: true,
+                  italic: true,
+                }}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="capabilitiesTitle">Titre des capacités</Label>
+              <Input
+                id="capabilitiesTitle"
+                value={transformationContent.capabilitiesTitle}
+                onChange={(e) =>
+                  handleTransformationChange(
+                    "capabilitiesTitle",
+                    e.target.value
+                  )
+                }
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Capacités</Label>
+              {transformationContent.capabilities.map((capability, index) => (
+                <div key={index} className="flex gap-2">
+                  <Input
+                    value={capability}
+                    onChange={(e) =>
+                      handleCapabilityChange(index, e.target.value)
+                    }
+                  />
+                  <button
+                    onClick={() => removeCapability(index)}
+                    className="px-2 py-1 text-red-500 hover:text-red-600"
+                  >
+                    Supprimer
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={addCapability}
+                className="mt-2 px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded"
+              >
+                Ajouter une capacité
+              </button>
             </div>
           </AccordionContent>
         </AccordionItem>

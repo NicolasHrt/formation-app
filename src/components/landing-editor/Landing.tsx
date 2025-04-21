@@ -17,15 +17,29 @@ interface LandingProps {
     cta: string;
     videoUrl: string;
   };
+  transformationContent?: {
+    title: string;
+    subtitle: string;
+    mainPromise: string;
+    capabilitiesTitle: string;
+    capabilities: string[];
+  };
 }
 
-export function Landing({ content, heroContent }: LandingProps) {
+export function Landing({
+  content,
+  heroContent,
+  transformationContent,
+}: LandingProps) {
   const primaryColor = "#D84B2F"; // Orange vif
   return (
     <div className="overflow-y-scroll max-h-screen">
       <Hero primaryColor={primaryColor} content={heroContent} />
       <ProblemSection primaryColor={primaryColor} />
-      <TransformationSection primaryColor={primaryColor} />
+      <TransformationSection
+        primaryColor={primaryColor}
+        content={transformationContent}
+      />
       <ProductSection primaryColor={primaryColor} />
       <AuthoritySection primaryColor={primaryColor} />
       <TestimonialsSection primaryColor={primaryColor} />
