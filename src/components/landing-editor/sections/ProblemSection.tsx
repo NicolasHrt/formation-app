@@ -11,10 +11,14 @@ interface Problem {
   details: string[];
 }
 
+interface ProblemSectionContent {
+  title: string;
+  problems: Problem[];
+}
+
 interface ProblemSectionProps {
   primaryColor?: string;
-  title?: string;
-  problems?: Problem[];
+  content?: ProblemSectionContent;
 }
 
 const defaultProblems: Problem[] = [
@@ -70,23 +74,25 @@ const defaultProblems: Problem[] = [
 
 export function ProblemSection({
   primaryColor = "#D84B2F",
-  title = "Ces problèmes vous semblent familiers ?",
-  problems = defaultProblems,
+  content = {
+    title: "Ces problèmes vous semblent familiers ?",
+    problems: defaultProblems,
+  },
 }: ProblemSectionProps) {
   return (
     <div className="bg-[#1C1C1C] text-white py-32">
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-5xl md:text-6xl font-bold text-center mb-24">
-          {title.split("<br/>").map((part, i) => (
+          {content.title.split("<br/>").map((part, i) => (
             <span key={i}>
               {part}
-              {i < title.split("<br/>").length - 1 && <br />}
+              {i < content.title.split("<br/>").length - 1 && <br />}
             </span>
           ))}
         </h1>
 
         <div className="space-y-32">
-          {problems.map((problem, index) => (
+          {content.problems.map((problem, index) => (
             <div key={index} className="flex gap-16 items-start">
               <div className="w-24 h-24 flex-shrink-0">
                 <div className="w-full h-full bg-white/10 rounded-lg flex items-center justify-center">

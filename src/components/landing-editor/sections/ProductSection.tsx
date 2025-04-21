@@ -1,8 +1,4 @@
-import * as LucideIcons from "lucide-react";
-import { Icon } from "@/components/ui/icon";
 import Image from "next/image";
-
-type IconName = keyof typeof LucideIcons;
 
 interface Module {
   title: string;
@@ -11,87 +7,70 @@ interface Module {
   imageAlt?: string;
 }
 
-interface Format {
-  icon: IconName;
+interface ProductSectionContent {
   title: string;
-  description: string;
+  subtitle: string;
+  modules: Module[];
 }
 
 interface ProductSectionProps {
-  title?: string;
-  subtitle?: string;
-  modules?: Module[];
-  formats?: Format[];
+  content?: ProductSectionContent;
   primaryColor?: string;
 }
 
 export function ProductSection({
-  title = "Ce que vous allez apprendre",
-  subtitle = "Un programme complet et structuré",
-  modules = [
-    {
-      title: "Module 1 : Les fondamentaux",
-      description:
-        "Maîtrisez les bases essentielles pour créer des landing pages efficaces",
-      imageUrl: "https://placehold.co/800x450/2A2A2A/FFFFFF/png?text=Module+1",
-      imageAlt: "Module 1 - Les fondamentaux",
-    },
-    {
-      title: "Module 2 : Copywriting avancé",
-      description:
-        "Apprenez à écrire des textes qui convertissent et engagent vos visiteurs",
-      imageUrl: "https://placehold.co/800x450/2A2A2A/FFFFFF/png?text=Module+2",
-      imageAlt: "Module 2 - Copywriting avancé",
-    },
-    {
-      title: "Module 3 : Design et UX",
-      description:
-        "Créez des designs attractifs et une expérience utilisateur optimale",
-      imageUrl: "https://placehold.co/800x450/2A2A2A/FFFFFF/png?text=Module+3",
-      imageAlt: "Module 3 - Design et UX",
-    },
-    {
-      title: "Module 4 : Optimisation et Analytics",
-      description:
-        "Mesurez et améliorez vos performances avec des données concrètes",
-      imageUrl: "https://placehold.co/800x450/2A2A2A/FFFFFF/png?text=Module+4",
-      imageAlt: "Module 4 - Optimisation et Analytics",
-    },
-  ],
-  formats = [
-    {
-      icon: "Video",
-      title: "Vidéos HD",
-      description: "Plus de 10 heures de contenu en haute qualité",
-    },
-    {
-      icon: "FileText",
-      title: "Ressources PDF",
-      description: "Guides pratiques et fiches récapitulatives",
-    },
-    {
-      icon: "Users",
-      title: "Communauté",
-      description: "Accès à un groupe privé d'entraide",
-    },
-    {
-      icon: "Package",
-      title: "Bonus",
-      description: "Templates et outils exclusifs",
-    },
-  ],
+  content = {
+    title: "Ce que vous allez apprendre",
+    subtitle: "Un programme complet et structuré",
+    modules: [
+      {
+        title: "Module 1 : Les fondamentaux",
+        description:
+          "Maîtrisez les bases essentielles pour créer des landing pages efficaces",
+        imageUrl:
+          "https://placehold.co/800x450/2A2A2A/FFFFFF/png?text=Module+1",
+        imageAlt: "Module 1 - Les fondamentaux",
+      },
+      {
+        title: "Module 2 : Copywriting avancé",
+        description:
+          "Apprenez à écrire des textes qui convertissent et engagent vos visiteurs",
+        imageUrl:
+          "https://placehold.co/800x450/2A2A2A/FFFFFF/png?text=Module+2",
+        imageAlt: "Module 2 - Copywriting avancé",
+      },
+      {
+        title: "Module 3 : Design et UX",
+        description:
+          "Créez des designs attractifs et une expérience utilisateur optimale",
+        imageUrl:
+          "https://placehold.co/800x450/2A2A2A/FFFFFF/png?text=Module+3",
+        imageAlt: "Module 3 - Design et UX",
+      },
+      {
+        title: "Module 4 : Optimisation et Analytics",
+        description:
+          "Mesurez et améliorez vos performances avec des données concrètes",
+        imageUrl:
+          "https://placehold.co/800x450/2A2A2A/FFFFFF/png?text=Module+4",
+        imageAlt: "Module 4 - Optimisation et Analytics",
+      },
+    ],
+  },
   primaryColor = "#D84B2F",
 }: ProductSectionProps) {
   return (
     <div className="bg-[#1C1C1C] text-white py-32">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">{title}</h2>
-          <p className="text-xl text-gray-300">{subtitle}</p>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            {content.title}
+          </h2>
+          <p className="text-xl text-gray-300">{content.subtitle}</p>
         </div>
 
         <div className="space-y-32">
-          {modules.map((module, index) => (
+          {content.modules.map((module, index) => (
             <div
               key={index}
               className={`flex flex-col ${
@@ -123,27 +102,6 @@ export function ProductSection({
               )}
             </div>
           ))}
-        </div>
-
-        <div className="mt-32">
-          <div className="bg-[#2A2A2A] rounded-2xl p-8 md:p-12">
-            <h3 className="text-2xl font-bold mb-8 text-center">
-              Ce qui est inclus
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {formats.map((format, index) => (
-                <div key={index} className="flex gap-4">
-                  <div style={{ color: primaryColor }}>
-                    <Icon name={format.icon} className="w-8 h-8" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">{format.title}</h4>
-                    <p className="text-gray-300">{format.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </div>

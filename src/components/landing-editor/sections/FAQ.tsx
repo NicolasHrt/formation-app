@@ -5,13 +5,18 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-interface FAQProps {
-  title?: string;
-  subtitle?: string;
-  questions?: {
+interface FAQContent {
+  title: string;
+  subtitle: string;
+  questions: {
     question: string;
     answer: string;
   }[];
+}
+
+interface FAQProps {
+  content?: FAQContent;
+  primaryColor?: string;
 }
 
 const defaultQuestions = [
@@ -43,20 +48,24 @@ const defaultQuestions = [
 ];
 
 export function FAQ({
-  title = "Questions fréquentes",
-  subtitle = "Tout ce que vous devez savoir pour démarrer",
-  questions = defaultQuestions,
+  content = {
+    title: "Questions fréquentes",
+    subtitle: "Tout ce que vous devez savoir pour démarrer",
+    questions: defaultQuestions,
+  },
 }: FAQProps) {
   return (
     <div className="bg-[#1C1C1C] text-white py-32">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">{title}</h2>
-          <p className="text-xl text-gray-300">{subtitle}</p>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            {content.title}
+          </h2>
+          <p className="text-xl text-gray-300">{content.subtitle}</p>
         </div>
 
         <Accordion type="single" collapsible className="space-y-4">
-          {questions.map((item, index) => (
+          {content.questions.map((item, index) => (
             <AccordionItem
               key={index}
               value={`item-${index}`}

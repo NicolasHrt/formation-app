@@ -12,12 +12,12 @@ interface HeroContent {
 }
 
 interface HeroProps {
-  hero?: HeroContent;
+  content?: HeroContent;
   primaryColor?: string;
 }
 
 export function Hero({
-  hero = {
+  content = {
     headerTitle: "Créateurs, Formateurs, Coachs :",
     title: "Vous allez adorer développer votre business avec TinyPages",
     subtitle:
@@ -58,12 +58,14 @@ export function Hero({
       <div className="max-w-6xl mx-auto">
         {/* En-tête */}
         <div className="text-center mb-8">
-          <p className="text-2xl font-light mb-6">{hero.headerTitle}</p>
+          <p className="text-2xl font-light mb-6">{content.headerTitle}</p>
 
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">{hero.title}</h1>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6">
+            {content.title}
+          </h1>
 
           <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto">
-            {hero.subtitle}
+            {content.subtitle}
           </p>
         </div>
 
@@ -84,7 +86,7 @@ export function Hero({
               onLoadedData={() => setIsLoaded(true)}
               onEnded={() => setIsPlaying(false)}
             >
-              <source src={hero.videoUrl} type="video/mp4" />
+              <source src={content.videoUrl} type="video/mp4" />
             </video>
 
             {/* Bouton play au centre */}
@@ -130,7 +132,7 @@ export function Hero({
             className="text-white px-8 py-6 text-lg rounded-lg"
             style={{ backgroundColor: primaryColor }}
           >
-            {hero.cta}
+            {content.cta}
           </Button>
         </div>
       </div>

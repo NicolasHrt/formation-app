@@ -11,10 +11,14 @@ interface Testimonial {
   rating: number;
 }
 
+interface TestimonialsSectionContent {
+  title: string;
+  subtitle: string;
+  testimonials: Testimonial[];
+}
+
 interface TestimonialsSectionProps {
-  title?: string;
-  subtitle?: string;
-  testimonials?: Testimonial[];
+  content?: TestimonialsSectionContent;
   primaryColor?: string;
 }
 
@@ -62,21 +66,25 @@ const defaultTestimonials: Testimonial[] = [
 ];
 
 export function TestimonialsSection({
-  title = "Ce que nos clients disent",
-  subtitle = "Découvrez pourquoi les créateurs adorent TinyPages",
-  testimonials = defaultTestimonials,
+  content = {
+    title: "Ce que nos clients disent",
+    subtitle: "Découvrez pourquoi les créateurs adorent TinyPages",
+    testimonials: defaultTestimonials,
+  },
   primaryColor = "#D84B2F",
 }: TestimonialsSectionProps) {
   return (
     <div className="bg-[#1C1C1C] text-white py-32">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">{title}</h2>
-          <p className="text-xl text-gray-300">{subtitle}</p>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            {content.title}
+          </h2>
+          <p className="text-xl text-gray-300">{content.subtitle}</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
+          {content.testimonials.map((testimonial, index) => (
             <div
               key={index}
               className="bg-[#2A2A2A] p-8 rounded-lg hover:bg-[#333333] transition-colors"
@@ -117,14 +125,6 @@ export function TestimonialsSection({
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="text-center mt-16">
-          <p className="text-2xl font-light text-gray-300">
-            Rejoignez plus de{" "}
-            <span className="font-bold text-white">1000+</span> créateurs qui
-            font confiance à TinyPages
-          </p>
         </div>
       </div>
     </div>
