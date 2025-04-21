@@ -3,6 +3,8 @@ import { FAQ } from "./sections/FAQ";
 import { ProblemSection } from "./sections/ProblemSection";
 import { TestimonialsSection } from "./sections/TestimonialsSection";
 import { AuthoritySection } from "./sections/AuthoritySection";
+import { TransformationSection } from "./sections/TransformationSection";
+import { ProductSection } from "./sections/ProductSection";
 
 interface LandingProps {
   content: any;
@@ -17,6 +19,10 @@ export function Landing({ content }: LandingProps) {
         cta={content.hero?.cta}
       />
       <ProblemSection primaryColor={content.hero?.primaryColor || "#D84B2F"} />
+      <TransformationSection
+        primaryColor={content.hero?.primaryColor || "#D84B2F"}
+      />
+      <ProductSection primaryColor={content.hero?.primaryColor || "#D84B2F"} />
       <AuthoritySection
         title={content.authority?.title}
         subtitle={content.authority?.subtitle}
