@@ -6,6 +6,7 @@ import { AuthoritySection } from "./sections/AuthoritySection";
 import { TransformationSection } from "./sections/TransformationSection";
 import { ProductSection } from "./sections/ProductSection";
 import { PricingSection } from "./sections/PricingSection";
+import { CTASection } from "./sections/CTASection";
 
 interface LandingProps {
   content: any;
@@ -39,6 +40,7 @@ export function Landing({ content }: LandingProps) {
         primaryColor={content.hero?.primaryColor || "#D84B2F"}
       />
       <PricingSection primaryColor={content.hero?.primaryColor || "#D84B2F"} />
+      <CTASection primaryColor={content.hero?.primaryColor || "#D84B2F"} />
       <FAQ title={content.faq?.title} />
     </div>
   );
