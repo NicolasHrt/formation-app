@@ -12,7 +12,6 @@ interface FAQProps {
     question: string;
     answer: string;
   }[];
-  primaryColor?: string;
 }
 
 const defaultQuestions = [
@@ -47,7 +46,6 @@ export function FAQ({
   title = "Questions fréquentes",
   subtitle = "Tout ce que vous devez savoir pour démarrer",
   questions = defaultQuestions,
-  primaryColor = "#D84B2F",
 }: FAQProps) {
   return (
     <div className="bg-[#1C1C1C] text-white py-32">
@@ -73,19 +71,6 @@ export function FAQ({
             </AccordionItem>
           ))}
         </Accordion>
-
-        <div className="text-center mt-16">
-          <p className="text-xl text-gray-300">
-            Vous avez d'autres questions ?{" "}
-            <a
-              href="#contact"
-              className="font-semibold hover:underline transition-colors"
-              style={{ color: primaryColor }}
-            >
-              Contactez-nous
-            </a>
-          </p>
-        </div>
       </div>
     </div>
   );

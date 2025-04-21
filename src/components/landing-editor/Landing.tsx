@@ -13,35 +13,18 @@ interface LandingProps {
 }
 
 export function Landing({ content }: LandingProps) {
-  const primaryColor = "#3B82F6"; // Bleu vif de Tailwind
+  const primaryColor = "#D84B2F"; // Orange vif
   return (
     <div className="overflow-y-scroll max-h-screen">
-      <Hero
-        title={content.hero?.title}
-        subtitle={content.hero?.subtitle}
-        cta={content.hero?.cta}
-        primaryColor={primaryColor}
-      />
+      <Hero primaryColor={primaryColor} />
       <ProblemSection primaryColor={primaryColor} />
       <TransformationSection primaryColor={primaryColor} />
       <ProductSection primaryColor={primaryColor} />
-      <AuthoritySection
-        title={content.authority?.title}
-        subtitle={content.authority?.subtitle}
-        description={content.authority?.description}
-        imageUrl={content.authority?.imageUrl}
-        achievements={content.authority?.achievements}
-        primaryColor={primaryColor}
-      />
-      <TestimonialsSection
-        title={content.testimonials?.title}
-        subtitle={content.testimonials?.subtitle}
-        testimonials={content.testimonials?.items}
-        primaryColor={primaryColor}
-      />
+      <AuthoritySection primaryColor={primaryColor} />
+      <TestimonialsSection primaryColor={primaryColor} />
       <PricingSection primaryColor={primaryColor} />
       <CTASection primaryColor={primaryColor} />
-      <FAQ title={content.faq?.title} />
+      <FAQ />
     </div>
   );
 }

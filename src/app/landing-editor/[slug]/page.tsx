@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { LandingSidebarEditor } from "@/components/landing-editor/LandingSidebarEditor";
 import { Landing } from "@/components/landing-editor/Landing";
-import { TemplateSelector } from "@/components/landing-editor/TemplateSelector";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -21,18 +20,7 @@ export default function LandingEditor({
   const [courseId, setCourseId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const [selectedSection, setSelectedSection] = useState("hero");
-  const [content, setContent] = useState({
-    hero: {
-      title: "Créez et vendez vos formations en ligne",
-      subtitle: "Une plateforme simple et efficace pour partager votre savoir",
-      cta: "Commencer maintenant",
-    },
-    benefits: [],
-    faq: [],
-    pricing: [],
-  });
+  const [content, setContent] = useState<any>(null);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -74,12 +62,7 @@ export default function LandingEditor({
             Retour à la page d'accueil
           </Button>
         </Link>
-        <LandingSidebarEditor
-          selectedSection={selectedSection}
-          onSectionSelect={setSelectedSection}
-          content={content}
-          onContentChange={setContent}
-        />
+        <LandingSidebarEditor />
       </div>
       <div className="w-3/4">
         <Landing content={content} />

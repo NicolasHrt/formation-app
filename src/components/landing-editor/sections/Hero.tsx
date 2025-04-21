@@ -3,30 +3,29 @@ import { useRef, useState } from "react";
 
 // Image de couverture par défaut en base64 (dégradé gris foncé)
 
+interface HeroContent {
+  headerTitle: string;
+  title: string;
+  subtitle: string;
+  cta: string;
+  videoUrl: string;
+}
+
 interface HeroProps {
-  title?: string;
-  subtitle?: string;
-  cta?: string;
-  badge?: string;
-  stats?: {
-    value: string;
-    label: string;
-  }[];
-  videoUrl?: string;
+  hero?: HeroContent;
   primaryColor?: string;
 }
 
 export function Hero({
-  title = "Créateurs, Formateurs, Coachs :",
-  subtitle = "1 workspace simple et élégant pour piloter toute votre activité — site web, landing pages, email marketing, produits numériques, et bien plus",
-  cta = "Démarrer l'essai gratuit",
-  badge = "Nouveau",
-  stats = [
-    { value: "1000+", label: "Étudiants" },
-    { value: "4.9/5", label: "Avis" },
-    { value: "7 jours", label: "Garantie" },
-  ],
-  videoUrl = "https://formation-app.s3.us-east-1.amazonaws.com/videos/cm9r95ytw000a4uajwyv3bwhq/1745250845112-ey6wzbilvp.mp4",
+  hero = {
+    headerTitle: "Créateurs, Formateurs, Coachs :",
+    title: "Vous allez adorer développer votre business avec TinyPages",
+    subtitle:
+      "1 workspace simple et élégant pour piloter toute votre activité — site web, landing pages, email marketing, produits numériques, et bien plus",
+    cta: "Démarrer l'essai gratuit",
+    videoUrl:
+      "https://formation-app.s3.us-east-1.amazonaws.com/videos/cm9r95ytw000a4uajwyv3bwhq/1745250845112-ey6wzbilvp.mp4",
+  },
   primaryColor = "#D84B2F",
 }: HeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -59,23 +58,12 @@ export function Hero({
       <div className="max-w-6xl mx-auto">
         {/* En-tête */}
         <div className="text-center mb-8">
-          <p className="text-2xl font-light mb-6">{title}</p>
+          <p className="text-2xl font-light mb-6">{hero.headerTitle}</p>
 
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            Vous allez{" "}
-            <span
-              style={{ textDecorationColor: primaryColor }}
-              className="underline decoration-4"
-            >
-              adorer
-            </span>{" "}
-            développer
-            <br />
-            votre business avec TinyPages
-          </h1>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6">{hero.title}</h1>
 
           <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto">
-            {subtitle}
+            {hero.subtitle}
           </p>
         </div>
 
@@ -96,7 +84,7 @@ export function Hero({
               onLoadedData={() => setIsLoaded(true)}
               onEnded={() => setIsPlaying(false)}
             >
-              <source src={videoUrl} type="video/mp4" />
+              <source src={hero.videoUrl} type="video/mp4" />
             </video>
 
             {/* Bouton play au centre */}
@@ -142,7 +130,7 @@ export function Hero({
             className="text-white px-8 py-6 text-lg rounded-lg"
             style={{ backgroundColor: primaryColor }}
           >
-            {cta}
+            {hero.cta}
           </Button>
         </div>
       </div>
