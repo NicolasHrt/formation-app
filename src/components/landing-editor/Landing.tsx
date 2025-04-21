@@ -13,34 +13,34 @@ interface LandingProps {
 }
 
 export function Landing({ content }: LandingProps) {
+  const primaryColor = "#3B82F6"; // Bleu vif de Tailwind
   return (
     <div className="overflow-y-scroll max-h-screen">
       <Hero
         title={content.hero?.title}
         subtitle={content.hero?.subtitle}
         cta={content.hero?.cta}
+        primaryColor={primaryColor}
       />
-      <ProblemSection primaryColor={content.hero?.primaryColor || "#D84B2F"} />
-      <TransformationSection
-        primaryColor={content.hero?.primaryColor || "#D84B2F"}
-      />
-      <ProductSection primaryColor={content.hero?.primaryColor || "#D84B2F"} />
+      <ProblemSection primaryColor={primaryColor} />
+      <TransformationSection primaryColor={primaryColor} />
+      <ProductSection primaryColor={primaryColor} />
       <AuthoritySection
         title={content.authority?.title}
         subtitle={content.authority?.subtitle}
         description={content.authority?.description}
         imageUrl={content.authority?.imageUrl}
         achievements={content.authority?.achievements}
-        primaryColor={content.hero?.primaryColor || "#D84B2F"}
+        primaryColor={primaryColor}
       />
       <TestimonialsSection
         title={content.testimonials?.title}
         subtitle={content.testimonials?.subtitle}
         testimonials={content.testimonials?.items}
-        primaryColor={content.hero?.primaryColor || "#D84B2F"}
+        primaryColor={primaryColor}
       />
-      <PricingSection primaryColor={content.hero?.primaryColor || "#D84B2F"} />
-      <CTASection primaryColor={content.hero?.primaryColor || "#D84B2F"} />
+      <PricingSection primaryColor={primaryColor} />
+      <CTASection primaryColor={primaryColor} />
       <FAQ title={content.faq?.title} />
     </div>
   );
