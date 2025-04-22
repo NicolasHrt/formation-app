@@ -1,8 +1,4 @@
-import { Icon } from "@/components/ui/icon";
-import * as LucideIcons from "lucide-react";
-
 interface Achievement {
-  icon: keyof typeof LucideIcons;
   value: string;
   label: string;
 }
@@ -22,17 +18,14 @@ interface AuthoritySectionProps {
 
 const defaultAchievements: Achievement[] = [
   {
-    icon: "Users",
     value: "10,000+",
     label: "Étudiants formés",
   },
   {
-    icon: "Trophy",
     value: "8+ ans",
     label: "d'expérience",
   },
   {
-    icon: "Star",
     value: "4.9/5",
     label: "de satisfaction",
   },
@@ -85,13 +78,6 @@ export function AuthoritySection({
             <div className="grid grid-cols-3 gap-8 pt-8">
               {content.achievements.map((achievement, index) => (
                 <div key={index} className="text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/10 mb-4">
-                    <Icon
-                      name={achievement.icon}
-                      className="text-white"
-                      size={24}
-                    />
-                  </div>
                   <p
                     className="text-2xl font-bold mb-1"
                     style={{ color: primaryColor }}

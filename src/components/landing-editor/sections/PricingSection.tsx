@@ -1,4 +1,5 @@
 import { CheckCircle, Clock, Zap, Shield, Users, Gift } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface PricingSectionContent {
   title: string;
@@ -81,15 +82,13 @@ export function PricingSection({
             </div>
 
             <div className="text-center">
-              <button
-                className="px-8 py-4 rounded-lg font-semibold text-lg transition-all hover:scale-105 hover:shadow-lg"
-                style={{
-                  backgroundColor: primaryColor,
-                  color: "white",
-                }}
+              <Button
+                size="lg"
+                className="text-white px-8 py-6 text-lg rounded-lg"
+                style={{ backgroundColor: primaryColor }}
               >
                 {content.ctaText}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

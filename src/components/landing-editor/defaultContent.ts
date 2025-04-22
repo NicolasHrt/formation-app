@@ -1,7 +1,6 @@
 import {
   HeroContent,
   TransformationContent,
-  Capability,
   TestimonialsContent,
   FAQContent,
   PricingContent,

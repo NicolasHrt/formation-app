@@ -5,7 +5,6 @@ import { ChevronDown, ChevronUp, X, MoreVertical } from "lucide-react";
 import { formatDuration } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Progress } from "@/components/ui/progress";
 import "@/styles/rich-text.css";
 
 interface CourseReaderProps {
@@ -36,15 +35,6 @@ export default function CourseReader({ course }: CourseReaderProps) {
       [moduleId]: !prev[moduleId],
     }));
   };
-
-  const totalVideos = course.modules.reduce(
-    (acc: number, module: any) => acc + module.videos.length,
-    0
-  );
-
-  // Mock completed videos (in a real app, this would come from a database)
-  const completedVideos = Math.floor(totalVideos * 0.4);
-  const progressPercentage = (completedVideos / totalVideos) * 100;
 
   return (
     <div className="container mx-auto px-4 mt-8">
@@ -95,19 +85,6 @@ export default function CourseReader({ course }: CourseReaderProps) {
                 <h2 className="font-semibold text-2xl">{course.title}</h2>
               </div>
 
-              {/* 
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-muted-foreground">
-                    Votre progression
-                  </span>
-                  <span className="text-sm font-medium">
-                    {completedVideos}/{totalVideos}
-                  </span>
-                </div>
-                <Progress value={progressPercentage} className="h-2" />
-              </div> */}
-
               <Separator />
 
               <div className="space-y-1 p-2">
@@ -151,11 +128,7 @@ export default function CourseReader({ course }: CourseReaderProps) {
                             }`}
                           >
                             <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs">
-                              {videoIndex < completedVideos ? (
-                                <div className="h-3 w-3 rounded-full bg-primary" />
-                              ) : (
-                                videoIndex + 1
-                              )}
+                              {videoIndex + 1}
                             </div>
                             <div className="flex flex-1 flex-col">
                               <span className="line-clamp-2">
