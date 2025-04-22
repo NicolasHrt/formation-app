@@ -11,7 +11,8 @@ import {
 
 export const defaultHeroContent: HeroContent = {
   headerTitle: "Créateurs, Formateurs, Coachs :",
-  title: "Vous allez adorer développer votre business avec TinyPages",
+  title:
+    "Vous allez <strong>adorer</strong> développer votre business avec TinyPages",
   subtitle:
     "1 workspace simple et élégant pour piloter toute votre activité — site web, landing pages, email marketing, produits numériques, et bien plus",
   cta: "Démarrer l'essai gratuit",

@@ -20,10 +20,7 @@ export function TransformationSection({
           <p className="text-xl text-gray-300">{content.subtitle}</p>
         </div>
         <div className="bg-gradient-to-br from-[#2A2A2A] to-[#333333] rounded-3xl p-10 md:p-16 mb-12 shadow-xl border border-white/5 backdrop-blur-sm">
-          <p
-            style={{ color: `var(--color-${primaryColor}-500)` }}
-            className="text-3xl font-bold text-center leading-relaxed"
-          >
+          <p className="text-3xl font-bold text-center leading-relaxed text-gray-100">
             {content.mainPromise}
           </p>
           <div

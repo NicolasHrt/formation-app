@@ -522,10 +522,13 @@ export function LandingSidebarEditor({
               </div>
               <div className="space-y-2">
                 <Label htmlFor="title">Titre principal</Label>
-                <Input
-                  id="title"
-                  value={landingContent.heroContent.title}
-                  onChange={(e) => handleHeroChange("title", e.target.value)}
+                <RichTextEditor
+                  content={landingContent.heroContent.title}
+                  onChange={(value) => handleHeroChange("title", value)}
+                  features={{
+                    bold: true,
+                    italic: true,
+                  }}
                 />
               </div>
               <div className="space-y-2">
