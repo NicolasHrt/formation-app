@@ -42,8 +42,8 @@ export default function LandingEditor({
 
   return (
     <div className="flex h-screen">
-      <div className="w-1/3 border-r p-4 flex flex-col">
-        <div className="flex-1 overflow-y-auto">
+      <div className="w-1/3 border-r py-4 flex flex-col">
+        <div className="flex-1 overflow-y-scroll  px-4">
           <LandingSidebarEditor
             landingContent={landingContent}
             onLandingContentChange={setLandingContent}
