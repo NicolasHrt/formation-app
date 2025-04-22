@@ -544,14 +544,10 @@ export function LandingSidebarEditor({
                       </div>
                       <div className="space-y-2">
                         <Label>Description</Label>
-                        <Textarea
-                          value={problem.description}
-                          onChange={(e) =>
-                            handleProblemItemChange(
-                              index,
-                              "description",
-                              e.target.value
-                            )
+                        <RichTextEditor
+                          content={problem.description}
+                          onChange={(value) =>
+                            handleProblemItemChange(index, "description", value)
                           }
                         />
                       </div>
