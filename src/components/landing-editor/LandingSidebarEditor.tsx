@@ -37,6 +37,8 @@ import {
   Testimonial,
   FAQContent,
   FAQItem,
+  PricingContent,
+  defaultPricingContent,
 } from "@/components/landing-editor/types";
 import {
   defaultHeroContent,
@@ -57,6 +59,8 @@ interface LandingSidebarEditorProps {
   onFullscreenChange?: (isFullscreen: boolean) => void;
   faqContent: FAQContent;
   onFAQContentChange: (content: FAQContent) => void;
+  pricingContent: PricingContent;
+  onPricingContentChange: (content: PricingContent) => void;
 }
 
 export function LandingSidebarEditor({
@@ -69,6 +73,8 @@ export function LandingSidebarEditor({
   onFullscreenChange,
   faqContent = defaultFAQContent,
   onFAQContentChange = () => {},
+  pricingContent = defaultPricingContent,
+  onPricingContentChange = () => {},
 }: LandingSidebarEditorProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -247,6 +253,43 @@ export function LandingSidebarEditor({
         newQuestions[index],
       ];
       handleFAQChange("questions", newQuestions);
+    }
+  };
+
+  const handlePricingChange = (
+    field: keyof PricingContent,
+    value: string | string[]
+  ) => {
+    onPricingContentChange({
+      ...pricingContent,
+      [field]: value,
+    });
+  };
+
+  const handleFeatureChange = (index: number, value: string) => {
+    const newFeatures = [...pricingContent.features];
+    newFeatures[index] = value;
+    handlePricingChange("features", newFeatures);
+  };
+
+  const addFeature = () => {
+    handlePricingChange("features", [...pricingContent.features, ""]);
+  };
+
+  const removeFeature = (index: number) => {
+    const newFeatures = pricingContent.features.filter((_, i) => i !== index);
+    handlePricingChange("features", newFeatures);
+  };
+
+  const moveFeature = (index: number, direction: "up" | "down") => {
+    const newFeatures = [...pricingContent.features];
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+    if (newIndex >= 0 && newIndex < newFeatures.length) {
+      [newFeatures[index], newFeatures[newIndex]] = [
+        newFeatures[newIndex],
+        newFeatures[index],
+      ];
+      handlePricingChange("features", newFeatures);
     }
   };
 
@@ -648,8 +691,133 @@ export function LandingSidebarEditor({
             </div>
           </AccordionTrigger>
           <AccordionContent>
-            <div className="text-sm text-gray-500 p-2">
-              Édition des tarifs à venir...
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="pricingTitle">Titre</Label>
+                <Input
+                  id="pricingTitle"
+                  value={pricingContent.title}
+                  onChange={(e) => handlePricingChange("title", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="pricingSubtitle">Sous-titre</Label>
+                <Input
+                  id="pricingSubtitle"
+                  value={pricingContent.subtitle}
+                  onChange={(e) =>
+                    handlePricingChange("subtitle", e.target.value)
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="price">Prix</Label>
+                <Input
+                  id="price"
+                  value={pricingContent.price}
+                  onChange={(e) => handlePricingChange("price", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ctaText">Texte du bouton</Label>
+                <Input
+                  id="ctaText"
+                  value={pricingContent.ctaText}
+                  onChange={(e) =>
+                    handlePricingChange("ctaText", e.target.value)
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="bestOffer">Texte de la meilleure offre</Label>
+                <Input
+                  id="bestOffer"
+                  value={pricingContent.bestOffer}
+                  onChange={(e) =>
+                    handlePricingChange("bestOffer", e.target.value)
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="vat">Texte TVA</Label>
+                <Input
+                  id="vat"
+                  value={pricingContent.vat}
+                  onChange={(e) => handlePricingChange("vat", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="oneTimeAccess">Texte accès unique</Label>
+                <Input
+                  id="oneTimeAccess"
+                  value={pricingContent.oneTimeAccess}
+                  onChange={(e) =>
+                    handlePricingChange("oneTimeAccess", e.target.value)
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Fonctionnalités</Label>
+                <div className="space-y-4">
+                  {pricingContent.features.map((feature, index) => (
+                    <div
+                      key={index}
+                      className="border rounded-lg p-4 space-y-4"
+                    >
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium">
+                          Fonctionnalité {index + 1}
+                        </h4>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => moveFeature(index, "up")}
+                            disabled={index === 0}
+                          >
+                            <ArrowUp className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => moveFeature(index, "down")}
+                            disabled={
+                              index === pricingContent.features.length - 1
+                            }
+                          >
+                            <ArrowDown className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeFeature(index)}
+                            className="text-red-500"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Description</Label>
+                        <Input
+                          value={feature}
+                          onChange={(e) =>
+                            handleFeatureChange(index, e.target.value)
+                          }
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={addFeature}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Ajouter une fonctionnalité
+                  </Button>
+                </div>
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>

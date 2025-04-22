@@ -45,3 +45,30 @@ export interface FAQContent {
   subtitle: string;
   questions: FAQItem[];
 }
+
+export interface PricingContent {
+  title: string;
+  subtitle: string;
+  price: string;
+  features: string[];
+  ctaText: string;
+  bestOffer: string;
+  vat: string;
+  oneTimeAccess: string;
+}
+
+export const defaultPricingContent: PricingContent = {
+  title: "Accédez à toutes les fonctionnalités",
+  subtitle: "Un seul paiement, un accès à vie",
+  price: "97€",
+  features: [
+    "Accès à toutes les fonctionnalités",
+    "Mises à jour gratuites à vie",
+    "Support prioritaire",
+    "Garantie satisfait ou remboursé 30 jours",
+  ],
+  ctaText: "Obtenir l'accès maintenant",
+  bestOffer: "Meilleure offre",
+  vat: "TVA incluse",
+  oneTimeAccess: "Accès unique",
+};

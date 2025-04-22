@@ -4,6 +4,7 @@ import {
   Capability,
   TestimonialsContent,
   FAQContent,
+  PricingContent,
 } from "./types";
 
 export const defaultHeroContent: HeroContent = {
@@ -103,4 +104,21 @@ export const defaultFAQContent: FAQContent = {
         "Oui, notre équipe est disponible pour répondre à vos questions via notre système de support dédié. Nous nous engageons à vous répondre dans les 24 heures.",
     },
   ],
+};
+
+export const defaultPricingContent: PricingContent = {
+  title: "Accès à vie à la formation",
+  subtitle: "Une seule fois, pour toujours",
+  price: "297€",
+  features: [
+    "Accès illimité à tous les modules",
+    "Mises à jour gratuites à vie",
+    "Support prioritaire",
+    "Accès à la communauté privée",
+    "Garantie satisfait ou remboursé 30 jours",
+  ],
+  ctaText: "Commencer maintenant",
+  bestOffer: "Meilleure offre",
+  vat: "TTC",
+  oneTimeAccess: "Paiement unique, accès à vie",
 };
