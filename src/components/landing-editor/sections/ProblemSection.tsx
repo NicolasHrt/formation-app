@@ -23,7 +23,7 @@ export function ProblemSection({
           ))}
         </h1>
 
-        <div className="space-y-32">
+        <div className="space-y-32 max-w-4xl mx-auto">
           {content.problems.map((problem, index) => (
             <div key={index} className="flex gap-8 items-start ">
               <div className="space-y-8">
