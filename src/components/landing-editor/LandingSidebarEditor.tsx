@@ -40,6 +40,8 @@ import {
   PricingContent,
   AuthorityContent,
   Achievement,
+  ProblemContent,
+  Problem,
 } from "./types";
 import {
   defaultHeroContent,
@@ -48,6 +50,7 @@ import {
   defaultFAQContent,
   defaultPricingContent,
   defaultAuthorityContent,
+  defaultProblemContent,
 } from "./defaultContent";
 
 interface LandingSidebarEditorProps {
@@ -66,6 +69,8 @@ interface LandingSidebarEditorProps {
   onPricingContentChange: (content: PricingContent) => void;
   authorityContent: AuthorityContent;
   onAuthorityContentChange: (content: AuthorityContent) => void;
+  problemContent: ProblemContent;
+  onProblemContentChange: (content: ProblemContent) => void;
 }
 
 export function LandingSidebarEditor({
@@ -82,6 +87,8 @@ export function LandingSidebarEditor({
   onPricingContentChange = () => {},
   authorityContent = defaultAuthorityContent,
   onAuthorityContentChange = () => {},
+  problemContent = defaultProblemContent,
+  onProblemContentChange = () => {},
 }: LandingSidebarEditorProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -337,6 +344,54 @@ export function LandingSidebarEditor({
     handleAuthorityChange("achievements", newAchievements);
   };
 
+  const handleProblemChange = (
+    field: keyof ProblemContent,
+    value: string | Problem[]
+  ) => {
+    onProblemContentChange({
+      ...problemContent,
+      [field]: value,
+    });
+  };
+
+  const handleProblemItemChange = (
+    index: number,
+    field: keyof Problem,
+    value: string
+  ) => {
+    const newProblems = [...problemContent.problems];
+    newProblems[index] = {
+      ...newProblems[index],
+      [field]: value,
+    };
+    handleProblemChange("problems", newProblems);
+  };
+
+  const addProblem = () => {
+    const newProblem: Problem = {
+      title: "",
+      description: "",
+    };
+    handleProblemChange("problems", [...problemContent.problems, newProblem]);
+  };
+
+  const removeProblem = (index: number) => {
+    const newProblems = problemContent.problems.filter((_, i) => i !== index);
+    handleProblemChange("problems", newProblems);
+  };
+
+  const moveProblem = (index: number, direction: "up" | "down") => {
+    const newProblems = [...problemContent.problems];
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+    if (newIndex >= 0 && newIndex < newProblems.length) {
+      [newProblems[index], newProblems[newIndex]] = [
+        newProblems[newIndex],
+        newProblems[index],
+      ];
+      handleProblemChange("problems", newProblems);
+    }
+  };
+
   return (
     <div
       className={`${
@@ -422,12 +477,96 @@ export function LandingSidebarEditor({
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-4 h-4" />
-              Problème à resoudre
+              Problème à résoudre
             </div>
           </AccordionTrigger>
           <AccordionContent>
-            <div className="text-sm text-gray-500 p-2">
-              Édition des problèmes à venir...
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="problemTitle">Titre</Label>
+                <Input
+                  id="problemTitle"
+                  value={problemContent.title}
+                  onChange={(e) => handleProblemChange("title", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Problèmes</Label>
+                <div className="space-y-4">
+                  {problemContent.problems.map((problem, index) => (
+                    <div
+                      key={index}
+                      className="border rounded-lg p-4 space-y-4"
+                    >
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium">Problème {index + 1}</h4>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => moveProblem(index, "up")}
+                            disabled={index === 0}
+                          >
+                            <ArrowUp className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => moveProblem(index, "down")}
+                            disabled={
+                              index === problemContent.problems.length - 1
+                            }
+                          >
+                            <ArrowDown className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeProblem(index)}
+                            className="text-red-500"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Titre</Label>
+                        <Input
+                          value={problem.title}
+                          onChange={(e) =>
+                            handleProblemItemChange(
+                              index,
+                              "title",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Description</Label>
+                        <Textarea
+                          value={problem.description}
+                          onChange={(e) =>
+                            handleProblemItemChange(
+                              index,
+                              "description",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={addProblem}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Ajouter un problème
+                  </Button>
+                </div>
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>

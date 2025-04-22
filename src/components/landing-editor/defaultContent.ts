@@ -5,6 +5,7 @@ import {
   FAQContent,
   PricingContent,
   AuthorityContent,
+  ProblemContent,
 } from "./types";
 
 export const defaultHeroContent: HeroContent = {
@@ -143,6 +144,48 @@ export const defaultAuthorityContent: AuthorityContent = {
     {
       value: "50+",
       label: "Clients satisfaits",
+    },
+  ],
+};
+
+export const defaultProblemContent: ProblemContent = {
+  title: "Les problèmes que vous rencontrez",
+  problems: [
+    {
+      title: "🔧 Gestion complexe des outils",
+      description: `<p>Vous utilisez plusieurs outils différents pour gérer votre activité, ce qui rend la gestion quotidienne complexe et chronophage.</p>
+
+<p><strong>Note :</strong> La multiplication des outils crée de la confusion et des pertes de temps</p>
+
+<ul>
+  <li>Difficulté à synchroniser les données entre les outils</li>
+  <li>Temps perdu à naviguer entre différentes interfaces</li>
+  <li>Coûts d'abonnement qui s'accumulent</li>
+</ul>`,
+    },
+    {
+      title: "📉 Faible taux de conversion",
+      description: `<p>Vos landing pages ne convertissent pas suffisamment, malgré vos efforts pour les optimiser.</p>
+
+<p><strong>Note :</strong> Un taux de conversion faible impacte directement votre rentabilité</p>
+
+<ul>
+  <li>Perte de leads qualifiés</li>
+  <li>Coût d'acquisition élevé</li>
+  <li>Difficulté à justifier les investissements marketing</li>
+</ul>`,
+    },
+    {
+      title: "⏱️ Temps de mise en place trop long",
+      description: `<p>La création et la mise en ligne de vos pages prennent trop de temps, vous empêchant de vous concentrer sur votre cœur de métier.</p>
+
+<p><strong>Note :</strong> Le temps est une ressource précieuse pour les entrepreneurs</p>
+
+<ul>
+  <li>Délais de mise en ligne trop longs</li>
+  <li>Dépendance vis-à-vis des développeurs</li>
+  <li>Difficulté à tester rapidement de nouvelles idées</li>
+</ul>`,
     },
   ],
 };

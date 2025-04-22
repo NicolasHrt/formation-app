@@ -1,38 +1,14 @@
 import "@/styles/rich-text.css";
-
-interface Problem {
-  title: string;
-  description: string;
-}
-
-interface ProblemSectionContent {
-  title: string;
-  problems: Problem[];
-}
+import { defaultProblemContent } from "../defaultContent";
+import { ProblemContent } from "../types";
 
 interface ProblemSectionProps {
-  content?: ProblemSectionContent;
+  content?: ProblemContent;
   primaryColor?: string;
 }
 
 export function ProblemSection({
-  content = {
-    title: "Les problèmes que vous rencontrez",
-    problems: [
-      {
-        title: "🔧 Gestion complexe des outils",
-        description: `<p>Vous utilisez plusieurs outils différents pour gérer votre activité, ce qui rend la gestion quotidienne complexe et chron.</p>
-
-<p><strong>Note :</strong> La multiplication des outils crée de la confusion et des pertes de temps</p>
-
-<ul>
-  <li>Difficulté à synchroniser les données entre les outils</li>
-  <li>Temps perdu à naviguer entre différentes interfaces</li>
-  <li>Coûts d'abonnement qui s'accumulent</li>
-</ul>`,
-      },
-    ],
-  },
+  content = defaultProblemContent,
   primaryColor = "#D84B2F",
 }: ProblemSectionProps) {
   return (
@@ -49,7 +25,7 @@ export function ProblemSection({
 
         <div className="space-y-32">
           {content.problems.map((problem, index) => (
-            <div key={index} className="flex gap-8 items-start justify-center">
+            <div key={index} className="flex gap-8 items-start ">
               <div className="space-y-8">
                 <div>
                   <h2 className="text-4xl font-bold mb-4">{problem.title}</h2>

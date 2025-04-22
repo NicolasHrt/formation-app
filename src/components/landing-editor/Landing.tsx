@@ -13,6 +13,7 @@ import {
   FAQContent,
   PricingContent,
   AuthorityContent,
+  ProblemContent,
 } from "./types";
 
 interface LandingProps {
@@ -22,6 +23,7 @@ interface LandingProps {
   faqContent: FAQContent;
   pricingContent: PricingContent;
   authorityContent: AuthorityContent;
+  problemContent: ProblemContent;
 }
 
 export function Landing({
@@ -31,12 +33,13 @@ export function Landing({
   faqContent,
   pricingContent,
   authorityContent,
+  problemContent,
 }: LandingProps) {
   const primaryColor = "#D84B2F"; // Orange vif
   return (
     <div className="overflow-y-scroll max-h-screen">
       <Hero primaryColor={primaryColor} content={heroContent} />
-      <ProblemSection primaryColor={primaryColor} />
+      <ProblemSection primaryColor={primaryColor} content={problemContent} />
       <TransformationSection
         primaryColor={primaryColor}
         content={transformationContent}

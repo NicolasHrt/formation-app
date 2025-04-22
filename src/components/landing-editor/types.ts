@@ -85,3 +85,13 @@ export interface AuthorityContent {
   imageUrl: string;
   achievements: Achievement[];
 }
+
+export interface Problem {
+  title: string;
+  description: string;
+}
+
+export interface ProblemContent {
+  title: string;
+  problems: Problem[];
+}
