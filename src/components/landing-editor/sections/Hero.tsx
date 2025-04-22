@@ -49,7 +49,7 @@ export function Hero({
             dangerouslySetInnerHTML={{
               __html: content.title.replace(
                 /<strong>(.*?)<\/strong>/g,
-                `<strong style="color: ${primaryColor}">$1</strong>`
+                `<strong style="color: var(--color-${primaryColor}-500)">$1</strong>`
               ),
             }}
           />
@@ -119,8 +119,7 @@ export function Hero({
         <div className="text-center mt-12">
           <Button
             size="lg"
-            className="text-white px-8 py-6 text-lg rounded-lg"
-            style={{ backgroundColor: primaryColor }}
+            className={`text-white px-8 py-6 text-lg rounded-lg bg-${primaryColor}-500 hover:bg-${primaryColor}-600`}
           >
             {content.cta}
           </Button>

@@ -62,8 +62,8 @@ export function AuthoritySection({
                 {content.title}
               </h2>
               <p
+                style={{ color: `var(--color-${primaryColor}-500)` }}
                 className="text-2xl font-light"
-                style={{ color: primaryColor }}
               >
                 {content.subtitle}
               </p>
@@ -79,8 +79,8 @@ export function AuthoritySection({
               {content.achievements.map((achievement, index) => (
                 <div key={index} className="text-center flex-1">
                   <p
+                    style={{ color: `var(--color-${primaryColor}-500)` }}
                     className="text-2xl font-bold mb-1"
-                    style={{ color: primaryColor }}
                   >
                     {achievement.value}
                   </p>

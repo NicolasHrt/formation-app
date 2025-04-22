@@ -422,29 +422,24 @@ export function LandingSidebarEditor({
     }
   };
 
-  const colors: PrimaryColor[] = [
-    "red",
-    "orange",
-    "amber",
-    "yellow",
-    "lime",
-    "green",
-    "emerald",
-    "teal",
-    "cyan",
-    "sky",
-    "blue",
-    "indigo",
-    "violet",
-    "purple",
-    "fuchsia",
-    "pink",
-    "rose",
-    "slate",
-    "gray",
-    "zinc",
-    "neutral",
-    "stone",
+  const colors: { name: PrimaryColor; bg: string; hover: string }[] = [
+    { name: "red", bg: "bg-red-500", hover: "hover:bg-red-600" },
+    { name: "orange", bg: "bg-orange-500", hover: "hover:bg-orange-600" },
+    { name: "amber", bg: "bg-amber-500", hover: "hover:bg-amber-600" },
+    { name: "yellow", bg: "bg-yellow-500", hover: "hover:bg-yellow-600" },
+    { name: "lime", bg: "bg-lime-500", hover: "hover:bg-lime-600" },
+    { name: "green", bg: "bg-green-500", hover: "hover:bg-green-600" },
+    { name: "emerald", bg: "bg-emerald-500", hover: "hover:bg-emerald-600" },
+    { name: "teal", bg: "bg-teal-500", hover: "hover:bg-teal-600" },
+    { name: "cyan", bg: "bg-cyan-500", hover: "hover:bg-cyan-600" },
+    { name: "sky", bg: "bg-sky-500", hover: "hover:bg-sky-600" },
+    { name: "blue", bg: "bg-blue-500", hover: "hover:bg-blue-600" },
+    { name: "indigo", bg: "bg-indigo-500", hover: "hover:bg-indigo-600" },
+    { name: "violet", bg: "bg-violet-500", hover: "hover:bg-violet-600" },
+    { name: "purple", bg: "bg-purple-500", hover: "hover:bg-purple-600" },
+    { name: "fuchsia", bg: "bg-fuchsia-500", hover: "hover:bg-fuchsia-600" },
+    { name: "pink", bg: "bg-pink-500", hover: "hover:bg-pink-600" },
+    { name: "rose", bg: "bg-rose-500", hover: "hover:bg-rose-600" },
   ];
 
   return (
@@ -487,17 +482,17 @@ export function LandingSidebarEditor({
                 <div className="grid grid-cols-4 gap-2">
                   {colors.map((color) => (
                     <Button
-                      key={color}
+                      key={color.name}
                       variant="outline"
                       size="sm"
-                      className={`w-full h-10 ${
-                        landingContent.primaryColor === color
-                          ? `bg-${color}-500 text-white hover:bg-${color}-600`
-                          : `hover:bg-${color}-100`
+                      className={`w-full h-10 p-0 relative rounded-lg ${
+                        landingContent.primaryColor === color.name
+                          ? `${color.bg} text-white ${color.hover} border-2 border-black dark:border-white`
+                          : `hover:${color.bg} hover:opacity-70 opacity-50`
                       }`}
-                      onClick={() => handlePrimaryColorChange(color)}
+                      onClick={() => handlePrimaryColorChange(color.name)}
                     >
-                      {color}
+                      <div className={`w-full h-full ${color.bg} rounded-lg`} />
                     </Button>
                   ))}
                 </div>

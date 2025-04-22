@@ -57,8 +57,8 @@ export function PricingSection({
             <div className="text-center mb-12">
               <div className="inline-flex items-baseline">
                 <span
+                  style={{ color: `var(--color-${primaryColor}-500)` }}
                   className="text-6xl font-bold"
-                  style={{ color: primaryColor }}
                 >
                   {content.price}
                 </span>
@@ -73,8 +73,8 @@ export function PricingSection({
               {content.features.map((feature, index) => (
                 <div key={index} className="flex items-start gap-4">
                   <CheckCircle
+                    style={{ color: `var(--color-${primaryColor}-500)` }}
                     className="w-6 h-6 mt-1 flex-shrink-0"
-                    style={{ color: primaryColor }}
                   />
                   <p className="text-lg text-gray-200">{feature}</p>
                 </div>
@@ -84,8 +84,7 @@ export function PricingSection({
             <div className="text-center">
               <Button
                 size="lg"
-                className="text-white px-8 py-6 text-lg rounded-lg"
-                style={{ backgroundColor: primaryColor }}
+                className={`text-white px-8 py-6 text-lg rounded-lg bg-${primaryColor}-500 hover:bg-${primaryColor}-600`}
               >
                 {content.ctaText}
               </Button>

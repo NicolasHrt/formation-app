@@ -21,14 +21,13 @@ export function TransformationSection({
         </div>
         <div className="bg-gradient-to-br from-[#2A2A2A] to-[#333333] rounded-3xl p-10 md:p-16 mb-12 shadow-xl border border-white/5 backdrop-blur-sm">
           <p
+            style={{ color: `var(--color-${primaryColor}-500)` }}
             className="text-3xl font-bold text-center leading-relaxed"
-            style={{ color: primaryColor }}
           >
             {content.mainPromise}
           </p>
           <div
-            className="w-24 h-1 mx-auto mt-8 rounded-full"
-            style={{ backgroundColor: primaryColor, opacity: 0.5 }}
+            className={`w-24 h-1 mx-auto mt-8 rounded-full bg-${primaryColor}-500 opacity-50`}
           ></div>
         </div>
 
@@ -45,8 +44,8 @@ export function TransformationSection({
                   className="flex items-start gap-4 bg-[#2A2A2A] p-4 rounded-lg"
                 >
                   <CheckCircle
+                    style={{ color: `var(--color-${primaryColor}-500)` }}
                     className="w-6 h-6 mt-1 flex-shrink-0"
-                    style={{ color: primaryColor }}
                   />
                   <p className="text-lg text-gray-200">{capability.text}</p>
                 </div>

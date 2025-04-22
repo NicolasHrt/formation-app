@@ -54,7 +54,10 @@ export function TestimonialsSection({
                   />
                 )}
                 <div>
-                  <p className="font-semibold" style={{ color: primaryColor }}>
+                  <p
+                    style={{ color: `var(--color-${primaryColor}-500)` }}
+                    className="font-semibold"
+                  >
                     {testimonial.author.name}
                   </p>
                   <p className="text-sm text-gray-400">
