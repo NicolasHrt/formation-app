@@ -60,22 +60,12 @@ import {
 interface LandingSidebarEditorProps {
   landingContent: LandingContent;
   onLandingContentChange: (content: LandingContent) => void;
-  onFullscreenChange?: (isFullscreen: boolean) => void;
 }
 
 export function LandingSidebarEditor({
   landingContent = defaultLandingContent,
   onLandingContentChange = () => {},
-  onFullscreenChange,
 }: LandingSidebarEditorProps) {
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  const toggleFullscreen = () => {
-    const newFullscreenState = !isFullscreen;
-    setIsFullscreen(newFullscreenState);
-    onFullscreenChange?.(newFullscreenState);
-  };
-
   const handlePrimaryColorChange = (color: PrimaryColor) => {
     onLandingContentChange({
       ...landingContent,
@@ -443,28 +433,12 @@ export function LandingSidebarEditor({
   ];
 
   return (
-    <div
-      className={`${
-        isFullscreen ? "h-screen overflow-y-auto bg-background px-4" : ""
-      }`}
-    >
+    <div>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold flex items-center gap-2">
           <PencilRuler className="w-5 h-5" />
           Landing Editor
         </h2>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleFullscreen}
-          className="ml-2"
-        >
-          {isFullscreen ? (
-            <Minimize2 className="h-4 w-4" />
-          ) : (
-            <Maximize2 className="h-4 w-4" />
-          )}
-        </Button>
       </div>
 
       <Accordion type="multiple" className="w-full">
