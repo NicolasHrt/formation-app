@@ -72,3 +72,16 @@ export const defaultPricingContent: PricingContent = {
   vat: "TVA incluse",
   oneTimeAccess: "Accès unique",
 };
+
+export interface Achievement {
+  value: string;
+  label: string;
+}
+
+export interface AuthorityContent {
+  title: string;
+  subtitle: string;
+  description: string;
+  imageUrl: string;
+  achievements: Achievement[];
+}

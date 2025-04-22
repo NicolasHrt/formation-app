@@ -38,14 +38,17 @@ import {
   FAQContent,
   FAQItem,
   PricingContent,
-  defaultPricingContent,
-} from "@/components/landing-editor/types";
+  AuthorityContent,
+  Achievement,
+} from "./types";
 import {
   defaultHeroContent,
   defaultTransformationContent,
   defaultTestimonialsContent,
   defaultFAQContent,
-} from "@/components/landing-editor/defaultContent";
+  defaultPricingContent,
+  defaultAuthorityContent,
+} from "./defaultContent";
 
 interface LandingSidebarEditorProps {
   heroContent: HeroContent;
@@ -61,6 +64,8 @@ interface LandingSidebarEditorProps {
   onFAQContentChange: (content: FAQContent) => void;
   pricingContent: PricingContent;
   onPricingContentChange: (content: PricingContent) => void;
+  authorityContent: AuthorityContent;
+  onAuthorityContentChange: (content: AuthorityContent) => void;
 }
 
 export function LandingSidebarEditor({
@@ -75,6 +80,8 @@ export function LandingSidebarEditor({
   onFAQContentChange = () => {},
   pricingContent = defaultPricingContent,
   onPricingContentChange = () => {},
+  authorityContent = defaultAuthorityContent,
+  onAuthorityContentChange = () => {},
 }: LandingSidebarEditorProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -291,6 +298,43 @@ export function LandingSidebarEditor({
       ];
       handlePricingChange("features", newFeatures);
     }
+  };
+
+  const handleAuthorityChange = (
+    field: keyof AuthorityContent,
+    value: string | Achievement[]
+  ) => {
+    onAuthorityContentChange({
+      ...authorityContent,
+      [field]: value,
+    });
+  };
+
+  const handleAchievementChange = (
+    index: number,
+    field: "value" | "label",
+    value: string
+  ) => {
+    const newAchievements = [...authorityContent.achievements];
+    newAchievements[index] = {
+      ...newAchievements[index],
+      [field]: value,
+    };
+    handleAuthorityChange("achievements", newAchievements);
+  };
+
+  const addAchievement = () => {
+    handleAuthorityChange("achievements", [
+      ...authorityContent.achievements,
+      { value: "", label: "" },
+    ]);
+  };
+
+  const removeAchievement = (index: number) => {
+    const newAchievements = authorityContent.achievements.filter(
+      (_, i) => i !== index
+    );
+    handleAuthorityChange("achievements", newAchievements);
   };
 
   return (
@@ -523,8 +567,101 @@ export function LandingSidebarEditor({
             </div>
           </AccordionTrigger>
           <AccordionContent>
-            <div className="text-sm text-gray-500 p-2">
-              Édition des éléments d'autorité à venir...
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>Titre</Label>
+                <Input
+                  value={authorityContent.title}
+                  onChange={(e) =>
+                    handleAuthorityChange("title", e.target.value)
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Sous-titre</Label>
+                <Input
+                  value={authorityContent.subtitle}
+                  onChange={(e) =>
+                    handleAuthorityChange("subtitle", e.target.value)
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Description</Label>
+                <Textarea
+                  value={authorityContent.description}
+                  onChange={(e) =>
+                    handleAuthorityChange("description", e.target.value)
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>URL de l'image</Label>
+                <Input
+                  value={authorityContent.imageUrl}
+                  onChange={(e) =>
+                    handleAuthorityChange("imageUrl", e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Réalisations</Label>
+                <div className="space-y-4">
+                  {authorityContent.achievements.map((achievement, index) => (
+                    <div
+                      key={index}
+                      className="border rounded-lg p-4 space-y-4"
+                    >
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium">Réalisation {index + 1}</h4>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeAchievement(index)}
+                          className="text-red-500"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Valeur</Label>
+                        <Input
+                          value={achievement.value}
+                          onChange={(e) =>
+                            handleAchievementChange(
+                              index,
+                              "value",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Label</Label>
+                        <Input
+                          value={achievement.label}
+                          onChange={(e) =>
+                            handleAchievementChange(
+                              index,
+                              "label",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={addAchievement}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Ajouter une réalisation
+                  </Button>
+                </div>
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>

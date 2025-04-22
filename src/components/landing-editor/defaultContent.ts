@@ -4,6 +4,7 @@ import {
   TestimonialsContent,
   FAQContent,
   PricingContent,
+  AuthorityContent,
 } from "./types";
 
 export const defaultHeroContent: HeroContent = {
@@ -120,4 +121,28 @@ export const defaultPricingContent: PricingContent = {
   bestOffer: "Meilleure offre",
   vat: "TTC",
   oneTimeAccess: "Paiement unique, accès à vie",
+};
+
+export const defaultAuthorityContent: AuthorityContent = {
+  title: "Votre expert en landing pages",
+  subtitle:
+    "Plus de 10 ans d'expérience dans la création de pages qui convertissent",
+  description:
+    "Expert en marketing digital et en conversion, j'ai aidé des centaines d'entrepreneurs à transformer leur trafic en clients.",
+  imageUrl:
+    "https://cdn.prod.website-files.com/63fb3def0123f31ed888d309/650d80cd9cd2ed0a40ffe341_IMG_0581.jpeg",
+  achievements: [
+    {
+      value: "1000+",
+      label: "Landing pages créées",
+    },
+    {
+      value: "85%",
+      label: "Taux de conversion moyen",
+    },
+    {
+      value: "50+",
+      label: "Clients satisfaits",
+    },
+  ],
 };

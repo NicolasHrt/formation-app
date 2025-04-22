@@ -75,9 +75,9 @@ export function AuthoritySection({
               </p>
             </div>
 
-            <div className="grid grid-cols-3 gap-8 pt-8">
+            <div className="flex justify-center gap-8 pt-8">
               {content.achievements.map((achievement, index) => (
-                <div key={index} className="text-center">
+                <div key={index} className="text-center flex-1">
                   <p
                     className="text-2xl font-bold mb-1"
                     style={{ color: primaryColor }}

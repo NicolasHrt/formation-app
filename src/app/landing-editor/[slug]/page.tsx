@@ -15,6 +15,7 @@ import {
   TestimonialsContent,
   FAQContent,
   PricingContent,
+  AuthorityContent,
 } from "@/components/landing-editor/types";
 
 import {
@@ -23,6 +24,7 @@ import {
   defaultTestimonialsContent,
   defaultFAQContent,
   defaultPricingContent,
+  defaultAuthorityContent,
 } from "@/components/landing-editor/defaultContent";
 
 export default function LandingEditor({
@@ -47,6 +49,10 @@ export default function LandingEditor({
 
   const [pricingContent, setPricingContent] = useState<PricingContent>(
     defaultPricingContent
+  );
+
+  const [authorityContent, setAuthorityContent] = useState<AuthorityContent>(
+    defaultAuthorityContent
   );
 
   const [isSidebarFullscreen, setIsSidebarFullscreen] = useState(false);
@@ -82,6 +88,8 @@ export default function LandingEditor({
             onFAQContentChange={setFAQContent}
             pricingContent={pricingContent}
             onPricingContentChange={setPricingContent}
+            authorityContent={authorityContent}
+            onAuthorityContentChange={setAuthorityContent}
             onFullscreenChange={setIsSidebarFullscreen}
           />
         </div>
@@ -93,6 +101,7 @@ export default function LandingEditor({
           testimonialsContent={testimonialsContent}
           faqContent={faqContent}
           pricingContent={pricingContent}
+          authorityContent={authorityContent}
         />
       </div>
     </div>
