@@ -6,6 +6,7 @@ import {
   PricingContent,
   AuthorityContent,
   ProblemContent,
+  LandingContent,
 } from "./types";
 
 export const defaultHeroContent: HeroContent = {
@@ -188,4 +189,15 @@ export const defaultProblemContent: ProblemContent = {
 </ul>`,
     },
   ],
+};
+
+export const defaultLandingContent: LandingContent = {
+  primaryColor: "orange",
+  heroContent: defaultHeroContent,
+  transformationContent: defaultTransformationContent,
+  testimonialsContent: defaultTestimonialsContent,
+  faqContent: defaultFAQContent,
+  pricingContent: defaultPricingContent,
+  authorityContent: defaultAuthorityContent,
+  problemContent: defaultProblemContent,
 };

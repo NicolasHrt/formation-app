@@ -16,6 +16,7 @@ import {
   CreditCard,
   ArrowRight,
   HelpCircle,
+  Palette,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -42,6 +43,8 @@ import {
   Achievement,
   ProblemContent,
   Problem,
+  PrimaryColor,
+  LandingContent,
 } from "./types";
 import {
   defaultHeroContent,
@@ -51,44 +54,19 @@ import {
   defaultPricingContent,
   defaultAuthorityContent,
   defaultProblemContent,
+  defaultLandingContent,
 } from "./defaultContent";
 
 interface LandingSidebarEditorProps {
-  heroContent: HeroContent;
-  onHeroContentChange: Dispatch<SetStateAction<HeroContent>>;
-  transformationContent: TransformationContent;
-  onTransformationContentChange: Dispatch<
-    SetStateAction<TransformationContent>
-  >;
-  testimonialsContent: TestimonialsContent;
-  onTestimonialsContentChange: Dispatch<SetStateAction<TestimonialsContent>>;
+  landingContent: LandingContent;
+  onLandingContentChange: (content: LandingContent) => void;
   onFullscreenChange?: (isFullscreen: boolean) => void;
-  faqContent: FAQContent;
-  onFAQContentChange: (content: FAQContent) => void;
-  pricingContent: PricingContent;
-  onPricingContentChange: (content: PricingContent) => void;
-  authorityContent: AuthorityContent;
-  onAuthorityContentChange: (content: AuthorityContent) => void;
-  problemContent: ProblemContent;
-  onProblemContentChange: (content: ProblemContent) => void;
 }
 
 export function LandingSidebarEditor({
-  heroContent = defaultHeroContent,
-  onHeroContentChange = () => {},
-  transformationContent = defaultTransformationContent,
-  onTransformationContentChange = () => {},
-  testimonialsContent = defaultTestimonialsContent,
-  onTestimonialsContentChange = () => {},
+  landingContent = defaultLandingContent,
+  onLandingContentChange = () => {},
   onFullscreenChange,
-  faqContent = defaultFAQContent,
-  onFAQContentChange = () => {},
-  pricingContent = defaultPricingContent,
-  onPricingContentChange = () => {},
-  authorityContent = defaultAuthorityContent,
-  onAuthorityContentChange = () => {},
-  problemContent = defaultProblemContent,
-  onProblemContentChange = () => {},
 }: LandingSidebarEditorProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -98,49 +76,66 @@ export function LandingSidebarEditor({
     onFullscreenChange?.(newFullscreenState);
   };
 
+  const handlePrimaryColorChange = (color: PrimaryColor) => {
+    onLandingContentChange({
+      ...landingContent,
+      primaryColor: color,
+    });
+  };
+
   const handleHeroChange = (field: keyof HeroContent, value: string) => {
-    onHeroContentChange((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    onLandingContentChange({
+      ...landingContent,
+      heroContent: {
+        ...landingContent.heroContent,
+        [field]: value,
+      },
+    });
   };
 
   const handleTransformationChange = (
     field: keyof TransformationContent,
     value: string | Capability[]
   ) => {
-    onTransformationContentChange((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    onLandingContentChange({
+      ...landingContent,
+      transformationContent: {
+        ...landingContent.transformationContent,
+        [field]: value,
+      },
+    });
   };
 
   const handleCapabilityChange = (index: number, value: string) => {
-    const newCapabilities = [...transformationContent.capabilities];
+    const newCapabilities = [
+      ...landingContent.transformationContent.capabilities,
+    ];
     newCapabilities[index] = { ...newCapabilities[index], text: value };
     handleTransformationChange("capabilities", newCapabilities);
   };
 
   const addCapability = () => {
     const newCapability: Capability = {
-      order: transformationContent.capabilities.length,
+      order: landingContent.transformationContent.capabilities.length,
       text: "",
     };
     handleTransformationChange("capabilities", [
-      ...transformationContent.capabilities,
+      ...landingContent.transformationContent.capabilities,
       newCapability,
     ]);
   };
 
   const removeCapability = (index: number) => {
-    const newCapabilities = transformationContent.capabilities
+    const newCapabilities = landingContent.transformationContent.capabilities
       .filter((_, i) => i !== index)
       .map((cap, i) => ({ ...cap, order: i }));
     handleTransformationChange("capabilities", newCapabilities);
   };
 
   const moveCapability = (index: number, direction: "up" | "down") => {
-    const newCapabilities = [...transformationContent.capabilities];
+    const newCapabilities = [
+      ...landingContent.transformationContent.capabilities,
+    ];
     const newIndex = direction === "up" ? index - 1 : index + 1;
 
     if (newIndex >= 0 && newIndex < newCapabilities.length) {
@@ -160,10 +155,13 @@ export function LandingSidebarEditor({
     field: keyof TestimonialsContent,
     value: string | Testimonial[]
   ) => {
-    onTestimonialsContentChange((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    onLandingContentChange({
+      ...landingContent,
+      testimonialsContent: {
+        ...landingContent.testimonialsContent,
+        [field]: value,
+      },
+    });
   };
 
   const handleTestimonialChange = (
@@ -171,7 +169,9 @@ export function LandingSidebarEditor({
     field: keyof Testimonial,
     value: string | number | { name: string; role: string; avatar?: string }
   ) => {
-    const newTestimonials = [...testimonialsContent.testimonials];
+    const newTestimonials = [
+      ...landingContent.testimonialsContent.testimonials,
+    ];
     if (field === "author") {
       newTestimonials[index] = {
         ...newTestimonials[index],
@@ -197,20 +197,23 @@ export function LandingSidebarEditor({
       rating: 5,
     };
     handleTestimonialsChange("testimonials", [
-      ...testimonialsContent.testimonials,
+      ...landingContent.testimonialsContent.testimonials,
       newTestimonial,
     ]);
   };
 
   const removeTestimonial = (index: number) => {
-    const newTestimonials = testimonialsContent.testimonials.filter(
-      (_, i) => i !== index
-    );
+    const newTestimonials =
+      landingContent.testimonialsContent.testimonials.filter(
+        (_, i) => i !== index
+      );
     handleTestimonialsChange("testimonials", newTestimonials);
   };
 
   const moveTestimonial = (index: number, direction: "up" | "down") => {
-    const newTestimonials = [...testimonialsContent.testimonials];
+    const newTestimonials = [
+      ...landingContent.testimonialsContent.testimonials,
+    ];
     const newIndex = direction === "up" ? index - 1 : index + 1;
 
     if (newIndex >= 0 && newIndex < newTestimonials.length) {
@@ -226,9 +229,12 @@ export function LandingSidebarEditor({
     field: keyof FAQContent,
     value: string | FAQItem[]
   ) => {
-    onFAQContentChange({
-      ...faqContent,
-      [field]: value,
+    onLandingContentChange({
+      ...landingContent,
+      faqContent: {
+        ...landingContent.faqContent,
+        [field]: value,
+      },
     });
   };
 
@@ -237,7 +243,7 @@ export function LandingSidebarEditor({
     field: keyof FAQItem,
     value: string
   ) => {
-    const newQuestions = [...faqContent.questions];
+    const newQuestions = [...landingContent.faqContent.questions];
     newQuestions[index] = {
       ...newQuestions[index],
       [field]: value,
@@ -250,16 +256,21 @@ export function LandingSidebarEditor({
       question: "",
       answer: "",
     };
-    handleFAQChange("questions", [...faqContent.questions, newItem]);
+    handleFAQChange("questions", [
+      ...landingContent.faqContent.questions,
+      newItem,
+    ]);
   };
 
   const removeFAQItem = (index: number) => {
-    const newQuestions = faqContent.questions.filter((_, i) => i !== index);
+    const newQuestions = landingContent.faqContent.questions.filter(
+      (_, i) => i !== index
+    );
     handleFAQChange("questions", newQuestions);
   };
 
   const moveFAQItem = (index: number, direction: "up" | "down") => {
-    const newQuestions = [...faqContent.questions];
+    const newQuestions = [...landingContent.faqContent.questions];
     const newIndex = direction === "up" ? index - 1 : index + 1;
     if (newIndex >= 0 && newIndex < newQuestions.length) {
       [newQuestions[index], newQuestions[newIndex]] = [
@@ -274,29 +285,37 @@ export function LandingSidebarEditor({
     field: keyof PricingContent,
     value: string | string[]
   ) => {
-    onPricingContentChange({
-      ...pricingContent,
-      [field]: value,
+    onLandingContentChange({
+      ...landingContent,
+      pricingContent: {
+        ...landingContent.pricingContent,
+        [field]: value,
+      },
     });
   };
 
   const handleFeatureChange = (index: number, value: string) => {
-    const newFeatures = [...pricingContent.features];
+    const newFeatures = [...landingContent.pricingContent.features];
     newFeatures[index] = value;
     handlePricingChange("features", newFeatures);
   };
 
   const addFeature = () => {
-    handlePricingChange("features", [...pricingContent.features, ""]);
+    handlePricingChange("features", [
+      ...landingContent.pricingContent.features,
+      "",
+    ]);
   };
 
   const removeFeature = (index: number) => {
-    const newFeatures = pricingContent.features.filter((_, i) => i !== index);
+    const newFeatures = landingContent.pricingContent.features.filter(
+      (_, i) => i !== index
+    );
     handlePricingChange("features", newFeatures);
   };
 
   const moveFeature = (index: number, direction: "up" | "down") => {
-    const newFeatures = [...pricingContent.features];
+    const newFeatures = [...landingContent.pricingContent.features];
     const newIndex = direction === "up" ? index - 1 : index + 1;
     if (newIndex >= 0 && newIndex < newFeatures.length) {
       [newFeatures[index], newFeatures[newIndex]] = [
@@ -311,9 +330,12 @@ export function LandingSidebarEditor({
     field: keyof AuthorityContent,
     value: string | Achievement[]
   ) => {
-    onAuthorityContentChange({
-      ...authorityContent,
-      [field]: value,
+    onLandingContentChange({
+      ...landingContent,
+      authorityContent: {
+        ...landingContent.authorityContent,
+        [field]: value,
+      },
     });
   };
 
@@ -322,7 +344,7 @@ export function LandingSidebarEditor({
     field: "value" | "label",
     value: string
   ) => {
-    const newAchievements = [...authorityContent.achievements];
+    const newAchievements = [...landingContent.authorityContent.achievements];
     newAchievements[index] = {
       ...newAchievements[index],
       [field]: value,
@@ -332,13 +354,13 @@ export function LandingSidebarEditor({
 
   const addAchievement = () => {
     handleAuthorityChange("achievements", [
-      ...authorityContent.achievements,
+      ...landingContent.authorityContent.achievements,
       { value: "", label: "" },
     ]);
   };
 
   const removeAchievement = (index: number) => {
-    const newAchievements = authorityContent.achievements.filter(
+    const newAchievements = landingContent.authorityContent.achievements.filter(
       (_, i) => i !== index
     );
     handleAuthorityChange("achievements", newAchievements);
@@ -348,9 +370,12 @@ export function LandingSidebarEditor({
     field: keyof ProblemContent,
     value: string | Problem[]
   ) => {
-    onProblemContentChange({
-      ...problemContent,
-      [field]: value,
+    onLandingContentChange({
+      ...landingContent,
+      problemContent: {
+        ...landingContent.problemContent,
+        [field]: value,
+      },
     });
   };
 
@@ -359,7 +384,7 @@ export function LandingSidebarEditor({
     field: keyof Problem,
     value: string
   ) => {
-    const newProblems = [...problemContent.problems];
+    const newProblems = [...landingContent.problemContent.problems];
     newProblems[index] = {
       ...newProblems[index],
       [field]: value,
@@ -372,16 +397,21 @@ export function LandingSidebarEditor({
       title: "",
       description: "",
     };
-    handleProblemChange("problems", [...problemContent.problems, newProblem]);
+    handleProblemChange("problems", [
+      ...landingContent.problemContent.problems,
+      newProblem,
+    ]);
   };
 
   const removeProblem = (index: number) => {
-    const newProblems = problemContent.problems.filter((_, i) => i !== index);
+    const newProblems = landingContent.problemContent.problems.filter(
+      (_, i) => i !== index
+    );
     handleProblemChange("problems", newProblems);
   };
 
   const moveProblem = (index: number, direction: "up" | "down") => {
-    const newProblems = [...problemContent.problems];
+    const newProblems = [...landingContent.problemContent.problems];
     const newIndex = direction === "up" ? index - 1 : index + 1;
     if (newIndex >= 0 && newIndex < newProblems.length) {
       [newProblems[index], newProblems[newIndex]] = [
@@ -391,6 +421,31 @@ export function LandingSidebarEditor({
       handleProblemChange("problems", newProblems);
     }
   };
+
+  const colors: PrimaryColor[] = [
+    "red",
+    "orange",
+    "amber",
+    "yellow",
+    "lime",
+    "green",
+    "emerald",
+    "teal",
+    "cyan",
+    "sky",
+    "blue",
+    "indigo",
+    "violet",
+    "purple",
+    "fuchsia",
+    "pink",
+    "rose",
+    "slate",
+    "gray",
+    "zinc",
+    "neutral",
+    "stone",
+  ];
 
   return (
     <div
@@ -418,6 +473,39 @@ export function LandingSidebarEditor({
       </div>
 
       <Accordion type="multiple" className="w-full">
+        <AccordionItem value="primary-color">
+          <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
+            <div className="flex items-center gap-2">
+              <Palette className="w-4 h-4" />
+              Couleur primaire
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>Couleur</Label>
+                <div className="grid grid-cols-4 gap-2">
+                  {colors.map((color) => (
+                    <Button
+                      key={color}
+                      variant="outline"
+                      size="sm"
+                      className={`w-full h-10 ${
+                        landingContent.primaryColor === color
+                          ? `bg-${color}-500 text-white hover:bg-${color}-600`
+                          : `hover:bg-${color}-100`
+                      }`}
+                      onClick={() => handlePrimaryColorChange(color)}
+                    >
+                      {color}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
         <AccordionItem value="hero">
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
             <div className="flex items-center gap-2">
@@ -431,7 +519,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="headerTitle">Titre d'en-tête</Label>
                 <Input
                   id="headerTitle"
-                  value={heroContent.headerTitle}
+                  value={landingContent.heroContent.headerTitle}
                   onChange={(e) =>
                     handleHeroChange("headerTitle", e.target.value)
                   }
@@ -441,7 +529,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="title">Titre principal</Label>
                 <Input
                   id="title"
-                  value={heroContent.title}
+                  value={landingContent.heroContent.title}
                   onChange={(e) => handleHeroChange("title", e.target.value)}
                 />
               </div>
@@ -449,7 +537,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="subtitle">Sous-titre</Label>
                 <Textarea
                   id="subtitle"
-                  value={heroContent.subtitle}
+                  value={landingContent.heroContent.subtitle}
                   onChange={(e) => handleHeroChange("subtitle", e.target.value)}
                 />
               </div>
@@ -457,7 +545,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="cta">Bouton CTA</Label>
                 <Input
                   id="cta"
-                  value={heroContent.cta}
+                  value={landingContent.heroContent.cta}
                   onChange={(e) => handleHeroChange("cta", e.target.value)}
                 />
               </div>
@@ -465,7 +553,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="videoUrl">URL de la vidéo</Label>
                 <Input
                   id="videoUrl"
-                  value={heroContent.videoUrl}
+                  value={landingContent.heroContent.videoUrl}
                   onChange={(e) => handleHeroChange("videoUrl", e.target.value)}
                 />
               </div>
@@ -486,73 +574,81 @@ export function LandingSidebarEditor({
                 <Label htmlFor="problemTitle">Titre</Label>
                 <Input
                   id="problemTitle"
-                  value={problemContent.title}
+                  value={landingContent.problemContent.title}
                   onChange={(e) => handleProblemChange("title", e.target.value)}
                 />
               </div>
               <div className="space-y-2">
                 <Label>Problèmes</Label>
                 <div className="space-y-4">
-                  {problemContent.problems.map((problem, index) => (
-                    <div
-                      key={index}
-                      className="border rounded-lg p-4 space-y-4"
-                    >
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-medium">Problème {index + 1}</h4>
-                        <div className="flex gap-1">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => moveProblem(index, "up")}
-                            disabled={index === 0}
-                          >
-                            <ArrowUp className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => moveProblem(index, "down")}
-                            disabled={
-                              index === problemContent.problems.length - 1
+                  {landingContent.problemContent.problems.map(
+                    (problem, index) => (
+                      <div
+                        key={index}
+                        className="border rounded-lg p-4 space-y-4"
+                      >
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-medium">Problème {index + 1}</h4>
+                          <div className="flex gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => moveProblem(index, "up")}
+                              disabled={index === 0}
+                            >
+                              <ArrowUp className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => moveProblem(index, "down")}
+                              disabled={
+                                index ===
+                                landingContent.problemContent.problems.length -
+                                  1
+                              }
+                            >
+                              <ArrowDown className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeProblem(index)}
+                              className="text-red-500"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Titre</Label>
+                          <Input
+                            value={problem.title}
+                            onChange={(e) =>
+                              handleProblemItemChange(
+                                index,
+                                "title",
+                                e.target.value
+                              )
                             }
-                          >
-                            <ArrowDown className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => removeProblem(index)}
-                            className="text-red-500"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Description</Label>
+                          <RichTextEditor
+                            content={problem.description}
+                            onChange={(value) =>
+                              handleProblemItemChange(
+                                index,
+                                "description",
+                                value
+                              )
+                            }
+                          />
                         </div>
                       </div>
-                      <div className="space-y-2">
-                        <Label>Titre</Label>
-                        <Input
-                          value={problem.title}
-                          onChange={(e) =>
-                            handleProblemItemChange(
-                              index,
-                              "title",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Description</Label>
-                        <RichTextEditor
-                          content={problem.description}
-                          onChange={(value) =>
-                            handleProblemItemChange(index, "description", value)
-                          }
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  )}
                   <Button
                     variant="outline"
                     className="w-full"
@@ -580,7 +676,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="transformationTitle">Titre</Label>
                 <Input
                   id="transformationTitle"
-                  value={transformationContent.title}
+                  value={landingContent.transformationContent.title}
                   onChange={(e) =>
                     handleTransformationChange("title", e.target.value)
                   }
@@ -590,7 +686,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="transformationSubtitle">Sous-titre</Label>
                 <Input
                   id="transformationSubtitle"
-                  value={transformationContent.subtitle}
+                  value={landingContent.transformationContent.subtitle}
                   onChange={(e) =>
                     handleTransformationChange("subtitle", e.target.value)
                   }
@@ -600,7 +696,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="mainPromise">Promesse principale</Label>
                 <Textarea
                   id="mainPromise"
-                  value={transformationContent.mainPromise}
+                  value={landingContent.transformationContent.mainPromise}
                   onChange={(e) =>
                     handleTransformationChange("mainPromise", e.target.value)
                   }
@@ -610,7 +706,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="capabilitiesTitle">Titre des capacités</Label>
                 <Input
                   id="capabilitiesTitle"
-                  value={transformationContent.capabilitiesTitle}
+                  value={landingContent.transformationContent.capabilitiesTitle}
                   onChange={(e) =>
                     handleTransformationChange(
                       "capabilitiesTitle",
@@ -622,7 +718,7 @@ export function LandingSidebarEditor({
               <div className="space-y-2">
                 <Label>Capacités</Label>
                 <div className="space-y-2">
-                  {transformationContent.capabilities
+                  {landingContent.transformationContent.capabilities
                     .sort((a, b) => a.order - b.order)
                     .map((capability, index) => (
                       <div
@@ -650,7 +746,9 @@ export function LandingSidebarEditor({
                             onClick={() => moveCapability(index, "down")}
                             disabled={
                               index ===
-                              transformationContent.capabilities.length - 1
+                              landingContent.transformationContent.capabilities
+                                .length -
+                                1
                             }
                           >
                             <ArrowDown className="h-4 w-4" />
@@ -706,7 +804,7 @@ export function LandingSidebarEditor({
               <div className="space-y-2">
                 <Label>Titre</Label>
                 <Input
-                  value={authorityContent.title}
+                  value={landingContent.authorityContent.title}
                   onChange={(e) =>
                     handleAuthorityChange("title", e.target.value)
                   }
@@ -715,7 +813,7 @@ export function LandingSidebarEditor({
               <div className="space-y-2">
                 <Label>Sous-titre</Label>
                 <Input
-                  value={authorityContent.subtitle}
+                  value={landingContent.authorityContent.subtitle}
                   onChange={(e) =>
                     handleAuthorityChange("subtitle", e.target.value)
                   }
@@ -724,7 +822,7 @@ export function LandingSidebarEditor({
               <div className="space-y-2">
                 <Label>Description</Label>
                 <Textarea
-                  value={authorityContent.description}
+                  value={landingContent.authorityContent.description}
                   onChange={(e) =>
                     handleAuthorityChange("description", e.target.value)
                   }
@@ -733,7 +831,7 @@ export function LandingSidebarEditor({
               <div className="space-y-2">
                 <Label>URL de l'image</Label>
                 <Input
-                  value={authorityContent.imageUrl}
+                  value={landingContent.authorityContent.imageUrl}
                   onChange={(e) =>
                     handleAuthorityChange("imageUrl", e.target.value)
                   }
@@ -743,50 +841,54 @@ export function LandingSidebarEditor({
               <div className="space-y-2">
                 <Label>Réalisations</Label>
                 <div className="space-y-4">
-                  {authorityContent.achievements.map((achievement, index) => (
-                    <div
-                      key={index}
-                      className="border rounded-lg p-4 space-y-4"
-                    >
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-medium">Réalisation {index + 1}</h4>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeAchievement(index)}
-                          className="text-red-500"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                  {landingContent.authorityContent.achievements.map(
+                    (achievement, index) => (
+                      <div
+                        key={index}
+                        className="border rounded-lg p-4 space-y-4"
+                      >
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-medium">
+                            Réalisation {index + 1}
+                          </h4>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeAchievement(index)}
+                            className="text-red-500"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Valeur</Label>
+                          <Input
+                            value={achievement.value}
+                            onChange={(e) =>
+                              handleAchievementChange(
+                                index,
+                                "value",
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Label</Label>
+                          <Input
+                            value={achievement.label}
+                            onChange={(e) =>
+                              handleAchievementChange(
+                                index,
+                                "label",
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <Label>Valeur</Label>
-                        <Input
-                          value={achievement.value}
-                          onChange={(e) =>
-                            handleAchievementChange(
-                              index,
-                              "value",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Label</Label>
-                        <Input
-                          value={achievement.label}
-                          onChange={(e) =>
-                            handleAchievementChange(
-                              index,
-                              "label",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  )}
                   <Button
                     variant="outline"
                     className="w-full"
@@ -814,7 +916,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="testimonialsTitle">Titre</Label>
                 <Input
                   id="testimonialsTitle"
-                  value={testimonialsContent.title}
+                  value={landingContent.testimonialsContent.title}
                   onChange={(e) =>
                     handleTestimonialsChange("title", e.target.value)
                   }
@@ -824,7 +926,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="testimonialsSubtitle">Sous-titre</Label>
                 <Input
                   id="testimonialsSubtitle"
-                  value={testimonialsContent.subtitle}
+                  value={landingContent.testimonialsContent.subtitle}
                   onChange={(e) =>
                     handleTestimonialsChange("subtitle", e.target.value)
                   }
@@ -833,7 +935,7 @@ export function LandingSidebarEditor({
               <div className="space-y-2">
                 <Label>Témoignages</Label>
                 <div className="space-y-4">
-                  {testimonialsContent.testimonials.map(
+                  {landingContent.testimonialsContent.testimonials.map(
                     (testimonial, index) => (
                       <div
                         key={index}
@@ -858,7 +960,9 @@ export function LandingSidebarEditor({
                               onClick={() => moveTestimonial(index, "down")}
                               disabled={
                                 index ===
-                                testimonialsContent.testimonials.length - 1
+                                landingContent.testimonialsContent.testimonials
+                                  .length -
+                                  1
                               }
                             >
                               <ArrowDown className="h-4 w-4" />
@@ -968,7 +1072,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="pricingTitle">Titre</Label>
                 <Input
                   id="pricingTitle"
-                  value={pricingContent.title}
+                  value={landingContent.pricingContent.title}
                   onChange={(e) => handlePricingChange("title", e.target.value)}
                 />
               </div>
@@ -976,7 +1080,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="pricingSubtitle">Sous-titre</Label>
                 <Input
                   id="pricingSubtitle"
-                  value={pricingContent.subtitle}
+                  value={landingContent.pricingContent.subtitle}
                   onChange={(e) =>
                     handlePricingChange("subtitle", e.target.value)
                   }
@@ -986,7 +1090,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="price">Prix</Label>
                 <Input
                   id="price"
-                  value={pricingContent.price}
+                  value={landingContent.pricingContent.price}
                   onChange={(e) => handlePricingChange("price", e.target.value)}
                 />
               </div>
@@ -994,7 +1098,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="ctaText">Texte du bouton</Label>
                 <Input
                   id="ctaText"
-                  value={pricingContent.ctaText}
+                  value={landingContent.pricingContent.ctaText}
                   onChange={(e) =>
                     handlePricingChange("ctaText", e.target.value)
                   }
@@ -1004,7 +1108,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="bestOffer">Texte de la meilleure offre</Label>
                 <Input
                   id="bestOffer"
-                  value={pricingContent.bestOffer}
+                  value={landingContent.pricingContent.bestOffer}
                   onChange={(e) =>
                     handlePricingChange("bestOffer", e.target.value)
                   }
@@ -1014,7 +1118,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="vat">Texte TVA</Label>
                 <Input
                   id="vat"
-                  value={pricingContent.vat}
+                  value={landingContent.pricingContent.vat}
                   onChange={(e) => handlePricingChange("vat", e.target.value)}
                 />
               </div>
@@ -1022,7 +1126,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="oneTimeAccess">Texte accès unique</Label>
                 <Input
                   id="oneTimeAccess"
-                  value={pricingContent.oneTimeAccess}
+                  value={landingContent.pricingContent.oneTimeAccess}
                   onChange={(e) =>
                     handlePricingChange("oneTimeAccess", e.target.value)
                   }
@@ -1031,55 +1135,59 @@ export function LandingSidebarEditor({
               <div className="space-y-2">
                 <Label>Fonctionnalités</Label>
                 <div className="space-y-4">
-                  {pricingContent.features.map((feature, index) => (
-                    <div
-                      key={index}
-                      className="border rounded-lg p-4 space-y-4"
-                    >
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-medium">
-                          Fonctionnalité {index + 1}
-                        </h4>
-                        <div className="flex gap-1">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => moveFeature(index, "up")}
-                            disabled={index === 0}
-                          >
-                            <ArrowUp className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => moveFeature(index, "down")}
-                            disabled={
-                              index === pricingContent.features.length - 1
+                  {landingContent.pricingContent.features.map(
+                    (feature, index) => (
+                      <div
+                        key={index}
+                        className="border rounded-lg p-4 space-y-4"
+                      >
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-medium">
+                            Fonctionnalité {index + 1}
+                          </h4>
+                          <div className="flex gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => moveFeature(index, "up")}
+                              disabled={index === 0}
+                            >
+                              <ArrowUp className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => moveFeature(index, "down")}
+                              disabled={
+                                index ===
+                                landingContent.pricingContent.features.length -
+                                  1
+                              }
+                            >
+                              <ArrowDown className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeFeature(index)}
+                              className="text-red-500"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Description</Label>
+                          <Input
+                            value={feature}
+                            onChange={(e) =>
+                              handleFeatureChange(index, e.target.value)
                             }
-                          >
-                            <ArrowDown className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => removeFeature(index)}
-                            className="text-red-500"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                          />
                         </div>
                       </div>
-                      <div className="space-y-2">
-                        <Label>Description</Label>
-                        <Input
-                          value={feature}
-                          onChange={(e) =>
-                            handleFeatureChange(index, e.target.value)
-                          }
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  )}
                   <Button
                     variant="outline"
                     className="w-full"
@@ -1107,7 +1215,7 @@ export function LandingSidebarEditor({
                 <Label htmlFor="faqTitle">Titre</Label>
                 <Input
                   id="faqTitle"
-                  value={faqContent.title}
+                  value={landingContent.faqContent.title}
                   onChange={(e) => handleFAQChange("title", e.target.value)}
                 />
               </div>
@@ -1115,14 +1223,14 @@ export function LandingSidebarEditor({
                 <Label htmlFor="faqSubtitle">Sous-titre</Label>
                 <Input
                   id="faqSubtitle"
-                  value={faqContent.subtitle}
+                  value={landingContent.faqContent.subtitle}
                   onChange={(e) => handleFAQChange("subtitle", e.target.value)}
                 />
               </div>
               <div className="space-y-2">
                 <Label>Questions</Label>
                 <div className="space-y-4">
-                  {faqContent.questions.map((item, index) => (
+                  {landingContent.faqContent.questions.map((item, index) => (
                     <div
                       key={index}
                       className="border rounded-lg p-4 space-y-4"
@@ -1142,7 +1250,10 @@ export function LandingSidebarEditor({
                             variant="ghost"
                             size="icon"
                             onClick={() => moveFAQItem(index, "down")}
-                            disabled={index === faqContent.questions.length - 1}
+                            disabled={
+                              index ===
+                              landingContent.faqContent.questions.length - 1
+                            }
                           >
                             <ArrowDown className="h-4 w-4" />
                           </Button>

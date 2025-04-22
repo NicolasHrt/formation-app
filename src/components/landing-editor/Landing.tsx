@@ -14,6 +14,7 @@ import {
   PricingContent,
   AuthorityContent,
   ProblemContent,
+  PrimaryColor,
 } from "./types";
 
 interface LandingProps {
@@ -24,6 +25,7 @@ interface LandingProps {
   pricingContent: PricingContent;
   authorityContent: AuthorityContent;
   problemContent: ProblemContent;
+  primaryColor: PrimaryColor;
 }
 
 export function Landing({
@@ -34,27 +36,27 @@ export function Landing({
   pricingContent,
   authorityContent,
   problemContent,
+  primaryColor,
 }: LandingProps) {
-  const primaryColor = "#D84B2F"; // Orange vif
   return (
-    <div className="overflow-y-scroll max-h-screen">
-      <Hero primaryColor={primaryColor} content={heroContent} />
-      <ProblemSection primaryColor={primaryColor} content={problemContent} />
+    <div className="min-h-screen">
+      <Hero content={heroContent} primaryColor={primaryColor} />
+      <ProblemSection content={problemContent} primaryColor={primaryColor} />
       <TransformationSection
-        primaryColor={primaryColor}
         content={transformationContent}
+        primaryColor={primaryColor}
       />
       <ProductSection primaryColor={primaryColor} />
       <AuthoritySection
-        primaryColor={primaryColor}
         content={authorityContent}
+        primaryColor={primaryColor}
       />
       <TestimonialsSection
-        primaryColor={primaryColor}
         content={testimonialsContent}
+        primaryColor={primaryColor}
       />
-      <PricingSection primaryColor={primaryColor} content={pricingContent} />
-      <FAQ primaryColor={primaryColor} content={faqContent} />
+      <PricingSection content={pricingContent} primaryColor={primaryColor} />
+      <FAQ content={faqContent} primaryColor={primaryColor} />
     </div>
   );
 }

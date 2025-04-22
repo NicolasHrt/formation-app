@@ -95,3 +95,38 @@ export interface ProblemContent {
   title: string;
   problems: Problem[];
 }
+
+export type PrimaryColor =
+  | "red"
+  | "orange"
+  | "amber"
+  | "yellow"
+  | "lime"
+  | "green"
+  | "emerald"
+  | "teal"
+  | "cyan"
+  | "sky"
+  | "blue"
+  | "indigo"
+  | "violet"
+  | "purple"
+  | "fuchsia"
+  | "pink"
+  | "rose"
+  | "slate"
+  | "gray"
+  | "zinc"
+  | "neutral"
+  | "stone";
+
+export interface LandingContent {
+  primaryColor: PrimaryColor;
+  heroContent: HeroContent;
+  transformationContent: TransformationContent;
+  testimonialsContent: TestimonialsContent;
+  faqContent: FAQContent;
+  pricingContent: PricingContent;
+  authorityContent: AuthorityContent;
+  problemContent: ProblemContent;
+}
