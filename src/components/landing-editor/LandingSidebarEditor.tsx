@@ -35,11 +35,14 @@ import {
   Capability,
   TestimonialsContent,
   Testimonial,
+  FAQContent,
+  FAQItem,
 } from "@/components/landing-editor/types";
 import {
   defaultHeroContent,
   defaultTransformationContent,
   defaultTestimonialsContent,
+  defaultFAQContent,
 } from "@/components/landing-editor/defaultContent";
 
 interface LandingSidebarEditorProps {
@@ -52,6 +55,8 @@ interface LandingSidebarEditorProps {
   testimonialsContent: TestimonialsContent;
   onTestimonialsContentChange: Dispatch<SetStateAction<TestimonialsContent>>;
   onFullscreenChange?: (isFullscreen: boolean) => void;
+  faqContent: FAQContent;
+  onFAQContentChange: (content: FAQContent) => void;
 }
 
 export function LandingSidebarEditor({
@@ -62,6 +67,8 @@ export function LandingSidebarEditor({
   testimonialsContent = defaultTestimonialsContent,
   onTestimonialsContentChange = () => {},
   onFullscreenChange,
+  faqContent = defaultFAQContent,
+  onFAQContentChange = () => {},
 }: LandingSidebarEditorProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -192,6 +199,54 @@ export function LandingSidebarEditor({
         newTestimonials[index],
       ];
       handleTestimonialsChange("testimonials", newTestimonials);
+    }
+  };
+
+  const handleFAQChange = (
+    field: keyof FAQContent,
+    value: string | FAQItem[]
+  ) => {
+    onFAQContentChange({
+      ...faqContent,
+      [field]: value,
+    });
+  };
+
+  const handleFAQItemChange = (
+    index: number,
+    field: keyof FAQItem,
+    value: string
+  ) => {
+    const newQuestions = [...faqContent.questions];
+    newQuestions[index] = {
+      ...newQuestions[index],
+      [field]: value,
+    };
+    handleFAQChange("questions", newQuestions);
+  };
+
+  const addFAQItem = () => {
+    const newItem: FAQItem = {
+      question: "",
+      answer: "",
+    };
+    handleFAQChange("questions", [...faqContent.questions, newItem]);
+  };
+
+  const removeFAQItem = (index: number) => {
+    const newQuestions = faqContent.questions.filter((_, i) => i !== index);
+    handleFAQChange("questions", newQuestions);
+  };
+
+  const moveFAQItem = (index: number, direction: "up" | "down") => {
+    const newQuestions = [...faqContent.questions];
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+    if (newIndex >= 0 && newIndex < newQuestions.length) {
+      [newQuestions[index], newQuestions[newIndex]] = [
+        newQuestions[newIndex],
+        newQuestions[index],
+      ];
+      handleFAQChange("questions", newQuestions);
     }
   };
 
@@ -603,12 +658,98 @@ export function LandingSidebarEditor({
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
             <div className="flex items-center gap-2">
               <HelpCircle className="w-4 h-4" />
-              Section FAQ
+              FAQ
             </div>
           </AccordionTrigger>
           <AccordionContent>
-            <div className="text-sm text-gray-500 p-2">
-              Édition des questions fréquentes à venir...
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="faqTitle">Titre</Label>
+                <Input
+                  id="faqTitle"
+                  value={faqContent.title}
+                  onChange={(e) => handleFAQChange("title", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="faqSubtitle">Sous-titre</Label>
+                <Input
+                  id="faqSubtitle"
+                  value={faqContent.subtitle}
+                  onChange={(e) => handleFAQChange("subtitle", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Questions</Label>
+                <div className="space-y-4">
+                  {faqContent.questions.map((item, index) => (
+                    <div
+                      key={index}
+                      className="border rounded-lg p-4 space-y-4"
+                    >
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium">Question {index + 1}</h4>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => moveFAQItem(index, "up")}
+                            disabled={index === 0}
+                          >
+                            <ArrowUp className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => moveFAQItem(index, "down")}
+                            disabled={index === faqContent.questions.length - 1}
+                          >
+                            <ArrowDown className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeFAQItem(index)}
+                            className="text-red-500"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Question</Label>
+                        <Input
+                          value={item.question}
+                          onChange={(e) =>
+                            handleFAQItemChange(
+                              index,
+                              "question",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Réponse</Label>
+                        <Textarea
+                          value={item.answer}
+                          onChange={(e) =>
+                            handleFAQItemChange(index, "answer", e.target.value)
+                          }
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={addFAQItem}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Ajouter une question
+                  </Button>
+                </div>
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>

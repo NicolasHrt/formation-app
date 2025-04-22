@@ -10,18 +10,21 @@ import {
   HeroContent,
   TransformationContent,
   TestimonialsContent,
+  FAQContent,
 } from "./types";
 
 interface LandingProps {
   heroContent: HeroContent;
   transformationContent: TransformationContent;
   testimonialsContent: TestimonialsContent;
+  faqContent: FAQContent;
 }
 
 export function Landing({
   heroContent,
   transformationContent,
   testimonialsContent,
+  faqContent,
 }: LandingProps) {
   const primaryColor = "#D84B2F"; // Orange vif
   return (
@@ -39,7 +42,7 @@ export function Landing({
         content={testimonialsContent}
       />
       <PricingSection primaryColor={primaryColor} />
-      <FAQ />
+      <FAQ primaryColor={primaryColor} content={faqContent} />
     </div>
   );
 }

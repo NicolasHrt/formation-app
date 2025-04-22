@@ -13,12 +13,14 @@ import {
   HeroContent,
   TransformationContent,
   TestimonialsContent,
+  FAQContent,
 } from "@/components/landing-editor/types";
 
 import {
   defaultHeroContent,
   defaultTransformationContent,
   defaultTestimonialsContent,
+  defaultFAQContent,
 } from "@/components/landing-editor/defaultContent";
 
 export default function LandingEditor({
@@ -39,15 +41,17 @@ export default function LandingEditor({
   const [testimonialsContent, setTestimonialsContent] =
     useState<TestimonialsContent>(defaultTestimonialsContent);
 
+  const [faqContent, setFAQContent] = useState<FAQContent>(defaultFAQContent);
+
   const [isSidebarFullscreen, setIsSidebarFullscreen] = useState(false);
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <div
         className={`${
           isSidebarFullscreen
             ? "fixed inset-0 z-50 bg-background"
-            : "w-1/4 p-4 overflow-y-scroll max-h-screen"
+            : "w-1/4 border-r p-4 overflow-y-scroll max-h-screen"
         }`}
       >
         <div
@@ -68,6 +72,8 @@ export default function LandingEditor({
             onTransformationContentChange={setTransformationContent}
             testimonialsContent={testimonialsContent}
             onTestimonialsContentChange={setTestimonialsContent}
+            faqContent={faqContent}
+            onFAQContentChange={setFAQContent}
             onFullscreenChange={setIsSidebarFullscreen}
           />
         </div>
@@ -77,6 +83,7 @@ export default function LandingEditor({
           heroContent={heroContent}
           transformationContent={transformationContent}
           testimonialsContent={testimonialsContent}
+          faqContent={faqContent}
         />
       </div>
     </div>

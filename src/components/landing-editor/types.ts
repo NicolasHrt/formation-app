@@ -34,3 +34,14 @@ export interface TestimonialsContent {
   subtitle: string;
   testimonials: Testimonial[];
 }
+
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export interface FAQContent {
+  title: string;
+  subtitle: string;
+  questions: FAQItem[];
+}

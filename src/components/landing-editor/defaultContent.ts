@@ -3,6 +3,7 @@ import {
   TransformationContent,
   Capability,
   TestimonialsContent,
+  FAQContent,
 } from "./types";
 
 export const defaultHeroContent: HeroContent = {
@@ -78,6 +79,28 @@ export const defaultTestimonialsContent: TestimonialsContent = {
       content:
         "Ce qui me plaît le plus, c'est la rapidité avec laquelle on peut mettre en place une page qui convertit. Plus besoin de passer des heures en configuration, je peux me concentrer sur mon contenu.",
       rating: 5,
+    },
+  ],
+};
+
+export const defaultFAQContent: FAQContent = {
+  title: "Questions fréquentes",
+  subtitle: "Tout ce que vous devez savoir sur notre formation",
+  questions: [
+    {
+      question: "Comment fonctionne l'accès à la formation ?",
+      answer:
+        "Une fois votre inscription validée, vous recevrez un email avec vos identifiants pour accéder à la plateforme. Vous pourrez commencer immédiatement votre formation à votre rythme.",
+    },
+    {
+      question: "Pendant combien de temps ai-je accès à la formation ?",
+      answer:
+        "Vous avez un accès à vie à la formation. Vous pouvez y revenir autant de fois que vous le souhaitez et suivre les mises à jour gratuitement.",
+    },
+    {
+      question: "Y a-t-il un support disponible ?",
+      answer:
+        "Oui, notre équipe est disponible pour répondre à vos questions via notre système de support dédié. Nous nous engageons à vous répondre dans les 24 heures.",
     },
   ],
 };
