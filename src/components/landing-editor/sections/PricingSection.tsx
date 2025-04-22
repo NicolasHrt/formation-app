@@ -47,9 +47,11 @@ export function PricingSection({
 
         <div className="max-w-2xl mx-auto">
           <div className="bg-[#2A2A2A] rounded-2xl p-8 md:p-12 relative">
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white px-6 py-2 rounded-full font-semibold shadow-lg">
-              {content.bestOffer}
-            </div>
+            {content.bestOffer && (
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white px-6 py-2 rounded-full font-semibold shadow-lg">
+                {content.bestOffer}
+              </div>
+            )}
 
             <div className="text-center mb-12">
               <div className="inline-flex items-baseline">
