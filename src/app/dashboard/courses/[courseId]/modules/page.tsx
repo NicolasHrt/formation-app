@@ -200,14 +200,14 @@ function ModuleCard({
           </div>
         </div>
 
-        <CardFooter className="flex justify-between items-center pt-4 pb-0 border-t border-gray-100 px-0">
+        <CardFooter className="flex justify-between items-center pt-4 pb-0 border-t border-border px-0">
           <div className="text-sm text-gray-500">
             Mis en ligne le {publishedAt}
           </div>
           <Link
             href={`/dashboard/courses/${module.courseId}/modules/${module.id}`}
           >
-            <Button variant="black">Gérer les vidéos</Button>
+            <Button variant="outline">Gérer les vidéos</Button>
           </Link>
         </CardFooter>
       </CardContent>

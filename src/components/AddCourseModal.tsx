@@ -103,7 +103,7 @@ export default function AddCourseModal() {
           <div className="space-y-2">
             <Label htmlFor="slug">URL de la landing page</Label>
             <div className="flex items-center ">
-              <div className="bg-muted px-3 py-2 rounded-l-md text-sm text-muted-foreground border">
+              <div className="bg-muted px-3 py-2 rounded-l-md text-sm text-muted-foreground border border-border">
                 formation.com/
               </div>
               <Input

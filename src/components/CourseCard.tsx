@@ -40,7 +40,7 @@ export function CourseCard({ course }: CourseCardProps) {
           {course.description}
         </p>
       </CardContent>
-      <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-6 border-t">
+      <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-6 border-t border-border">
         <div className="flex flex-col sm:flex-row w-full gap-3">
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <Link
@@ -56,7 +56,7 @@ export function CourseCard({ course }: CourseCardProps) {
               href={`/dashboard/courses/${course.id}`}
               className="w-full sm:w-auto"
             >
-              <Button variant="black" className="w-full sm:w-auto">
+              <Button variant="outline" className="w-full sm:w-auto">
                 <StickyNote className="mr-2 h-4 w-4" />
                 Landing page
               </Button>
