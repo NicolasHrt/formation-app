@@ -557,7 +557,7 @@ export function LandingSidebarEditor({
                     (problem, index) => (
                       <div
                         key={index}
-                        className="border rounded-lg p-4 space-y-4"
+                        className="border border-border rounded-lg p-4 space-y-4"
                       >
                         <div className="flex items-center justify-between">
                           <h4 className="font-medium">Problème {index + 1}</h4>
@@ -817,7 +817,7 @@ export function LandingSidebarEditor({
                     (achievement, index) => (
                       <div
                         key={index}
-                        className="border rounded-lg p-4 space-y-4"
+                        className="border border-border rounded-lg p-4 space-y-4"
                       >
                         <div className="flex items-center justify-between">
                           <h4 className="font-medium">
@@ -911,7 +911,7 @@ export function LandingSidebarEditor({
                     (testimonial, index) => (
                       <div
                         key={index}
-                        className="border rounded-lg p-4 space-y-4"
+                        className="border border-border rounded-lg p-4 space-y-4"
                       >
                         <div className="flex items-center justify-between">
                           <h4 className="font-medium">
@@ -1111,7 +1111,7 @@ export function LandingSidebarEditor({
                     (feature, index) => (
                       <div
                         key={index}
-                        className="border rounded-lg p-4 space-y-4"
+                        className="border border-border rounded-lg p-4 space-y-4"
                       >
                         <div className="flex items-center justify-between">
                           <h4 className="font-medium">
@@ -1205,7 +1205,7 @@ export function LandingSidebarEditor({
                   {landingContent.faqContent.questions.map((item, index) => (
                     <div
                       key={index}
-                      className="border rounded-lg p-4 space-y-4"
+                      className="border border-border rounded-lg p-4 space-y-4"
                     >
                       <div className="flex items-center justify-between">
                         <h4 className="font-medium">Question {index + 1}</h4>

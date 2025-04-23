@@ -58,22 +58,28 @@ export function AuthoritySection({
 
           <div className="space-y-8">
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                {content.title}
-              </h2>
-              <p
-                style={{ color: `var(--color-${primaryColor}-500)` }}
-                className="text-2xl font-light"
-              >
-                {content.subtitle}
-              </p>
+              {content.title && (
+                <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                  {content.title}
+                </h2>
+              )}
+              {content.subtitle && (
+                <p
+                  style={{ color: `var(--color-${primaryColor}-500)` }}
+                  className="text-2xl font-medium"
+                >
+                  {content.subtitle}
+                </p>
+              )}
             </div>
 
-            <div className="prose prose-lg prose-invert">
-              <p className="text-gray-300 leading-relaxed">
-                {content.description}
-              </p>
-            </div>
+            {content.description && (
+              <div className="prose prose-lg prose-invert">
+                <p className="text-gray-300 leading-relaxed">
+                  {content.description}
+                </p>
+              </div>
+            )}
 
             <div className="flex justify-center gap-8 pt-8">
               {content.achievements.map((achievement, index) => (
