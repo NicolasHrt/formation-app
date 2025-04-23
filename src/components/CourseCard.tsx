@@ -21,7 +21,7 @@ export function CourseCard({ course }: CourseCardProps) {
       <CardHeader className="relative">
         <div className="flex justify-between items-start">
           <div className="space-y-2">
-            <Badge variant="secondary" className="mb-2">
+            <Badge className="mb-2">
               <Calendar className="w-3 h-3 mr-1" />
               {new Date(course.createdAt).toLocaleDateString("fr-FR", {
                 day: "numeric",
@@ -29,14 +29,14 @@ export function CourseCard({ course }: CourseCardProps) {
                 year: "numeric",
               })}
             </Badge>
-            <CardTitle className="text-2xl font-bold line-clamp-1">
+            <CardTitle className="text-2xl font-bold line-clamp-1 text-foreground">
               {course.title}
             </CardTitle>
           </div>
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-gray-600 line-clamp-3 text-sm leading-relaxed">
+        <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">
           {course.description}
         </p>
       </CardContent>

@@ -66,12 +66,7 @@ export default function EditCourseModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-gray-500 hover:text-gray-700"
-          title="Modifier la formation"
-        >
+        <Button variant="ghost" size="icon" title="Modifier la formation">
           <Pencil className="h-4 w-4" />
         </Button>
       </DialogTrigger>

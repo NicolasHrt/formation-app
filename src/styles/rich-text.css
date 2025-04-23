@@ -1,7 +1,6 @@
 .rich-text-editor,
 .rich-text-content {
   min-height: 200px;
-  padding: 1rem;
   cursor: text;
   outline: none;
 }

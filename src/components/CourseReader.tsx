@@ -60,9 +60,11 @@ export default function CourseReader({ course }: CourseReaderProps) {
                   />
                 </div>
                 <div className="flex-1 overflow-auto p-4 md:p-6">
-                  <h2 className="text-2xl font-bold">{activeVideo.title}</h2>
+                  <h2 className="text-2xl font-bold text-foreground">
+                    {activeVideo.title}
+                  </h2>
                   <div
-                    className="rich-text-content"
+                    className="rich-text-content text-muted-foreground"
                     dangerouslySetInnerHTML={{
                       __html: activeVideo.description,
                     }}
@@ -82,7 +84,9 @@ export default function CourseReader({ course }: CourseReaderProps) {
           {sidebarOpen && (
             <div className="w-80 overflow-auto ml-4">
               <div className="sticky top-0 z-10 flex items-center justify-between p-4 ">
-                <h2 className="font-semibold text-2xl">{course.title}</h2>
+                <h2 className="font-semibold text-2xl text-foreground">
+                  {course.title}
+                </h2>
               </div>
 
               <Separator />
@@ -94,8 +98,8 @@ export default function CourseReader({ course }: CourseReaderProps) {
                       onClick={() => toggleSection(module.id)}
                       className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm font-medium hover:bg-accent hover:text-accent-foreground"
                     >
-                      <div className="flex flex-col">
-                        <span>
+                      <div className="flex flex-col ">
+                        <span className="text-foreground">
                           Section {moduleIndex + 1} : {module.title}
                         </span>
                         <span className="text-xs text-muted-foreground">
@@ -131,7 +135,7 @@ export default function CourseReader({ course }: CourseReaderProps) {
                               {videoIndex + 1}
                             </div>
                             <div className="flex flex-1 flex-col">
-                              <span className="line-clamp-2">
+                              <span className="line-clamp-2 text-foreground">
                                 {videoIndex + 1}. {video.title}
                               </span>
                               <div className="flex items-center gap-2 text-xs text-muted-foreground">

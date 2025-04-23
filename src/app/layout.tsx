@@ -5,6 +5,14 @@ import { authOptions } from "@/utils/authOptions";
 import Navbar from "@/components/Navbar";
 import { SessionProvider } from "@/components/SessionProvider";
 import { QueryProvider } from "@/providers/QueryProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
+import { Roboto } from "next/font/google";
+
+const roboto = Roboto({
+  weight: ["300", "400", "500", "700"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Formation App",
@@ -19,21 +27,23 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
 
   return (
-    <html lang="fr">
-      <head>
-        <link
-          href="http://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="fr" suppressHydrationWarning className={roboto.className}>
+      <head />
       <body>
-        <SessionProvider session={session}>
-          <QueryProvider>
-            <div className="min-h-screen bg-background">
-              <main className="">{children}</main>
-            </div>
-          </QueryProvider>
-        </SessionProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SessionProvider session={session}>
+            <QueryProvider>
+              <div className="min-h-screen bg-background">
+                <main className="">{children}</main>
+              </div>
+            </QueryProvider>
+          </SessionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

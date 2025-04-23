@@ -52,59 +52,6 @@ interface CourseWithModules extends Course {
   author: User;
 }
 
-function CourseSidebar({
-  courseId,
-  courseSlug,
-}: {
-  courseId: string;
-  courseSlug: string;
-}) {
-  return (
-    <Card className="w-64">
-      <CardContent className="p-4 space-y-2">
-        <Button variant="ghost" className="w-full justify-start" asChild>
-          <a href={`/dashboard/courses/${courseId}/modules`}>
-            <BookOpen className="mr-2 h-4 w-4" />
-            Modules
-          </a>
-        </Button>
-        <Button variant="ghost" className="w-full justify-start" asChild>
-          <a href={`/dashboard/courses/${courseId}/students`}>
-            <Users className="mr-2 h-4 w-4" />
-            Étudiants
-          </a>
-        </Button>
-        <Button variant="ghost" className="w-full justify-start" asChild>
-          <a href={`/dashboard/courses/${courseId}/emails`}>
-            <Mail className="mr-2 h-4 w-4" />
-            Emails
-          </a>
-        </Button>
-        <Button variant="ghost" className="w-full justify-start" asChild>
-          <a href={`/dashboard/courses/${courseId}/analytics`}>
-            <BarChart2 className="mr-2 h-4 w-4" />
-            Analytics
-          </a>
-        </Button>
-        <Button variant="ghost" className="w-full justify-start" asChild>
-          <a href={`/landing-editor/${courseSlug}`}>
-            <Layout className="mr-2 h-4 w-4" />
-            Landing page
-          </a>
-        </Button>
-        <div className="pt-2 border-t border-gray-100">
-          <Button variant="ghost" className="w-full justify-start" asChild>
-            <a href={`/courses/${courseSlug}`} target="_blank">
-              <Eye className="mr-2 h-4 w-4" />
-              Prévisualiser la formation
-            </a>
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
 function CourseStats({ course }: { course: CourseWithModules }) {
   // Données mockées pour l'exemple
   const salesData = [
@@ -278,7 +225,7 @@ export default function CoursePage({
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle>{course.title}</CardTitle>
-                <p className="text-gray-600 mt-1">{course.description}</p>
+                <p className=" mt-1">{course.description}</p>
               </div>
               <div className="flex gap-2">
                 <EditCourseModal course={course} onSuccess={fetchCourse} />
@@ -298,10 +245,8 @@ export default function CoursePage({
                       <DialogTitle>Supprimer la formation</DialogTitle>
                       <DialogDescription>
                         Êtes-vous sûr de vouloir supprimer la formation{" "}
-                        <span className="font-semibold text-gray-900">
-                          {course.title}
-                        </span>
-                        ? Cette action est irréversible et supprimera également
+                        <span className="font-semibold">{course.title}</span>?
+                        Cette action est irréversible et supprimera également
                         tous les modules et vidéos associés.
                       </DialogDescription>
                     </DialogHeader>

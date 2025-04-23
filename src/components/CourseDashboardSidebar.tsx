@@ -85,7 +85,7 @@ export function CourseDashboardSidebar({
             Emails
           </Link>
         </Button>
-        <div className="pt-2 border-t border-gray-100">
+        <div className="pt-2 border-t border-border">
           <Button variant="ghost" className="w-full justify-start" asChild>
             <a href={`/courses/${courseSlug}`} target="_blank">
               <Eye className="mr-2 h-4 w-4" />

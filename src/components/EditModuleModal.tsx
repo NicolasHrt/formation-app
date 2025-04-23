@@ -67,12 +67,7 @@ export default function EditModuleModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-          title="Modifier le module"
-        >
+        <Button variant="ghost" size="icon" title="Modifier le module">
           <Pencil className="h-5 w-5" />
         </Button>
       </DialogTrigger>
