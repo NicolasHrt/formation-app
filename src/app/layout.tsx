@@ -20,10 +20,16 @@ export default async function RootLayout({
 
   return (
     <html lang="fr">
+      <head>
+        <link
+          href="http://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>
         <SessionProvider session={session}>
           <QueryProvider>
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-background">
               <main className="">{children}</main>
             </div>
           </QueryProvider>
