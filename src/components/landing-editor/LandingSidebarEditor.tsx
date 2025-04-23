@@ -435,7 +435,7 @@ export function LandingSidebarEditor({
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold flex items-center gap-2">
+        <h2 className="text-lg font-semibold flex items-center gap-2 mt-4">
           <PencilRuler className="w-5 h-5" />
           Landing Editor
         </h2>
@@ -444,7 +444,7 @@ export function LandingSidebarEditor({
       <Accordion type="multiple" className="w-full">
         <AccordionItem value="primary-color">
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-foreground">
               <Palette className="w-4 h-4" />
               Couleur primaire
             </div>
@@ -477,7 +477,7 @@ export function LandingSidebarEditor({
 
         <AccordionItem value="hero">
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-foreground">
               <Layout className="w-4 h-4" />
               Hero
             </div>
@@ -535,7 +535,7 @@ export function LandingSidebarEditor({
 
         <AccordionItem value="problem">
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-foreground">
               <AlertTriangle className="w-4 h-4" />
               Problème à résoudre
             </div>
@@ -637,7 +637,7 @@ export function LandingSidebarEditor({
 
         <AccordionItem value="transformation">
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-foreground">
               <Sparkles className="w-4 h-4" />
               Promesse
             </div>
@@ -752,7 +752,7 @@ export function LandingSidebarEditor({
 
         <AccordionItem value="product">
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-foreground">
               <Package className="w-4 h-4" />
               Produit
             </div>
@@ -766,7 +766,7 @@ export function LandingSidebarEditor({
 
         <AccordionItem value="authority">
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-foreground">
               <User className="w-4 h-4" />
               Autorité
             </div>
@@ -877,7 +877,7 @@ export function LandingSidebarEditor({
 
         <AccordionItem value="testimonials">
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-foreground">
               <MessageSquare className="w-4 h-4" />
               Témoignages
             </div>
@@ -1033,7 +1033,7 @@ export function LandingSidebarEditor({
 
         <AccordionItem value="pricing">
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-foreground">
               <CreditCard className="w-4 h-4" />
               Prix
             </div>
@@ -1176,7 +1176,7 @@ export function LandingSidebarEditor({
 
         <AccordionItem value="faq">
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-foreground ">
               <HelpCircle className="w-4 h-4" />
               FAQ
             </div>
