@@ -60,13 +60,13 @@ export default function DashboardPage() {
         ) : (
           <Card className="w-full">
             <CardHeader className="text-center pb-2">
-              <BookOpen className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-              <CardTitle className="text-xl">
+              <BookOpen className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <CardTitle className="text-xl text-foreground">
                 Aucune formation pour le moment
               </CardTitle>
             </CardHeader>
             <CardContent className="text-center space-y-4">
-              <p className="text-gray-500">
+              <p className="text-muted-foreground">
                 Commencez par créer votre première formation.
               </p>
               <div className="pt-4">

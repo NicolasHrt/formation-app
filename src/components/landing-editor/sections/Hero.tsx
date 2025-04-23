@@ -38,14 +38,16 @@ export function Hero({
   };
 
   return (
-    <div className="relative min-h-screen bg-[#1C1C1C] text-white py-20 px-4">
+    <div className="relative min-h-screen text-foreground py-20 px-4">
       <div className="max-w-6xl mx-auto">
         {/* En-tête */}
         <div className="text-center mb-8">
-          <p className="text-2xl font-light mb-6">{content.headerTitle}</p>
+          <p className="text-2xl font-light mb-6 text-foreground">
+            {content.headerTitle}
+          </p>
 
           <h1
-            className="text-5xl md:text-6xl font-bold mb-6"
+            className="text-5xl md:text-6xl font-bold mb-6 text-foreground"
             dangerouslySetInnerHTML={{
               __html: content.title
                 .replace(
@@ -56,7 +58,7 @@ export function Hero({
             }}
           ></h1>
 
-          <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto">
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto">
             {content.subtitle}
           </p>
         </div>
@@ -121,7 +123,7 @@ export function Hero({
         <div className="text-center mt-12">
           <Button
             size="lg"
-            className={`text-white px-8 py-6 text-lg rounded-lg bg-${primaryColor}-500 hover:bg-${primaryColor}-600`}
+            className={` px-8 py-6 text-lg rounded-lg bg-${primaryColor}-500 hover:bg-${primaryColor}-600`}
           >
             {content.cta}
           </Button>

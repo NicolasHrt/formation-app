@@ -4,9 +4,6 @@ import {
   ArrowDown,
   Trash2,
   Plus,
-  CheckCircle,
-  Maximize2,
-  Minimize2,
   Layout,
   AlertTriangle,
   Sparkles,
@@ -14,7 +11,6 @@ import {
   User,
   MessageSquare,
   CreditCard,
-  ArrowRight,
   HelpCircle,
   Palette,
 } from "lucide-react";
@@ -22,7 +18,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Dispatch, SetStateAction, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -46,16 +41,7 @@ import {
   PrimaryColor,
   LandingContent,
 } from "./types";
-import {
-  defaultHeroContent,
-  defaultTransformationContent,
-  defaultTestimonialsContent,
-  defaultFAQContent,
-  defaultPricingContent,
-  defaultAuthorityContent,
-  defaultProblemContent,
-  defaultLandingContent,
-} from "./defaultContent";
+import { defaultLandingContent } from "./defaultContent";
 
 interface LandingSidebarEditorProps {
   landingContent: LandingContent;

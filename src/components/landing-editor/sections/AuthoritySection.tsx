@@ -44,15 +44,15 @@ export function AuthoritySection({
   primaryColor = "#D84B2F",
 }: AuthoritySectionProps) {
   return (
-    <div className="bg-[#1C1C1C] text-white py-20">
+    <div className="  py-20">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-16 items-center">
-          <div className="relative">
+          <div className="relative rounded-2xl overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-tr from-[#1C1C1C] via-transparent to-transparent z-10" />
             <img
               src={content.imageUrl}
               alt="Portrait"
-              className="w-full h-[600px] object-cover rounded-2xl"
+              className="w-full h-[600px] object-cover "
             />
           </div>
 
@@ -74,11 +74,9 @@ export function AuthoritySection({
             </div>
 
             {content.description && (
-              <div className="prose prose-lg prose-invert">
-                <p className="text-gray-300 leading-relaxed">
-                  {content.description}
-                </p>
-              </div>
+              <p className="text-muted-foreground leading-relaxed">
+                {content.description}
+              </p>
             )}
 
             <div className="flex justify-center gap-8 pt-8">
@@ -90,7 +88,9 @@ export function AuthoritySection({
                   >
                     {achievement.value}
                   </p>
-                  <p className="text-sm text-gray-400">{achievement.label}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {achievement.label}
+                  </p>
                 </div>
               ))}
             </div>

@@ -37,22 +37,22 @@ export function PricingSection({
   primaryColor = "#D84B2F",
 }: PricingSectionProps) {
   return (
-    <div className="bg-[#1C1C1C] text-white py-20">
+    <div className="py-20">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             {content.title}
           </h2>
-          <p className="text-xl text-gray-300">{content.subtitle}</p>
+          <p className="text-xl text-muted-foreground">{content.subtitle}</p>
         </div>
 
         <div className="max-w-2xl mx-auto">
-          <div className="bg-[#2A2A2A] rounded-2xl p-8 md:p-12 relative">
-            {content.bestOffer && (
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white px-6 py-2 rounded-full font-semibold shadow-lg">
+          <div className="rounded-2xl p-8 md:p-12 relative border border-black/10  dark:border-white/5">
+            {/* {content.bestOffer && (
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-500 to-yellow-600  px-6 py-2 rounded-full font-semibold shadow-lg">
                 {content.bestOffer}
               </div>
-            )}
+            )} */}
 
             <div className="text-center mb-12">
               <div className="inline-flex items-baseline">
@@ -62,11 +62,13 @@ export function PricingSection({
                 >
                   {content.price}
                 </span>
-                <span className="text-2xl text-gray-400 ml-2">
+                <span className="text-2xl text-muted-foreground ml-2">
                   {content.vat}
                 </span>
               </div>
-              <p className="text-gray-400 mt-4">{content.oneTimeAccess}</p>
+              <p className="text-muted-foreground mt-4">
+                {content.oneTimeAccess}
+              </p>
             </div>
 
             <div className="space-y-6 mb-12">
@@ -76,7 +78,7 @@ export function PricingSection({
                     style={{ color: `var(--color-${primaryColor}-500)` }}
                     className="w-6 h-6 mt-1 flex-shrink-0"
                   />
-                  <p className="text-lg text-gray-200">{feature}</p>
+                  <p className="text-lg text-muted-foreground">{feature}</p>
                 </div>
               ))}
             </div>
@@ -84,7 +86,7 @@ export function PricingSection({
             <div className="text-center">
               <Button
                 size="lg"
-                className={`text-white px-8 py-6 text-lg rounded-lg bg-${primaryColor}-500 hover:bg-${primaryColor}-600`}
+                className={` px-8 py-6 text-lg rounded-lg bg-${primaryColor}-500 hover:bg-${primaryColor}-600`}
               >
                 {content.ctaText}
               </Button>

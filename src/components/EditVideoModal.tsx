@@ -68,12 +68,7 @@ export default function EditVideoModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-          title="Modifier la vidéo"
-        >
+        <Button variant="ghost" size="icon" title="Modifier la vidéo">
           <Pencil className="h-5 w-5" />
         </Button>
       </DialogTrigger>

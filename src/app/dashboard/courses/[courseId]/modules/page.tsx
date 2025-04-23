@@ -455,7 +455,7 @@ export default function ModulesPage({
             <Card>
               <CardContent className="p-8 text-center">
                 <div className="max-w-md mx-auto space-y-4">
-                  <div className="text-gray-400">
+                  <div className="text-muted-foreground">
                     <svg
                       className="mx-auto h-12 w-12"
                       fill="none"
@@ -471,10 +471,10 @@ export default function ModulesPage({
                       />
                     </svg>
                   </div>
-                  <CardTitle className="text-lg">
+                  <CardTitle className="text-lg text-foreground">
                     Aucun module dans cette formation
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-muted-foreground">
                     Commencez par ajouter votre premier module à cette
                     formation.
                   </CardDescription>

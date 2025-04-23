@@ -12,7 +12,7 @@ export function ProblemSection({
   primaryColor = "#D84B2F",
 }: ProblemSectionProps) {
   return (
-    <div className="bg-[#1C1C1C] text-white py-20">
+    <div className="  py-20">
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-5xl md:text-6xl font-bold text-center mb-24">
           {content.title.split("<br/>").map((part, i) => (
@@ -30,7 +30,7 @@ export function ProblemSection({
                 <div>
                   <h2 className="text-4xl font-bold mb-4">{problem.title}</h2>
                   <div
-                    className="rich-text-content max-w-none"
+                    className="rich-text-content text-muted-foreground max-w-none"
                     dangerouslySetInnerHTML={{ __html: problem.description }}
                   />
                 </div>

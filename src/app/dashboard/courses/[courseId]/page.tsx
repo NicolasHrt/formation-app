@@ -46,6 +46,8 @@ import {
 } from "recharts";
 import Navbar from "@/components/Navbar";
 import { CourseDashboardSidebar } from "@/components/CourseDashboardSidebar";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 interface CourseWithModules extends Course {
   modules: Module[];
@@ -245,31 +247,31 @@ export default function CoursePage({
                       <DialogTitle>Supprimer la formation</DialogTitle>
                       <DialogDescription>
                         Êtes-vous sûr de vouloir supprimer la formation{" "}
-                        <span className="font-semibold">{course.title}</span>?
-                        Cette action est irréversible et supprimera également
+                        <span className="font-semibold text-foreground">
+                          {course.title}
+                        </span>
+                        ? Cette action est irréversible et supprimera également
                         tous les modules et vidéos associés.
                       </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 mt-4">
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">
+                        <Label>
                           Tapez le nom de la formation pour confirmer
-                        </label>
-                        <input
+                        </Label>
+                        <Input
                           type="text"
-                          className="w-full px-3 py-2 border rounded-md"
                           value={confirmationTitle}
                           onChange={(e) => setConfirmationTitle(e.target.value)}
                           placeholder="Nom de la formation"
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">
+                        <Label>
                           Tapez "supprimer définitivement" pour confirmer
-                        </label>
-                        <input
+                        </Label>
+                        <Input
                           type="text"
-                          className="w-full px-3 py-2 border rounded-md"
                           value={confirmationText}
                           onChange={(e) => setConfirmationText(e.target.value)}
                           placeholder="supprimer définitivement"

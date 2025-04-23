@@ -105,7 +105,7 @@ function VideoCard({
             size="icon"
             onClick={onMoveUp}
             disabled={isFirst}
-            className="text-gray-500 hover:text-gray-700 disabled:opacity-50"
+            className="disabled:opacity-50"
           >
             <ChevronUp className="h-4 w-4" />
           </Button>
@@ -114,7 +114,7 @@ function VideoCard({
             size="icon"
             onClick={onMoveDown}
             disabled={isLast}
-            className="text-gray-500 hover:text-gray-700 disabled:opacity-50"
+            className="disabled:opacity-50"
           >
             <ChevronDown className="h-4 w-4" />
           </Button>
@@ -495,7 +495,7 @@ export default function VideosPage({
           <Card>
             <CardContent className="p-8 text-center">
               <div className="max-w-md mx-auto space-y-4">
-                <div className="text-gray-400">
+                <div className="text-muted-foreground">
                   <svg
                     className="mx-auto h-12 w-12"
                     fill="none"
@@ -511,10 +511,10 @@ export default function VideosPage({
                     />
                   </svg>
                 </div>
-                <CardTitle className="text-lg">
+                <CardTitle className="text-lg text-foreground">
                   Aucune vidéo dans ce module
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-muted-foreground">
                   Commencez par ajouter votre première vidéo à ce module.
                 </CardDescription>
                 <div className="mt-6">

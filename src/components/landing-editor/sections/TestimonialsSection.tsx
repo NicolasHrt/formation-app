@@ -13,20 +13,20 @@ export function TestimonialsSection({
   primaryColor = "#D84B2F",
 }: TestimonialsSectionProps) {
   return (
-    <div className="bg-[#1C1C1C] text-white py-20">
+    <div className="  py-20">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             {content.title}
           </h2>
-          <p className="text-xl text-gray-300">{content.subtitle}</p>
+          <p className="text-xl text-muted-foreground">{content.subtitle}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {content.testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="bg-[#2A2A2A] p-8 rounded-lg hover:bg-[#333333] transition-colors"
+              className="border border-black/10  dark:border-white/5 p-8 rounded-xl"
             >
               <div className="flex gap-1 mb-6">
                 {[...Array(testimonial.rating)].map((_, i) => (
@@ -40,7 +40,7 @@ export function TestimonialsSection({
               </div>
 
               <blockquote className="mb-8">
-                <p className="text-lg text-gray-300 italic">
+                <p className="text-lg text-muted-foreground italic">
                   "{testimonial.content}"
                 </p>
               </blockquote>

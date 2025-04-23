@@ -6,9 +6,9 @@ import Navbar from "@/components/Navbar";
 import { SessionProvider } from "@/components/SessionProvider";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
-import { Roboto } from "next/font/google";
+import { Poppins } from "next/font/google";
 
-const roboto = Roboto({
+const poppins = Poppins({
   weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
   display: "swap",
@@ -27,7 +27,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
 
   return (
-    <html lang="fr" suppressHydrationWarning className={roboto.className}>
+    <html lang="fr" suppressHydrationWarning className={poppins.className}>
       <head />
       <body>
         <ThemeProvider
@@ -38,7 +38,7 @@ export default async function RootLayout({
         >
           <SessionProvider session={session}>
             <QueryProvider>
-              <div className="min-h-screen bg-background">
+              <div className="min-h-screen bg-background text-foreground">
                 <main className="">{children}</main>
               </div>
             </QueryProvider>

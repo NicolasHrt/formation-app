@@ -40,7 +40,9 @@ export default function CourseReader({ course }: CourseReaderProps) {
     <div className="container mx-auto px-4 mt-8">
       {course.modules.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-[60vh] text-center">
-          <h2 className="text-2xl font-bold mb-4">Formation vide</h2>
+          <h2 className="text-2xl font-bold mb-4 text-foreground">
+            Formation vide
+          </h2>
           <p className="text-muted-foreground max-w-md">
             Cette formation ne contient pas encore de modules ou de vidéos.
             Revenez plus tard pour découvrir son contenu.
