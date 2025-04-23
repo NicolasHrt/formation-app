@@ -226,7 +226,7 @@ export default function RichTextEditor({
           </div>
         </div>
         <div
-          className={`relative ${disabled ? "pointer-events-none" : ""}`}
+          className={`relative p-4 ${disabled ? "pointer-events-none" : ""}`}
           tabIndex={disabled ? -1 : 0}
         >
           <EditorContent
