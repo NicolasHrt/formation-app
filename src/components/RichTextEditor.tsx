@@ -97,7 +97,7 @@ export default function RichTextEditor({
       <div className="border border-border rounded-lg">
         <div
           className={`border-b p-2 flex flex-wrap gap-2 border-border ${
-            disabled ? "bg-gray-50" : ""
+            disabled ? "opacity-50" : ""
           }`}
         >
           <div className="flex gap-2">

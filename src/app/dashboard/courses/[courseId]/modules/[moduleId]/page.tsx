@@ -172,11 +172,11 @@ function VideoCard({
       <CardContent className="pt-6">
         <div className="flex items-center gap-3 mb-3">
           <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full flex items-center gap-2">
-            <span className="text-primary/70">Vidéo</span>
+            <span>Vidéo</span>
             <span>{video.order + 1}</span>
           </span>
-          <span className="text-sm text-gray-500">•</span>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-muted-foreground">•</span>
+          <span className="text-sm text-muted-foreground">
             {video.duration ? Math.round(video.duration / 60) : 0} min
           </span>
         </div>
@@ -185,8 +185,8 @@ function VideoCard({
           {video.title}
         </CardTitle>
 
-        <CardFooter className="flex justify-between items-center pt-4 pb-0 border-t border-gray-100 px-0">
-          <div className="text-sm text-gray-500">
+        <CardFooter className="flex justify-between items-center pt-4 pb-0 border-t border-border px-0">
+          <div className="text-sm text-muted-foreground">
             Mis en ligne le{" "}
             {new Date(video.createdAt).toLocaleDateString("fr-FR", {
               day: "numeric",

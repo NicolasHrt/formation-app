@@ -36,6 +36,11 @@ export default function AddVideoModal({
   const [duration, setDuration] = useState<number>(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const truncateFileName = (fileName: string, maxLength: number = 20) => {
+    if (fileName.length <= maxLength) return fileName;
+    return fileName.substring(0, maxLength) + "...";
+  };
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -162,7 +167,9 @@ export default function AddVideoModal({
                 disabled={loading}
               >
                 <Upload className="mr-2 h-4 w-4" />
-                {selectedFile ? selectedFile.name : "Sélectionner une vidéo"}
+                {selectedFile
+                  ? truncateFileName(selectedFile.name)
+                  : "Sélectionner une vidéo"}
               </Button>
             </div>
           </div>
