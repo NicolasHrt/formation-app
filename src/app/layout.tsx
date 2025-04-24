@@ -38,7 +38,7 @@ export default async function RootLayout({
         >
           <SessionProvider session={session}>
             <QueryProvider>
-              <div className="min-h-screen bg-background text-foreground">
+              <div className="text-foreground">
                 <main className="">{children}</main>
               </div>
             </QueryProvider>
