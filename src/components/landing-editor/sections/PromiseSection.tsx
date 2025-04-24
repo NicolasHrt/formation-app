@@ -1,15 +1,15 @@
 import { CheckCircle } from "lucide-react";
-import { TransformationContent } from "../types";
+import { PromiseContent } from "../types";
 
-interface TransformationSectionProps {
-  content: TransformationContent;
+interface PromiseSectionProps {
+  content: PromiseContent;
   primaryColor?: string;
 }
 
-export function TransformationSection({
+export function PromiseSection({
   content,
   primaryColor = "#D84B2F",
-}: TransformationSectionProps) {
+}: PromiseSectionProps) {
   return (
     <div className="py-20">
       <div className="max-w-4xl mx-auto px-4">
@@ -20,9 +20,9 @@ export function TransformationSection({
           <p className="text-xl text-muted-foreground">{content.subtitle}</p>
         </div>
         <div className="rounded-3xl p-10 md:p-16 mb-12 border border-black/10  dark:border-white/5 ">
-          <p className="text-3xl font-bold text-center leading-relaxed">
+          <h3 className="text-3xl font-bold text-center leading-relaxed ">
             {content.mainPromise}
-          </p>
+          </h3>
           <div
             className={`w-24 h-1 mx-auto mt-8 rounded-full bg-${primaryColor}-500 opacity-50`}
           ></div>

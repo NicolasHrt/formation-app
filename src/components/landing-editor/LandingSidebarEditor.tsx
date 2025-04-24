@@ -27,7 +27,7 @@ import {
 import RichTextEditor from "@/components/RichTextEditor";
 import {
   HeroContent,
-  TransformationContent,
+  PromiseContent,
   Capability,
   TestimonialsContent,
   Testimonial,
@@ -69,49 +69,45 @@ export function LandingSidebarEditor({
     });
   };
 
-  const handleTransformationChange = (
-    field: keyof TransformationContent,
+  const handlePromiseChange = (
+    field: keyof PromiseContent,
     value: string | Capability[]
   ) => {
     onLandingContentChange({
       ...landingContent,
-      transformationContent: {
-        ...landingContent.transformationContent,
+      promiseContent: {
+        ...landingContent.promiseContent,
         [field]: value,
       },
     });
   };
 
   const handleCapabilityChange = (index: number, value: string) => {
-    const newCapabilities = [
-      ...landingContent.transformationContent.capabilities,
-    ];
+    const newCapabilities = [...landingContent.promiseContent.capabilities];
     newCapabilities[index] = { ...newCapabilities[index], text: value };
-    handleTransformationChange("capabilities", newCapabilities);
+    handlePromiseChange("capabilities", newCapabilities);
   };
 
   const addCapability = () => {
     const newCapability: Capability = {
-      order: landingContent.transformationContent.capabilities.length,
+      order: landingContent.promiseContent.capabilities.length,
       text: "",
     };
-    handleTransformationChange("capabilities", [
-      ...landingContent.transformationContent.capabilities,
+    handlePromiseChange("capabilities", [
+      ...landingContent.promiseContent.capabilities,
       newCapability,
     ]);
   };
 
   const removeCapability = (index: number) => {
-    const newCapabilities = landingContent.transformationContent.capabilities
+    const newCapabilities = landingContent.promiseContent.capabilities
       .filter((_, i) => i !== index)
       .map((cap, i) => ({ ...cap, order: i }));
-    handleTransformationChange("capabilities", newCapabilities);
+    handlePromiseChange("capabilities", newCapabilities);
   };
 
   const moveCapability = (index: number, direction: "up" | "down") => {
-    const newCapabilities = [
-      ...landingContent.transformationContent.capabilities,
-    ];
+    const newCapabilities = [...landingContent.promiseContent.capabilities];
     const newIndex = direction === "up" ? index - 1 : index + 1;
 
     if (newIndex >= 0 && newIndex < newCapabilities.length) {
@@ -123,7 +119,7 @@ export function LandingSidebarEditor({
       newCapabilities.forEach((cap, i) => {
         cap.order = i;
       });
-      handleTransformationChange("capabilities", newCapabilities);
+      handlePromiseChange("capabilities", newCapabilities);
     }
   };
 
@@ -633,20 +629,18 @@ export function LandingSidebarEditor({
               <div className="space-y-2">
                 <Label htmlFor="transformationTitle">Titre</Label>
                 <Input
-                  id="transformationTitle"
-                  value={landingContent.transformationContent.title}
-                  onChange={(e) =>
-                    handleTransformationChange("title", e.target.value)
-                  }
+                  id="promiseTitle"
+                  value={landingContent.promiseContent.title}
+                  onChange={(e) => handlePromiseChange("title", e.target.value)}
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="transformationSubtitle">Sous-titre</Label>
                 <Input
-                  id="transformationSubtitle"
-                  value={landingContent.transformationContent.subtitle}
+                  id="promiseSubtitle"
+                  value={landingContent.promiseContent.subtitle}
                   onChange={(e) =>
-                    handleTransformationChange("subtitle", e.target.value)
+                    handlePromiseChange("subtitle", e.target.value)
                   }
                 />
               </div>
@@ -654,9 +648,9 @@ export function LandingSidebarEditor({
                 <Label htmlFor="mainPromise">Promesse principale</Label>
                 <Textarea
                   id="mainPromise"
-                  value={landingContent.transformationContent.mainPromise}
+                  value={landingContent.promiseContent.mainPromise}
                   onChange={(e) =>
-                    handleTransformationChange("mainPromise", e.target.value)
+                    handlePromiseChange("mainPromise", e.target.value)
                   }
                 />
               </div>
@@ -664,19 +658,16 @@ export function LandingSidebarEditor({
                 <Label htmlFor="capabilitiesTitle">Titre des capacités</Label>
                 <Input
                   id="capabilitiesTitle"
-                  value={landingContent.transformationContent.capabilitiesTitle}
+                  value={landingContent.promiseContent.capabilitiesTitle}
                   onChange={(e) =>
-                    handleTransformationChange(
-                      "capabilitiesTitle",
-                      e.target.value
-                    )
+                    handlePromiseChange("capabilitiesTitle", e.target.value)
                   }
                 />
               </div>
               <div className="space-y-2">
                 <Label>Capacités</Label>
                 <div className="space-y-2">
-                  {landingContent.transformationContent.capabilities
+                  {landingContent.promiseContent.capabilities
                     .sort((a, b) => a.order - b.order)
                     .map((capability, index) => (
                       <div
@@ -704,7 +695,7 @@ export function LandingSidebarEditor({
                             onClick={() => moveCapability(index, "down")}
                             disabled={
                               index ===
-                              landingContent.transformationContent.capabilities
+                              landingContent.promiseContent.capabilities
                                 .length -
                                 1
                             }

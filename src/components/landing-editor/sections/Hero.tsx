@@ -42,9 +42,7 @@ export function Hero({
       <div className="max-w-6xl mx-auto">
         {/* En-tête */}
         <div className="text-center mb-8">
-          <p className="text-2xl font-light mb-6 text-foreground">
-            {content.headerTitle}
-          </p>
+          <h2 className="text-2xl font-light mb-6">{content.headerTitle}</h2>
 
           <h1
             className="text-5xl md:text-6xl font-bold mb-6 text-foreground"

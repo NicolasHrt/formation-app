@@ -3,12 +3,12 @@ import { FAQ } from "./sections/FAQ";
 import { ProblemSection } from "./sections/ProblemSection";
 import { TestimonialsSection } from "./sections/TestimonialsSection";
 import { AuthoritySection } from "./sections/AuthoritySection";
-import { TransformationSection } from "./sections/TransformationSection";
+import { PromiseSection } from "./sections/PromiseSection";
 import { ProductSection } from "./sections/ProductSection";
 import { PricingSection } from "./sections/PricingSection";
 import {
   HeroContent,
-  TransformationContent,
+  PromiseContent,
   TestimonialsContent,
   FAQContent,
   PricingContent,
@@ -19,7 +19,7 @@ import {
 
 interface LandingProps {
   heroContent: HeroContent;
-  transformationContent: TransformationContent;
+  promiseContent: PromiseContent;
   testimonialsContent: TestimonialsContent;
   faqContent: FAQContent;
   pricingContent: PricingContent;
@@ -30,7 +30,7 @@ interface LandingProps {
 
 export function Landing({
   heroContent,
-  transformationContent,
+  promiseContent,
   testimonialsContent,
   faqContent,
   pricingContent,
@@ -42,10 +42,7 @@ export function Landing({
     <div className="min-h-screen bg-background text-foreground">
       <Hero content={heroContent} primaryColor={primaryColor} />
       <ProblemSection content={problemContent} primaryColor={primaryColor} />
-      <TransformationSection
-        content={transformationContent}
-        primaryColor={primaryColor}
-      />
+      <PromiseSection content={promiseContent} primaryColor={primaryColor} />
       <ProductSection primaryColor={primaryColor} />
       <AuthoritySection
         content={authorityContent}

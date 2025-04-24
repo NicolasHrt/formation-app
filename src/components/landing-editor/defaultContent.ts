@@ -1,6 +1,6 @@
 import {
   HeroContent,
-  TransformationContent,
+  PromiseContent,
   TestimonialsContent,
   FAQContent,
   PricingContent,
@@ -20,7 +20,7 @@ export const defaultHeroContent: HeroContent = {
     "https://formation-app.s3.us-east-1.amazonaws.com/videos/cm9r95ytw000a4uajwyv3bwhq/1745250845112-ey6wzbilvp.mp4",
 };
 
-export const defaultTransformationContent: TransformationContent = {
+export const defaultPromiseContent: PromiseContent = {
   title: "Transformez votre potentiel",
   subtitle: "Une formation qui change la donne",
   mainPromise:
@@ -195,7 +195,7 @@ export const defaultProblemContent: ProblemContent = {
 export const defaultLandingContent: LandingContent = {
   primaryColor: "orange",
   heroContent: defaultHeroContent,
-  transformationContent: defaultTransformationContent,
+  promiseContent: defaultPromiseContent,
   testimonialsContent: defaultTestimonialsContent,
   faqContent: defaultFAQContent,
   pricingContent: defaultPricingContent,

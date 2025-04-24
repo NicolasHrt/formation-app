@@ -14,14 +14,14 @@ export function ProblemSection({
   return (
     <div className="  py-20">
       <div className="max-w-6xl mx-auto px-4">
-        <h1 className="text-5xl md:text-6xl font-bold text-center mb-24">
+        <h2 className="text-5xl md:text-6xl font-bold text-center mb-24">
           {content.title.split("<br/>").map((part, i) => (
             <span key={i}>
               {part}
               {i < content.title.split("<br/>").length - 1 && <br />}
             </span>
           ))}
-        </h1>
+        </h2>
 
         <div className="space-y-32 max-w-4xl mx-auto">
           {content.problems.map((problem, index) => (

@@ -1,35 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+
 import { LandingSidebarEditor } from "@/components/landing-editor/LandingSidebarEditor";
 import { Landing } from "@/components/landing-editor/Landing";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import { use } from "react";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import {
-  HeroContent,
-  TransformationContent,
-  TestimonialsContent,
-  FAQContent,
-  PricingContent,
-  AuthorityContent,
-  ProblemContent,
-  LandingContent,
-} from "@/components/landing-editor/types";
-
-import {
-  defaultHeroContent,
-  defaultTransformationContent,
-  defaultTestimonialsContent,
-  defaultFAQContent,
-  defaultPricingContent,
-  defaultAuthorityContent,
-  defaultProblemContent,
-  defaultLandingContent,
-} from "@/components/landing-editor/defaultContent";
+import { LandingContent } from "@/components/landing-editor/types";
+import { defaultLandingContent } from "@/components/landing-editor/defaultContent";
 
 export default function LandingEditor({
   params,
@@ -53,7 +29,7 @@ export default function LandingEditor({
       <div className="flex-1 overflow-y-auto">
         <Landing
           heroContent={landingContent.heroContent}
-          transformationContent={landingContent.transformationContent}
+          promiseContent={landingContent.promiseContent}
           testimonialsContent={landingContent.testimonialsContent}
           faqContent={landingContent.faqContent}
           pricingContent={landingContent.pricingContent}

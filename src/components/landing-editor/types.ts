@@ -11,7 +11,7 @@ export interface Capability {
   text: string;
 }
 
-export interface TransformationContent {
+export interface PromiseContent {
   title: string;
   subtitle: string;
   mainPromise: string;
@@ -123,7 +123,7 @@ export type PrimaryColor =
 export interface LandingContent {
   primaryColor: PrimaryColor;
   heroContent: HeroContent;
-  transformationContent: TransformationContent;
+  promiseContent: PromiseContent;
   testimonialsContent: TestimonialsContent;
   faqContent: FAQContent;
   pricingContent: PricingContent;

@@ -17,9 +17,9 @@ export function FAQ({ content = defaultFAQContent }: FAQProps) {
     <div className="  py-20">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <h3 className="text-4xl md:text-5xl font-bold mb-6">
             {content.title}
-          </h2>
+          </h3>
           <p className="text-xl text-muted-foreground">{content.subtitle}</p>
         </div>
 
