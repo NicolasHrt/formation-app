@@ -31,12 +31,7 @@ export function ProductSection({
             >
               <div className="w-full md:w-1/2">
                 <div className="rounded-xl p-8">
-                  <h3
-                    className="text-2xl font-bold mb-4"
-                    style={{ color: `var(--color-${primaryColor}-500)` }}
-                  >
-                    {module.title}
-                  </h3>
+                  <h3 className="text-2xl font-bold mb-4">{module.title}</h3>
                   <p className="text-gray-300 text-lg">{module.description}</p>
                 </div>
               </div>

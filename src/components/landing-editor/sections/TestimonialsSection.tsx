@@ -1,4 +1,3 @@
-import { Star } from "lucide-react";
 import { Icon } from "@/components/ui/icon";
 import { defaultTestimonialsContent } from "../defaultContent";
 import { TestimonialsContent } from "../types";

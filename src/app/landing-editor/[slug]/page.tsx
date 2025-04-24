@@ -7,11 +7,13 @@ import { Landing } from "@/components/landing-editor/Landing";
 import { LandingContent } from "@/components/landing-editor/types";
 import { defaultLandingContent } from "@/components/landing-editor/defaultContent";
 
-export default function LandingEditor({
+export default async function LandingEditor({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
+
   const [landingContent, setLandingContent] = useState<LandingContent>(
     defaultLandingContent
   );

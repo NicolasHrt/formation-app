@@ -677,7 +677,7 @@ export function LandingSidebarEditor({
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="transformation">
+        <AccordionItem value="promise">
           <AccordionTrigger className="flex items-center gap-2 [&>svg]:!rotate-0">
             <div className="flex items-center gap-2 text-foreground">
               <Sparkles className="w-4 h-4" />
@@ -687,7 +687,7 @@ export function LandingSidebarEditor({
           <AccordionContent>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="transformationTitle">Titre</Label>
+                <Label htmlFor="promiseTitle">Titre</Label>
                 <Input
                   id="promiseTitle"
                   value={landingContent.promiseContent.title}
@@ -695,7 +695,7 @@ export function LandingSidebarEditor({
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="transformationSubtitle">Sous-titre</Label>
+                <Label htmlFor="promiseSubtitle">Sous-titre</Label>
                 <Input
                   id="promiseSubtitle"
                   value={landingContent.promiseContent.subtitle}

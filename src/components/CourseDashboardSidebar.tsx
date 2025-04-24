@@ -79,17 +79,12 @@ export function CourseDashboardSidebar({
           }
           className="w-full justify-start"
           asChild
-        >
-          <Link href={`/dashboard/courses/${courseId}/emails`}>
-            <Mail className="mr-2 h-4 w-4" />
-            Emails
-          </Link>
-        </Button>
+        ></Button>
         <div className="pt-2 border-t border-border">
           <Button variant="ghost" className="w-full justify-start" asChild>
             <a href={`/courses/${courseSlug}`} target="_blank">
               <Eye className="mr-2 h-4 w-4" />
-              Prévisualiser la formation
+              La formation
             </a>
           </Button>
         </div>
