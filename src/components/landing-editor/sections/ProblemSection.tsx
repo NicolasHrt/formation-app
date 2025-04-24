@@ -9,7 +9,7 @@ interface ProblemSectionProps {
 
 export function ProblemSection({
   content = defaultProblemContent,
-  primaryColor = "#D84B2F",
+  primaryColor = "orange",
 }: ProblemSectionProps) {
   return (
     <div className="  py-20">

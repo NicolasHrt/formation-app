@@ -34,7 +34,7 @@ export function PricingSection({
     vat: "TTC",
     oneTimeAccess: "Paiement unique, accès à vie",
   },
-  primaryColor = "#D84B2F",
+  primaryColor = "orange",
 }: PricingSectionProps) {
   return (
     <div className="py-20">

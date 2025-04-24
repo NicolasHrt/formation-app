@@ -229,7 +229,7 @@ export const defaultProductContent: ProductContent = {
 };
 
 export const defaultLandingContent: LandingContent = {
-  primaryColor: "red",
+  primaryColor: "orange",
   heroContent: defaultHeroContent,
   promiseContent: defaultPromiseContent,
   testimonialsContent: defaultTestimonialsContent,

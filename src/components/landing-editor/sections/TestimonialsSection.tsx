@@ -10,7 +10,7 @@ interface TestimonialsSectionProps {
 
 export function TestimonialsSection({
   content = defaultTestimonialsContent,
-  primaryColor = "#D84B2F",
+  primaryColor = "orange",
 }: TestimonialsSectionProps) {
   return (
     <div className="  py-20">

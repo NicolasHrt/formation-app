@@ -10,7 +10,7 @@ interface HeroProps {
 
 export function Hero({
   content = defaultHeroContent,
-  primaryColor = "#D84B2F",
+  primaryColor = "orange",
 }: HeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);

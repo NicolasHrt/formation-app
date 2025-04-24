@@ -8,7 +8,7 @@ interface PromiseSectionProps {
 
 export function PromiseSection({
   content,
-  primaryColor = "#D84B2F",
+  primaryColor = "orange",
 }: PromiseSectionProps) {
   return (
     <div className="py-20">

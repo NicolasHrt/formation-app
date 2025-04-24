@@ -12,7 +12,10 @@ interface FAQProps {
   primaryColor?: string;
 }
 
-export function FAQ({ content = defaultFAQContent }: FAQProps) {
+export function FAQ({
+  content = defaultFAQContent,
+  primaryColor = "orange",
+}: FAQProps) {
   return (
     <div className="  py-20">
       <div className="max-w-4xl mx-auto px-4">

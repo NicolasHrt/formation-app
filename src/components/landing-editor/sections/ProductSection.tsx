@@ -9,7 +9,7 @@ interface ProductSectionProps {
 
 export function ProductSection({
   content = defaultProductContent,
-  primaryColor = "#D84B2F",
+  primaryColor = "orange",
 }: ProductSectionProps) {
   return (
     <div className="py-20">
@@ -30,10 +30,10 @@ export function ProductSection({
               } gap-12 items-center`}
             >
               <div className="w-full md:w-1/2">
-                <div className="bg-[#2A2A2A] rounded-xl p-8 hover:bg-[#333333] transition-colors">
+                <div className="rounded-xl p-8">
                   <h3
                     className="text-2xl font-bold mb-4"
-                    style={{ color: primaryColor }}
+                    style={{ color: `var(--color-${primaryColor}-500)` }}
                   >
                     {module.title}
                   </h3>

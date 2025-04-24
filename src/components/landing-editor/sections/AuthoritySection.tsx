@@ -41,7 +41,7 @@ export function AuthoritySection({
       "https://cdn.prod.website-files.com/63fb3def0123f31ed888d309/650d80cd9cd2ed0a40ffe341_IMG_0581-p-1600.jpeg",
     achievements: defaultAchievements,
   },
-  primaryColor = "#D84B2F",
+  primaryColor = "orange",
 }: AuthoritySectionProps) {
   return (
     <div className="  py-20">
