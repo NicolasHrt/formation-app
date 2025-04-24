@@ -40,6 +40,8 @@ import {
   Problem,
   PrimaryColor,
   LandingContent,
+  ProductContent,
+  Module,
 } from "./types";
 import { defaultLandingContent } from "./defaultContent";
 
@@ -394,6 +396,64 @@ export function LandingSidebarEditor({
     }
   };
 
+  const handleProductChange = (
+    field: keyof ProductContent,
+    value: string | Module[]
+  ) => {
+    onLandingContentChange({
+      ...landingContent,
+      productContent: {
+        ...landingContent.productContent,
+        [field]: value,
+      },
+    });
+  };
+
+  const handleModuleChange = (
+    index: number,
+    field: keyof Module,
+    value: string
+  ) => {
+    const newModules = [...landingContent.productContent.modules];
+    newModules[index] = {
+      ...newModules[index],
+      [field]: value,
+    };
+    handleProductChange("modules", newModules);
+  };
+
+  const addModule = () => {
+    const newModule: Module = {
+      title: "",
+      description: "",
+      imageUrl: "",
+      imageAlt: "",
+    };
+    handleProductChange("modules", [
+      ...landingContent.productContent.modules,
+      newModule,
+    ]);
+  };
+
+  const removeModule = (index: number) => {
+    const newModules = landingContent.productContent.modules.filter(
+      (_, i) => i !== index
+    );
+    handleProductChange("modules", newModules);
+  };
+
+  const moveModule = (index: number, direction: "up" | "down") => {
+    const newModules = [...landingContent.productContent.modules];
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+    if (newIndex >= 0 && newIndex < newModules.length) {
+      [newModules[index], newModules[newIndex]] = [
+        newModules[newIndex],
+        newModules[index],
+      ];
+      handleProductChange("modules", newModules);
+    }
+  };
+
   const colors: { name: PrimaryColor; bg: string; hover: string }[] = [
     { name: "red", bg: "bg-red-500", hover: "hover:bg-red-600" },
     { name: "orange", bg: "bg-orange-500", hover: "hover:bg-orange-600" },
@@ -735,8 +795,125 @@ export function LandingSidebarEditor({
             </div>
           </AccordionTrigger>
           <AccordionContent>
-            <div className="text-sm text-gray-500 p-2">
-              Édition des modules à venir...
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>Titre</Label>
+                <Input
+                  value={landingContent.productContent.title}
+                  onChange={(e) => handleProductChange("title", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Sous-titre</Label>
+                <Input
+                  value={landingContent.productContent.subtitle}
+                  onChange={(e) =>
+                    handleProductChange("subtitle", e.target.value)
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Modules</Label>
+                <div className="space-y-4">
+                  {landingContent.productContent.modules.map(
+                    (module, index) => (
+                      <div
+                        key={index}
+                        className="border border-border rounded-lg p-4 space-y-4"
+                      >
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-medium">Module {index + 1}</h4>
+                          <div className="flex gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => moveModule(index, "up")}
+                              disabled={index === 0}
+                            >
+                              <ArrowUp className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => moveModule(index, "down")}
+                              disabled={
+                                index ===
+                                landingContent.productContent.modules.length - 1
+                              }
+                            >
+                              <ArrowDown className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeModule(index)}
+                              className="text-red-500"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Titre du module</Label>
+                          <Input
+                            value={module.title}
+                            onChange={(e) =>
+                              handleModuleChange(index, "title", e.target.value)
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Description</Label>
+                          <Textarea
+                            value={module.description}
+                            onChange={(e) =>
+                              handleModuleChange(
+                                index,
+                                "description",
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>URL de l'image</Label>
+                          <Input
+                            value={module.imageUrl}
+                            onChange={(e) =>
+                              handleModuleChange(
+                                index,
+                                "imageUrl",
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Texte alternatif de l'image</Label>
+                          <Input
+                            value={module.imageAlt}
+                            onChange={(e) =>
+                              handleModuleChange(
+                                index,
+                                "imageAlt",
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
+                      </div>
+                    )
+                  )}
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={addModule}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Ajouter un module
+                  </Button>
+                </div>
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>

@@ -1,66 +1,18 @@
 import Image from "next/image";
-
-interface Module {
-  title: string;
-  description: string;
-  imageUrl?: string;
-  imageAlt?: string;
-}
-
-interface ProductSectionContent {
-  title: string;
-  subtitle: string;
-  modules: Module[];
-}
+import { ProductContent } from "../types";
+import { defaultProductContent } from "../defaultContent";
 
 interface ProductSectionProps {
-  content?: ProductSectionContent;
+  content?: ProductContent;
   primaryColor?: string;
 }
 
 export function ProductSection({
-  content = {
-    title: "Ce que vous allez apprendre",
-    subtitle: "Un programme complet et structuré",
-    modules: [
-      {
-        title: "Module 1 : Les fondamentaux",
-        description:
-          "Maîtrisez les bases essentielles pour créer des landing pages efficaces",
-        imageUrl:
-          "https://placehold.co/800x450/2A2A2A/FFFFFF/png?text=Module+1",
-        imageAlt: "Module 1 - Les fondamentaux",
-      },
-      {
-        title: "Module 2 : Copywriting avancé",
-        description:
-          "Apprenez à écrire des textes qui convertissent et engagent vos visiteurs",
-        imageUrl:
-          "https://placehold.co/800x450/2A2A2A/FFFFFF/png?text=Module+2",
-        imageAlt: "Module 2 - Copywriting avancé",
-      },
-      {
-        title: "Module 3 : Design et UX",
-        description:
-          "Créez des designs attractifs et une expérience utilisateur optimale",
-        imageUrl:
-          "https://placehold.co/800x450/2A2A2A/FFFFFF/png?text=Module+3",
-        imageAlt: "Module 3 - Design et UX",
-      },
-      {
-        title: "Module 4 : Optimisation et Analytics",
-        description:
-          "Mesurez et améliorez vos performances avec des données concrètes",
-        imageUrl:
-          "https://placehold.co/800x450/2A2A2A/FFFFFF/png?text=Module+4",
-        imageAlt: "Module 4 - Optimisation et Analytics",
-      },
-    ],
-  },
+  content = defaultProductContent,
   primaryColor = "#D84B2F",
 }: ProductSectionProps) {
   return (
-    <div className="  py-20">
+    <div className="py-20">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">

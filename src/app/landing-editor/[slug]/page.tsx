@@ -35,6 +35,7 @@ export default function LandingEditor({
           pricingContent={landingContent.pricingContent}
           authorityContent={landingContent.authorityContent}
           problemContent={landingContent.problemContent}
+          productContent={landingContent.productContent}
           primaryColor={landingContent.primaryColor}
         />
       </div>

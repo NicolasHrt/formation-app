@@ -120,6 +120,19 @@ export type PrimaryColor =
   | "neutral"
   | "stone";
 
+export interface Module {
+  title: string;
+  description: string;
+  imageUrl?: string;
+  imageAlt?: string;
+}
+
+export interface ProductContent {
+  title: string;
+  subtitle: string;
+  modules: Module[];
+}
+
 export interface LandingContent {
   primaryColor: PrimaryColor;
   heroContent: HeroContent;
@@ -129,4 +142,5 @@ export interface LandingContent {
   pricingContent: PricingContent;
   authorityContent: AuthorityContent;
   problemContent: ProblemContent;
+  productContent: ProductContent;
 }
